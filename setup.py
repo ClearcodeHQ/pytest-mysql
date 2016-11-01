@@ -34,7 +34,9 @@ def read(fname):
     """
     return open(os.path.join(here, fname)).read()
 
-requirements = []
+requirements = [
+    'pytest'
+]
 
 test_requires = [
     'pytest',
