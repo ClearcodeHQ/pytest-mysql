@@ -1,29 +1,28 @@
 language: python
 python:
-    - "2.7"
-    - "3.3"
-    - "3.4"
-    - "3.5"
-    - "pypy"
-    - "pypy3"
+- '2.7'
+- '3.3'
+- '3.4'
+- '3.5'
+- pypy
+- pypy3
 install:
-    - "pip install -r requirements-test.txt"
-    - "python setup.py develop"
-    - "pip install pytest-mysql[tests] coveralls wheel"
+- pip install -r requirements-test.txt
+- python setup.py develop
+- pip install pytest-mysql[tests] coveralls wheel
 script:
-    - "py.test -v --cov pytest_mysql tests/"
-    - "pylama"
-    - "pyroma ."
+- py.test -v --cov pytest_mysql tests/
+- pylama
+- pyroma .
 after_success:
-    - coveralls
-
+- coveralls
 deploy:
-    provider: pypi
-    user: thearoom
-    password:
-        secure: "run travis encrypt --add deploy.password"
-    on:
-        tags: true
-        all_branches: true
-        repo: ClearcodeHQ/pytest-mysql
-    distributions: "sdist bdist_wheel"
+  provider: pypi
+  user: thearoom
+  password:
+    secure: HH8s4whwONXVZ6lIKYsVDYypm/Sc05cGCtoGNHbT/VG3Ogmhnt78k7o7XR3SP6FTmeLr/w00gQmaLLPCpQw2UgKsq5tRYF5QKEX3DcP6oeh1yV+4pO4HL6oxffO2WFCYPcxfCqkAeOOpaskTXeheXoXXIuM6G22ioSEpcUPFhDRgZHVdyApWhobzZxnWc4H0X/Lqw6IfoE1BoFKF9qmvDUrRqL44xTec1Rbmx9PXowghijC4A9DZzFAxb8HpUb4omy+4LR37n4VL+rmLuJn92SKzLW+OofjcfwcCOY3U1GV7AyQnhvtaSnUOY9fAEOMq/10xuiCjtO5VQ9KNBIeDXLSrv6dos4dV2TE8RJrcRo7zQFpK4p/COX0DUqiAObEls1XDl2DInce8EpEPO3tNipPF9za7fse/ruT71/aCzbI25VDqTgBX7qMGWrizCkiymnFFVweaCElk0k4e4WY64mjgQDXfCnncbf3x18BGxqNlKqKa9ExUh0fktx16I5RS8AZyDczyorhjAH4dnNsHCxzq0GwIcrzY69MlnTBzy51fUzwQAMWLvyRu0iq0A4/yzpfsvfjwrxtqUYs6Jqj5c3uharfIcD6NUe++heVO0eUm45kiTJZt5axvlLB1Rn1cOVVe/Gwqn4BWHcAjoib9nQN0hySc1jdQTAMfmhRmRcQ=
+  on:
+    tags: true
+    all_branches: true
+    repo: ClearcodeHQ/pytest-mysql
+  distributions: sdist bdist_wheel
