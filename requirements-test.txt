@@ -1,12 +1,12 @@
 # test runs requirements (versions we'll be testing against) - automatically updated by requires.io
 coverage==4.2 # pytest-cov
 pylama==7.2.3
-pyflakes==1.2.3
+pyflakes==1.3.0
 pycodestyle==2.0.0
 pydocstyle
-mccabe==0.5.0
-pyroma==2.0.2
-pytest=3.0.3
+mccabe==0.5.2
+pyroma==2.2
+pytest==3.0.3
 mirakuru==0.8.2
 mysqlclient==1.3.9
 path.py==8.2.1
