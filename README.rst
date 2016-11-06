@@ -1,13 +1,9 @@
 pytest-mysql
-====
+============
 
 .. image:: https://img.shields.io/pypi/v/pytest-mysql.svg
     :target: https://pypi.python.org/pypi/pytest-mysql/
     :alt: Latest PyPI version
-
-.. image:: https://readthedocs.org/projects/pytest-mysql/badge/?version=v0.0.0
-    :target: http://pytest-mysql.readthedocs.io/en/v0.0.0/
-    :alt: Documentation Status
 
 .. image:: https://img.shields.io/pypi/wheel/pytest-mysql.svg
     :target: https://pypi.python.org/pypi/pytest-mysql/
