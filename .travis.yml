@@ -5,13 +5,15 @@ python:
 - '3.4'
 - '3.5'
 - pypy
-- pypy3
+env:
+- INSTALLATION="python setup.py develop" XDIST=1
+- INSTALLATION="pip install ." XDIST=0
 install:
 - pip install -r requirements-test.txt
-- python setup.py develop
+- "$INSTALLATION"
 - pip install pytest-mysql[tests] coveralls wheel
 script:
-- py.test -v --cov pytest_mysql tests/
+- py.test -n $XDIST --cov src/pytest_mysql tests
 - pylama
 - pyroma .
 after_success:

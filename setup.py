@@ -16,7 +16,7 @@
 
 # You should have received a copy of the GNU Lesser General Public License
 # along with pytest-mysql. If not, see <http://www.gnu.org/licenses/>.
-
+"""Installation module of pytest-mysql."""
 
 import os
 from setuptools import setup, find_packages
@@ -34,17 +34,21 @@ def read(fname):
     """
     return open(os.path.join(here, fname)).read()
 
+
 requirements = [
-    'pytest'
+    'pytest',
+    'path.py',
+    'mirakuru',
+    'port-for',
+    'mysqlclient'
 ]
 
 test_requires = [
-    'pytest',
-    'pytest-cov'
+    'pytest-cov==2.4.0',
+    'pytest-xdist==1.15.0',
 ]
 
 extras_require = {
-    'docs': ['sphinx'],
     'tests': test_requires
 }
 
@@ -55,7 +59,7 @@ setup(
     long_description=(
         read('README.rst') + '\n\n' + read('CHANGES.rst')
     ),
-    keywords='',
+    keywords='tests py.test pytest fixture mysql',
     author='Clearcode - The A Room',
     author_email='thearoom@clearcode.cc',
     url='https://github.com/ClearcodeHQ/pytest-mysql',
@@ -64,7 +68,8 @@ setup(
         'Development Status :: 5 - Production/Stable',
         'Environment :: Web Environment',
         'Intended Audience :: Developers',
-        'License :: OSI Approved :: GNU Lesser General Public License v3 or later (LGPLv3+)',
+        'License :: OSI Approved :: '
+        'GNU Lesser General Public License v3 or later (LGPLv3+)',
         'Natural Language :: English',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
@@ -80,4 +85,8 @@ setup(
     include_package_data=True,
     zip_safe=False,
     extras_require=extras_require,
+    entry_points={
+        'pytest11': [
+            'pytest_mysql = pytest_mysql.plugin'
+        ]},
 )

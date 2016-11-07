@@ -1,5 +1,4 @@
-# -*- coding: utf-8 -*-
-# Copyright (C) 2016 by Clearcode <http://clearcode.cc>
+# Copyright (C) 2013 by Clearcode <http://clearcode.cc>
 # and associates (see AUTHORS).
 
 # This file is part of pytest-mysql.
@@ -15,12 +14,28 @@
 # GNU Lesser General Public License for more details.
 
 # You should have received a copy of the GNU Lesser General Public License
-# along with pytest-mysql. If not, see <http://www.gnu.org/licenses/>.
-"""Main module for pytest-mysql."""
-
-import logging
-
-__version__ = '0.0.0'
+# along with pytest-mysql.  If not, see <http://www.gnu.org/licenses/>.
+"""Plugin definition."""
 
 
-logger = logging.getLogger(__name__)
+from pytest_mysql import factories
+
+
+def pytest_addoption(parser):
+    """Plugin configuration."""
+    parser.addini(
+        name='mysql_logsdir',
+        help='logsdir',
+        default='/tmp',
+    )
+
+    parser.addoption(
+        '--mysql-logsdir',
+        action='store',
+        metavar='path',
+        dest='mysql_logsdir',
+    )
+
+
+mysql_proc = factories.mysql_proc()
+mysql = factories.mysql('mysql_proc')
