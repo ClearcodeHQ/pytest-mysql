@@ -1,6 +1,8 @@
 CHANGELOG
 =========
 
-0.0.0
+unreleased
 -------
-- Created the pytest-mysql [by Clearcode - The A Room]
+
+- [enhancements] create command line and pytest.ini configuration options for mysql executable
+- [enhancements] create command line and pytest.ini configuration options for mysql logsdir

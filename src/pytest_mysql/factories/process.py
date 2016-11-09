@@ -33,7 +33,7 @@ def get_config(request):
     """Return a dictionary with config options."""
     config = {}
     options = [
-        'logsdir'
+        'exec', 'logsdir'
     ]
     for option in options:
         option_name = 'mysql_' + option
@@ -116,7 +116,7 @@ def mysql_proc(executable=None, admin_executable=None, init_executable=None,
 
         """
         config = get_config(request)
-        mysql_exec = executable or '/usr/bin/mysqld_safe'  # TODO: config
+        mysql_exec = executable or config['exec']
         mysql_admin_exec = admin_executable or '/usr/bin/mysqladmin'  # TODO: c
         mysql_init = init_executable or '/usr/bin/mysql_install_db'  # TODO:c
         mysql_port = get_port(port) or get_port('3307')  # TODO: config
