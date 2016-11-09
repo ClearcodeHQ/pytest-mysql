@@ -16,17 +16,35 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with pytest-mysql.  If not, see <http://www.gnu.org/licenses/>.
 """Plugin definition."""
-
+from tempfile import gettempdir
 
 from pytest_mysql import factories
+
+
+_help_executable = 'Path to PostgreSQL executable'
+_help_logsdir = "Logs directory location"
 
 
 def pytest_addoption(parser):
     """Plugin configuration."""
     parser.addini(
+        name='mysql_exec',
+        help=_help_executable,
+        default='/usr/bin/mysqld_safe'
+    )
+
+    parser.addini(
         name='mysql_logsdir',
         help='logsdir',
-        default='/tmp',
+        default=gettempdir(),
+    )
+
+    parser.addoption(
+        '--mysql-exec',
+        action='store',
+        metavar='path',
+        dest='mysql_exec',
+        help=_help_executable
     )
 
     parser.addoption(
