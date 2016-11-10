@@ -20,6 +20,8 @@
 import pytest
 import MySQLdb
 
+from pytest_mysql.factories.process import get_config
+
 
 def mysql(process_fixture_name, user=None, passwd=None, db=None,
           charset='utf8', collation='utf8_general_ci'):
@@ -62,14 +64,15 @@ def mysql(process_fixture_name, user=None, passwd=None, db=None,
         :rtype: MySQLdb.connections.Connection
         :returns: connection to database
         """
+        config = get_config(request)
         process = request.getfuncargvalue(process_fixture_name)
         if not process.running():
             process.start()
 
         mysql_host = process.host
-        mysql_user = user or 'root'  # TODO: config
-        mysql_passwd = passwd or ''  # TODO: config
-        mysql_db = db or 'test'  # TODO: config
+        mysql_user = user or config['user']
+        mysql_passwd = passwd or config['passwd']
+        mysql_db = db or config['dbname']
 
         unixsocket = process.socket_path
 

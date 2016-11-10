@@ -33,7 +33,8 @@ def get_config(request):
     """Return a dictionary with config options."""
     config = {}
     options = [
-        'exec', 'logsdir'
+        'exec', 'admin', 'init', 'host', 'port',
+        'user', 'passwd', 'dbname', 'params', 'logsdir'
     ]
     for option in options:
         option_name = 'mysql_' + option
@@ -117,11 +118,11 @@ def mysql_proc(executable=None, admin_executable=None, init_executable=None,
         """
         config = get_config(request)
         mysql_exec = executable or config['exec']
-        mysql_admin_exec = admin_executable or '/usr/bin/mysqladmin'  # TODO: c
-        mysql_init = init_executable or '/usr/bin/mysql_install_db'  # TODO:c
-        mysql_port = get_port(port) or get_port('3307')  # TODO: config
-        mysql_host = host or 'localhost'  # TODO: config
-        mysql_params = params or ''  # TODO: config
+        mysql_admin_exec = admin_executable or config['admin']
+        mysql_init = init_executable or config['init']
+        mysql_port = get_port(port) or get_port(config['port'])
+        mysql_host = host or config['host']
+        mysql_params = params or config['params']
 
         tmpdir = Path(mkdtemp(prefix="pytest-mysql-"))
         datadir = tmpdir / 'mysqldata_{port}'.format(port=mysql_port)
@@ -162,7 +163,7 @@ def mysql_proc(executable=None, admin_executable=None, init_executable=None,
             shutdown_server = (
                 mysql_admin_exec,
                 '--socket=%s' % unixsocket,
-                '--user=%s' % 'root',  # TODO: config
+                '--user=%s' % config['user'],
                 'shutdown'
             )
             subprocess.check_output(' '.join(shutdown_server), shell=True)
