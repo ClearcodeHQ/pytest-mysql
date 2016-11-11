@@ -4,4 +4,10 @@ Authors
 This file contains the list of people involved in the development
 of pytest-mysql along its history.
 
-* Clearcode - The A Room
+* Grzegorz Śliwiński
+* Jakub Klinkovský
+* Karolina Blümke
+* Paweł Wilczyński
+* Tomasz Święcicki
+* Tomasz Karbownicki
+* Michał Masłowski
