@@ -21,8 +21,16 @@ from tempfile import gettempdir
 from pytest_mysql import factories
 
 
-_help_executable = 'Path to PostgreSQL executable'
+_help_executable = 'Path to MySQL executable'
+_help_admin = 'Path to MySQL\'s admin executable'
+_help_init = 'Path to MySQL\'s init executable'
 _help_logsdir = "Logs directory location"
+_help_host = 'Host at which MySQL will accept connections'
+_help_port = 'Port at which MySQL will accept connections'
+_help_user = "MySQL username"
+_help_passwd = "MySQL password"
+_help_dbname = "Test database name"
+_help_params = "Starting parameters for the MySQL"
 
 
 def pytest_addoption(parser):
@@ -34,8 +42,56 @@ def pytest_addoption(parser):
     )
 
     parser.addini(
+        name='mysql_admin',
+        help=_help_admin,
+        default='/usr/bin/mysqladmin'
+    )
+
+    parser.addini(
+        name='mysql_init',
+        help=_help_init,
+        default='/usr/bin/mysql_install_db'
+    )
+
+    parser.addini(
+        name='mysql_host',
+        help=_help_host,
+        default='localhost'
+    )
+
+    parser.addini(
+        name='mysql_port',
+        help=_help_port,
+        default=None,
+    )
+
+    parser.addini(
+        name='mysql_user',
+        help=_help_user,
+        default='root'
+    )
+
+    parser.addini(
+        name='mysql_passwd',
+        help=_help_passwd,
+        default=''
+    )
+
+    parser.addini(
+        name='mysql_dbname',
+        help=_help_dbname,
+        default='test'
+    )
+
+    parser.addini(
+        name='mysql_params',
+        help=_help_params,
+        default=''
+    )
+
+    parser.addini(
         name='mysql_logsdir',
-        help='logsdir',
+        help=_help_logsdir,
         default=gettempdir(),
     )
 
@@ -48,10 +104,69 @@ def pytest_addoption(parser):
     )
 
     parser.addoption(
+        '--mysql-admin',
+        action='store',
+        metavar='path',
+        dest='mysql_admin',
+        help=_help_admin
+    )
+
+    parser.addoption(
+        '--mysql-init',
+        action='store',
+        metavar='path',
+        dest='mysql_init',
+        help=_help_init
+    )
+
+    parser.addoption(
+        '--mysql-host',
+        action='store',
+        dest='mysql_host',
+        help=_help_host,
+    )
+
+    parser.addoption(
+        '--mysql-port',
+        action='store',
+        dest='mysql_port',
+        help=_help_port
+    )
+
+    parser.addoption(
+        '--mysql-user',
+        action='store',
+        dest='mysql_user',
+        help=_help_user
+    )
+
+    parser.addoption(
+        '--mysql-passwd',
+        action='store',
+        dest='mysql_passwd',
+        help=_help_passwd
+    )
+
+    parser.addoption(
+        '--mysql-dbname',
+        action='store',
+        dest='mysql_dbname',
+        help=_help_dbname
+    )
+
+    parser.addoption(
+        '--mysql-params',
+        action='store',
+        dest='mysql_params',
+        help=_help_params
+    )
+
+    parser.addoption(
         '--mysql-logsdir',
         action='store',
         metavar='path',
         dest='mysql_logsdir',
+        help=_help_params
     )
 
 
