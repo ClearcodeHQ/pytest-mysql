@@ -65,7 +65,7 @@ def mysql(process_fixture_name, user=None, passwd=None, db=None,
         :returns: connection to database
         """
         config = get_config(request)
-        process = request.getfuncargvalue(process_fixture_name)
+        process = request.getfixturevalue(process_fixture_name)
         if not process.running():
             process.start()
 
