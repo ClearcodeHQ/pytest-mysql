@@ -1,7 +1,7 @@
 CHANGELOG
 =========
 
-unreleased
+1.1.0
 -------
 
 - [enhancement] change deprecated getfuncargvalaue to getfixturevalues, require at least pytest 3.0.0
