@@ -53,7 +53,7 @@ extras_require = {
 
 setup(
     name='pytest-mysql',
-    version='1.1.0',
+    version='1.1.1',
     description='MySQL process and client fixtures for pytest',
     long_description=(
         read('README.rst') + '\n\n' + read('CHANGES.rst')

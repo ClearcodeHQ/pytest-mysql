@@ -20,16 +20,16 @@ pytest-mysql
 Package status
 --------------
 
-.. image:: https://travis-ci.org/ClearcodeHQ/pytest-mysql.svg?branch=v1.1.0
+.. image:: https://travis-ci.org/ClearcodeHQ/pytest-mysql.svg?branch=v1.1.1
     :target: https://travis-ci.org/ClearcodeHQ/pytest-mysql
     :alt: Tests
 
-.. image:: https://coveralls.io/repos/ClearcodeHQ/pytest-mysql/badge.png?branch=v1.1.0
-    :target: https://coveralls.io/r/ClearcodeHQ/pytest-mysql?branch=v1.1.0
+.. image:: https://coveralls.io/repos/ClearcodeHQ/pytest-mysql/badge.png?branch=v1.1.1
+    :target: https://coveralls.io/r/ClearcodeHQ/pytest-mysql?branch=v1.1.1
     :alt: Coverage Status
 
-.. image:: https://requires.io/github/ClearcodeHQ/pytest-mysql/requirements.svg?tag=v1.1.0
-     :target: https://requires.io/github/ClearcodeHQ/pytest-mysql/requirements/?tag=v1.1.0
+.. image:: https://requires.io/github/ClearcodeHQ/pytest-mysql/requirements.svg?tag=v1.1.1
+     :target: https://requires.io/github/ClearcodeHQ/pytest-mysql/requirements/?tag=v1.1.1
      :alt: Requirements Status
 
 What is this?
