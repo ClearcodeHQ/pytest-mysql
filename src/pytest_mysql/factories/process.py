@@ -23,7 +23,6 @@ import subprocess
 from tempfile import mkdtemp
 
 import pytest
-from path import Path
 from mirakuru import TCPExecutor
 
 from pytest_mysql.port import get_port
@@ -124,14 +123,26 @@ def mysql_proc(executable=None, admin_executable=None, init_executable=None,
         mysql_host = host or config['host']
         mysql_params = params or config['params']
 
-        tmpdir = Path(mkdtemp(prefix="pytest-mysql-"))
-        datadir = tmpdir / 'mysqldata_{port}'.format(port=mysql_port)
-        pidfile = tmpdir / 'mysql-server.{port}.pid'.format(port=mysql_port)
-        unixsocket = tmpdir / 'mysql.{port}.sock'.format(port=mysql_port)
-        logsdir = Path(config['logsdir'])
-        logfile_path = logsdir / '{prefix}mysql-server.{port}.log'.format(
-            prefix=logs_prefix,
-            port=mysql_port
+        tmpdir = mkdtemp(prefix="pytest-mysql-")
+        datadir = os.path.join(
+            tmpdir,
+            'mysqldata_{port}'.format(port=mysql_port)
+        )
+        pidfile = os.path.join(
+            tmpdir,
+            'mysql-server.{port}.pid'.format(port=mysql_port)
+        )
+        unixsocket = os.path.join(
+            tmpdir,
+            'mysql.{port}.sock'.format(port=mysql_port)
+        )
+        logsdir = config['logsdir']
+        logfile_path = os.path.join(
+            logsdir,
+            '{prefix}mysql-server.{port}.log'.format(
+                prefix=logs_prefix,
+                port=mysql_port
+            )
         )
 
         init_mysql_directory(mysql_init, datadir, tmpdir)

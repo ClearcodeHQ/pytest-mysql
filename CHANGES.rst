@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+unreleased
+-------
+
+- [enhancements] removed path.py dependency
+
 1.1.0
 -------
 
