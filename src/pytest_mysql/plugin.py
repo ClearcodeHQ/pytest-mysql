@@ -21,9 +21,9 @@ from tempfile import gettempdir
 from pytest_mysql import factories
 
 
-_help_executable = 'Path to MySQL executable'
+_help_mysqld = 'Path to MySQLd executable'
 _help_admin = 'Path to MySQL\'s admin executable'
-_help_init = 'Path to MySQL\'s init executable'
+_help_mysqld_safe = 'Path to MySQL\'s init executable'
 _help_logsdir = "Logs directory location"
 _help_host = 'Host at which MySQL will accept connections'
 _help_port = 'Port at which MySQL will accept connections'
@@ -36,8 +36,14 @@ _help_params = "Starting parameters for the MySQL"
 def pytest_addoption(parser):
     """Plugin configuration."""
     parser.addini(
-        name='mysql_exec',
-        help=_help_executable,
+        name='mysql_mysqld',
+        help=_help_mysqld,
+        default='mysqld'
+    )
+
+    parser.addini(
+        name='mysql_mysqld_safe',
+        help=_help_mysqld_safe,
         default='/usr/bin/mysqld_safe'
     )
 
@@ -45,12 +51,6 @@ def pytest_addoption(parser):
         name='mysql_admin',
         help=_help_admin,
         default='/usr/bin/mysqladmin'
-    )
-
-    parser.addini(
-        name='mysql_init',
-        help=_help_init,
-        default='/usr/bin/mysql_install_db'
     )
 
     parser.addini(
@@ -96,11 +96,19 @@ def pytest_addoption(parser):
     )
 
     parser.addoption(
-        '--mysql-exec',
+        '--mysql-mysqld',
         action='store',
         metavar='path',
-        dest='mysql_exec',
-        help=_help_executable
+        dest='mysql_mysqld',
+        help=_help_mysqld
+    )
+
+    parser.addoption(
+        '--mysql-mysqld-safe',
+        action='store',
+        metavar='path',
+        dest='mysql_mysqld_safe',
+        help=_help_mysqld_safe
     )
 
     parser.addoption(
@@ -109,14 +117,6 @@ def pytest_addoption(parser):
         metavar='path',
         dest='mysql_admin',
         help=_help_admin
-    )
-
-    parser.addoption(
-        '--mysql-init',
-        action='store',
-        metavar='path',
-        dest='mysql_init',
-        help=_help_init
     )
 
     parser.addoption(
