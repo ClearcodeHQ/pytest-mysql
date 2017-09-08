@@ -1,5 +1,5 @@
 sudo: true
-group: deprecated-2017Q3
+disc: precise
 language: python
 python:
 - '2.7'
