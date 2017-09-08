@@ -13,8 +13,6 @@ env:
 branches:
   except:
   - requires-io-master
-before_install:
-- cp /etc/mysql/my.cnf /usr/share/mysql/my-default.cnf
 install:
 - pip install -r requirements-test.txt
 - "$INSTALLATION"
