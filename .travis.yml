@@ -1,3 +1,5 @@
+sudo: true
+group: deprecated-2017Q3
 language: python
 python:
 - '2.7'
@@ -14,6 +16,7 @@ branches:
   except:
   - requires-io-master
 install:
+- cat /etc/mysql/my.cnf
 - pip install -r requirements-test.txt
 - "$INSTALLATION"
 - pip install pytest-mysql[tests] coveralls wheel
