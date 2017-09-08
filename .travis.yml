@@ -1,3 +1,5 @@
+sudo: true
+disc: precise
 language: python
 python:
 - '2.7'
@@ -14,12 +16,13 @@ branches:
   except:
   - requires-io-master
 install:
+- cat /etc/mysql/my.cnf
 - pip install -r requirements-test.txt
 - "$INSTALLATION"
 - pip install pytest-mysql[tests] coveralls wheel
 script:
 - /usr/bin/mysql_config --version
-- USER=travis py.test -n $XDIST --cov src/pytest_mysql tests
+- USER=travis py.test -n $XDIST --showlocals --cov src/pytest_mysql tests
 - pylama
 - pyroma .
 after_success:
