@@ -73,6 +73,7 @@ def init_mysql_directory(mysql_init, datadir, tmpdir):
         '--user=%s' % os.getenv('USER'),
         '--datadir=%s' % datadir,
         '--tmpdir=%s' % tmpdir,
+        '--basedir=/etc/mysql'
     )
     subprocess.check_output(' '.join(init_directory), shell=True)
 
