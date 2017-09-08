@@ -68,13 +68,12 @@ def init_mysql_directory(mysql_init, datadir, tmpdir):
 
     """
     remove_mysql_directory(datadir)
-    shutil.copyfile('/etc/mysql/my.cnf', os.path.join(tmpdir, 'my-default.cnf'))
     init_directory = (
         mysql_init,
         '--user=%s' % os.getenv('USER'),
         '--datadir=%s' % datadir,
         '--tmpdir=%s' % tmpdir,
-        '--basedir=%s' % tmpdir,
+        '--no-defaults',
     )
     subprocess.check_output(' '.join(init_directory), shell=True)
 
