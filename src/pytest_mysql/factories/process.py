@@ -54,7 +54,7 @@ def remove_mysql_directory(datadir):
         shutil.rmtree(datadir)
 
 
-def init_mysql_directory(mysql_init, datadir, tmpdir):
+def init_mysql_directory(mysql_init, basedir, datadir, tmpdir):
     """
     Initialise mysql directory.
 
@@ -72,7 +72,8 @@ def init_mysql_directory(mysql_init, datadir, tmpdir):
         mysql_init,
         '--user=%s' % os.getenv('USER'),
         '--datadir=%s' % datadir,
-        '--tmpdir=%s' % tmpdir
+        '--tmpdir=%s' % tmpdir,
+        '--basedir=%s' % basedir,
     )
     subprocess.check_output(' '.join(init_directory), shell=True)
 
@@ -124,9 +125,12 @@ def mysql_proc(executable=None, admin_executable=None, init_executable=None,
         mysql_params = params or config['params']
 
         tmpdir = mkdtemp(prefix="pytest-mysql-")
-        datadir = os.path.join(
+        basedir = os.path.join(
             tmpdir,
             'mysqldata_{port}'.format(port=mysql_port)
+        )
+        datadir = os.path.join(
+            tmpdir, 'data'
         )
         pidfile = os.path.join(
             tmpdir,
@@ -145,7 +149,7 @@ def mysql_proc(executable=None, admin_executable=None, init_executable=None,
             )
         )
 
-        init_mysql_directory(mysql_init, datadir, tmpdir)
+        init_mysql_directory(mysql_init, basedir, datadir, tmpdir)
 
         mysql_executor = TCPExecutor(
             '''
