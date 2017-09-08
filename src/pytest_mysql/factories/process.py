@@ -43,17 +43,6 @@ def get_config(request):
     return config
 
 
-def remove_mysql_directory(datadir):
-    """
-    Check mysql directory. Recursively delete a directory tree if exist.
-
-    :param str datadir: path to datadir
-
-    """
-    if os.path.isdir(datadir):
-        shutil.rmtree(datadir)
-
-
 def init_mysql_directory(mysql_init, datadir, tmpdir):
     """
     Initialise mysql directory.
@@ -67,7 +56,6 @@ def init_mysql_directory(mysql_init, datadir, tmpdir):
     :param str tmpdir: path to tmpdir
 
     """
-    remove_mysql_directory(datadir)
     init_directory = (
         mysql_init,
         '--initialize',
@@ -100,7 +88,7 @@ def mysql_proc(mysqld_exec=None, admin_executable=None, mysqld_safe=None,
 
     """
     @pytest.fixture(scope='session')
-    def mysql_proc_fixture(request):
+    def mysql_proc_fixture(request, tmpdir_factory):
         """
         Process fixture for MySQL server.
 
@@ -124,18 +112,15 @@ def mysql_proc(mysqld_exec=None, admin_executable=None, mysqld_safe=None,
         mysql_host = host or config['host']
         mysql_params = params or config['params']
 
-        tmpdir = mkdtemp(prefix="pytest-mysql-")
-        datadir = os.path.join(
-            tmpdir,
+        tmpdir = tmpdir_factory.mktemp('pytest-mysql')
+
+        datadir = tmpdir.mkdir(
             'mysqldata_{port}'.format(port=mysql_port)
         )
-        os.makedirs(datadir)
-        pidfile = os.path.join(
-            tmpdir,
+        pidfile = tmpdir.join(
             'mysql-server.{port}.pid'.format(port=mysql_port)
         )
-        unixsocket = os.path.join(
-            tmpdir,
+        unixsocket = tmpdir.join(
             'mysql.{port}.sock'.format(port=mysql_port)
         )
         logsdir = config['logsdir']
@@ -181,7 +166,6 @@ def mysql_proc(mysqld_exec=None, admin_executable=None, mysqld_safe=None,
             )
             subprocess.check_output(' '.join(shutdown_server), shell=True)
             mysql_executor.stop()
-            remove_mysql_directory(tmpdir)
 
         request.addfinalizer(stop_server_and_remove_directory)
 
