@@ -129,7 +129,7 @@ def mysql_proc(mysqld_exec=None, admin_executable=None, mysqld_safe=None,
             tmpdir,
             'mysqldata_{port}'.format(port=mysql_port)
         )
-        os.mkdir(datadir)
+        os.makedirs(datadir)
         pidfile = os.path.join(
             tmpdir,
             'mysql-server.{port}.pid'.format(port=mysql_port)
