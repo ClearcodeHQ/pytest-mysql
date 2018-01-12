@@ -23,7 +23,8 @@ before_script:
 script:
 - /usr/bin/mysql_config --version
 - mysqld --version
-- mysqld --initialize --user=travis --datadir=/tmp/pytest-of-travis/pytest-0/popen-gw0/pytest-mysql0/mysqldata_32320 --tmpdir=/tmp/pytest-of-travis/pytest-0/popen-gw0/pytest-mysql0
+- mkdir -p /tmp/mysqldata_manual_test/datadir
+- mysqld --initialize --user=travis --datadir=/tmp/mysqldata_manual_test --tmpdir=/tmp/mysqldata_manual_test
 - ls -l /usr/bin/mysql_install_db
 - USER=travis py.test -n $XDIST --showlocals --cov src/pytest_mysql tests
 - pylama
