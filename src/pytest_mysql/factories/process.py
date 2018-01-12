@@ -18,9 +18,7 @@
 """Process fixture factory for MySQL database."""
 
 import os
-import shutil
 import subprocess
-from tempfile import mkdtemp
 
 import pytest
 
