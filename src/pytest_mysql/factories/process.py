@@ -58,7 +58,7 @@ def init_mysql_directory(mysql_init, datadir, tmpdir, logfile_path):
     """
     init_directory = (
         mysql_init,
-        '--initialize',
+        '--initialize-insecure',
         '--datadir=%s' % datadir,
         '--tmpdir=%s' % tmpdir,
         '--log-error=%s' % logfile_path,
