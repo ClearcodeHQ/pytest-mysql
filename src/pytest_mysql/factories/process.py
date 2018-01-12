@@ -154,7 +154,7 @@ def mysql_proc(mysqld_exec=None, admin_executable=None, mysqld_safe=None,
             port=mysql_port,
             timeout=60,
         )
-        mysql_executor.socket_path = unixsocket
+        mysql_executor.socket_path = unixsocket.strpath
         mysql_executor.start()
 
         def stop_server_and_remove_directory():
