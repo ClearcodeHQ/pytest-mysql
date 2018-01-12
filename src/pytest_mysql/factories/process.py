@@ -136,7 +136,7 @@ def mysql_proc(mysqld_exec=None, admin_executable=None, mysqld_safe=None,
 
         mysql_executor = MySQLExecutor(
             '''
-            {mysql_server} --user={user} --datadir={datadir} --pid-file={pidfile}
+            {mysql_server} --datadir={datadir} --pid-file={pidfile}
             --port={port} --socket={socket} --log-error={logfile_path}
             --tmpdir={tmpdir} --skip-syslog {params}
             '''
