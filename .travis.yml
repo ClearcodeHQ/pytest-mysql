@@ -24,8 +24,9 @@ script:
 - /usr/bin/mysql_config --version
 - mysqld --version
 - mkdir -p /tmp/mysqldata_manual_test/datadir
-- mysqld --initialize --user=travis --datadir=/tmp/mysqldata_manual_test --tmpdir=/tmp/mysqldata_manual_test
-- ls -l /usr/bin/mysql_install_db
+- ls -l /tmp/mysqldata_manual_test/
+- ls -l /tmp/mysqldata_manual_test/datadir/
+- mysqld --initialize --user=travis --datadir=/tmp/mysqldata_manual_test/datadir --tmpdir=/tmp/mysqldata_manual_test
 - USER=travis py.test -n $XDIST --showlocals --cov src/pytest_mysql tests
 - pylama
 - pyroma .
