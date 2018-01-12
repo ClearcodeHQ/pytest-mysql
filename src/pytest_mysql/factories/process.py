@@ -61,7 +61,7 @@ def init_mysql_directory(mysql_init, datadir, tmpdir, logfile_path):
         '--initialize',
         '--datadir=%s' % datadir,
         '--tmpdir=%s' % tmpdir,
-        '--log-error=%2' % logfile_path,
+        '--log-error=%s' % logfile_path,
     )
     subprocess.check_output(' '.join(init_directory), shell=True)
 
