@@ -24,7 +24,7 @@ script:
 - mysqld --version
 - mkdir -p /tmp/mysqldata_manual_test/datadir
 - ls -l /var/log/mysql/error.log
-- mysqld --initialize --user=travis --datadir=/tmp/mysqldata_manual_test/datadir --tmpdir=/tmp/mysqldata_manual_test --log-error/tmp/mysql_manual.log
+- mysqld --initialize-insecure --user=travis --datadir=/tmp/mysqldata_manual_test/datadir --tmpdir=/tmp/mysqldata_manual_test --log-error/tmp/mysql_manual.log
 - USER=travis py.test -n $XDIST --showlocals --cov src/pytest_mysql tests
 - pylama
 - pyroma .
