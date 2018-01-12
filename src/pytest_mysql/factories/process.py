@@ -43,7 +43,7 @@ def get_config(request):
     return config
 
 
-def init_mysql_directory(mysql_init, user, datadir, tmpdir):
+def init_mysql_directory(mysql_init, datadir, tmpdir, logfile_path):
     """
     Initialise mysql directory.
 
@@ -59,9 +59,9 @@ def init_mysql_directory(mysql_init, user, datadir, tmpdir):
     init_directory = (
         mysql_init,
         '--initialize',
-        '--user=%s' % user,
         '--datadir=%s' % datadir,
         '--tmpdir=%s' % tmpdir,
+        '--log-error=%2' % logfile_path,
     )
     subprocess.check_output(' '.join(init_directory), shell=True)
 
@@ -105,7 +105,6 @@ def mysql_proc(mysqld_exec=None, admin_executable=None, mysqld_safe=None,
 
         """
         config = get_config(request)
-        user = os.getenv('USER')
         mysql_mysqld = mysqld_exec or config['mysqld']
         mysql_admin_exec = admin_executable or config['admin']
         mysql_mysqld_safe = mysqld_safe or config['mysqld_safe']
@@ -133,7 +132,7 @@ def mysql_proc(mysqld_exec=None, admin_executable=None, mysqld_safe=None,
             )
         )
 
-        init_mysql_directory(mysql_mysqld, user, datadir, tmpdir)
+        init_mysql_directory(mysql_mysqld, datadir, tmpdir, logfile_path)
 
         mysql_executor = MySQLExecutor(
             '''
@@ -143,7 +142,6 @@ def mysql_proc(mysqld_exec=None, admin_executable=None, mysqld_safe=None,
             '''
             .format(
                 mysql_server=mysql_mysqld_safe,
-                user=user,
                 port=mysql_port,
                 datadir=datadir,
                 pidfile=pidfile,
