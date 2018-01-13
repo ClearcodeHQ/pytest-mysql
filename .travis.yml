@@ -18,7 +18,7 @@ install:
 - "$INSTALLATION"
 - pip install pytest-mysql[tests] coveralls wheel
 script:
-- /usr/bin/mysql_config --version
+- mysqld --version
 - USER=travis py.test -n $XDIST --cov src/pytest_mysql tests
 - pylama
 - pyroma .
