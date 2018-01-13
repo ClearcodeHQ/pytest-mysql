@@ -1,3 +1,4 @@
+sudo: true
 language: python
 python:
 - '2.7'
@@ -17,9 +18,11 @@ install:
 - pip install -r requirements-test.txt
 - "$INSTALLATION"
 - pip install pytest-mysql[tests] coveralls wheel
+before_script:
+  - bash .travis.install-mysql-5.7.sh
 script:
 - mysqld --version
-- USER=travis py.test -n $XDIST --cov src/pytest_mysql tests
+- py.test -n $XDIST --showlocals --cov src/pytest_mysql tests
 - pylama
 - pyroma .
 after_success:
