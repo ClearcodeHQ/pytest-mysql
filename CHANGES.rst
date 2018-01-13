@@ -1,6 +1,15 @@
 CHANGELOG
 =========
 
+unreleased
+-------
+
+- [breaking] Add support for MySQL 5.7.6 and up. Drop support for older MySQL versions.
+- [breaking] mysql_exec ini option replaced with mysql_mysqld_safe
+- [breaking] --mysql-exec cmd option replaced with --mysql-mysqld-safe
+- [breaking] dropped mysql_init ini option, --mysql-init cmd option
+- [breaking] added mysql_mysqld option and --mysql-mysqld cmd option
+
 1.1.1
 -------
 
