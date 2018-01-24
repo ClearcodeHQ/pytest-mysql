@@ -9,8 +9,7 @@ class MySQLExecutor(TCPExecutor):
             self, mysqld_safe, datadir, pidfile, unixsocket, logfile_path,
             params, tmpdir, host, port, timeout=60
     ):
-        """MySQL Executor for running and managing MySQL server process."""
-
+        """Specialised Executor for running and managing MySQL server process."""
         command = '''
         {mysql_server} --datadir={datadir} --pid-file={pidfile}
         --port={port} --socket={socket} --log-error={logfile_path}
