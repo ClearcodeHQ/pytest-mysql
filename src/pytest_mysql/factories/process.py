@@ -133,26 +133,16 @@ def mysql_proc(mysqld_exec=None, admin_executable=None, mysqld_safe=None,
         init_mysql_directory(mysql_mysqld, datadir, tmpdir, logfile_path)
 
         mysql_executor = MySQLExecutor(
-            '''
-            {mysql_server} --datadir={datadir} --pid-file={pidfile}
-            --port={port} --socket={socket} --log-error={logfile_path}
-            --tmpdir={tmpdir} --skip-syslog {params}
-            '''
-            .format(
-                mysql_server=mysql_mysqld_safe,
-                port=mysql_port,
-                datadir=datadir,
-                pidfile=pidfile,
-                socket=unixsocket,
-                logfile_path=logfile_path,
-                params=mysql_params,
-                tmpdir=tmpdir,
-            ),
+            mysqld_safe=mysql_mysqld_safe,
+            datadir=datadir,
+            pidfile=pidfile,
+            unixsocket=unixsocket,
+            logfile_path=logfile_path,
+            tmpdir=tmpdir,
+            params=mysql_params,
             host=mysql_host,
-            port=mysql_port,
-            timeout=60,
+            port=mysql_port
         )
-        mysql_executor.socket_path = unixsocket.strpath
         mysql_executor.start()
 
         def stop_server_and_remove_directory():
