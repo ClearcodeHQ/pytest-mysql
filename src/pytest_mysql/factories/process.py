@@ -41,29 +41,6 @@ def get_config(request):
     return config
 
 
-def init_mysql_directory(mysql_init, datadir, tmpdir, logfile_path):
-    """
-    Initialise mysql directory.
-
-    #. Remove mysql directory if exist.
-    #. `Initialize MySQL data directory
-        <https://dev.mysql.com/doc/refman/5.0/en/mysql-install-db.html>`_
-
-    :param str mysql_init: mysql_init executable
-    :param str datadir: path to datadir
-    :param str tmpdir: path to tmpdir
-
-    """
-    init_directory = (
-        mysql_init,
-        '--initialize-insecure',
-        '--datadir=%s' % datadir,
-        '--tmpdir=%s' % tmpdir,
-        '--log-error=%s' % logfile_path,
-    )
-    subprocess.check_output(' '.join(init_directory), shell=True)
-
-
 def mysql_proc(mysqld_exec=None, admin_executable=None, mysqld_safe=None,
                host=None, port=-1, params=None, logs_prefix=''):
     """
@@ -130,10 +107,9 @@ def mysql_proc(mysqld_exec=None, admin_executable=None, mysqld_safe=None,
             )
         )
 
-        init_mysql_directory(mysql_mysqld, datadir, tmpdir, logfile_path)
-
         mysql_executor = MySQLExecutor(
             mysqld_safe=mysql_mysqld_safe,
+            mysqld=mysql_mysqld,
             datadir=datadir,
             pidfile=pidfile,
             unixsocket=unixsocket,
