@@ -9,23 +9,37 @@ class MySQLExecutor(TCPExecutor):
 
     def __init__(
             self, mysqld_safe, mysqld, admin_exec, logfile_path,
-            params, tmpdir, user, host, port, timeout=60
+            params, base_directory, user, host, port, timeout=60
     ):
-        """Specialised Executor to run and manage MySQL server process."""
+        """
+        Specialised Executor to run and manage MySQL server process.
+
+        :param str mysqld_safe: path to mysqld_safe executable
+        :param str mysqld: path to mysqld executable
+        :param str admin_exec: path to mysqladmin executable
+        :param str logfile_path: where the server shoyld wrute it's logs
+        :param str params: string containing additional starting parameters
+        :param path base_directory: base directory where the temporary files,
+            database files, socket and pid will be placed in.
+        :param str user: mysql user name
+        :param str host: server's host
+        :param int port: server's port
+        :param int timeut: executor's timeout for start and stop actions
+        """
         self.mysqld_safe = mysqld_safe
         self.mysqd = mysqld
         self.admin_exec = admin_exec
-        self.datadir = tmpdir.mkdir(
+        self.base_directory = base_directory
+        self.datadir = self.base_directory.mkdir(
             'mysqldata_{port}'.format(port=port)
         )
-        self.pidfile = tmpdir.join(
+        self.pidfile = self.base_directory.join(
             'mysql-server.{port}.pid'.format(port=port)
         )
-        self.unixsocket = tmpdir.join(
+        self.unixsocket = self.base_directory.join(
             'mysql.{port}.sock'.format(port=port)
         )
         self.logfile_path = logfile_path
-        self.tmpdir = tmpdir
         self.user = user
         self._initialised = False
         command = '''
@@ -40,7 +54,7 @@ class MySQLExecutor(TCPExecutor):
             socket=self.unixsocket,
             logfile_path=self.logfile_path,
             params=params,
-            tmpdir=self.tmpdir,
+            tmpdir=self.base_directory,
         )
         super(MySQLExecutor, self).__init__(
             command, host, port, timeout=timeout
@@ -52,11 +66,11 @@ class MySQLExecutor(TCPExecutor):
 
         #. Remove mysql directory if exist.
         #. `Initialize MySQL data directory
-            <https://dev.mysql.com/doc/refman/5.0/en/mysql-install-db.html>`_
+            <https://dev.mysql.com/doc/refman/5.7/en/data-directory-initialization-mysqld.html>`_
 
         :param str mysql_init: mysql_init executable
         :param str datadir: path to datadir
-        :param str tmpdir: path to tmpdir
+        :param str base_directory: path to base_directory
 
         """
         if self._initialised:
@@ -65,7 +79,7 @@ class MySQLExecutor(TCPExecutor):
             self.mysqd,
             '--initialize-insecure',
             '--datadir=%s' % self.datadir,
-            '--tmpdir=%s' % self.tmpdir,
+            '--tmpdir=%s' % self.base_directory,
             '--log-error=%s' % self.logfile_path,
         )
         subprocess.check_output(' '.join(init_directory), shell=True)

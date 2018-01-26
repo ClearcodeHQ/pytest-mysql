@@ -74,6 +74,7 @@ def mysql_proc(mysqld_exec=None, admin_executable=None, mysqld_safe=None,
             `See <https://dev.mysql.com/doc/refman/5.6/en/mysqladmin.html>`_
 
         :param FixtureRequest request: fixture request object
+        :param tmpdir_factory: pytest fixture for temporary directories
         :rtype: pytest_dbfixtures.executors.TCPExecutor
         :returns: tcp executor
 
@@ -102,7 +103,7 @@ def mysql_proc(mysqld_exec=None, admin_executable=None, mysqld_safe=None,
             mysqld=mysql_mysqld,
             admin_exec=mysql_admin_exec,
             logfile_path=logfile_path,
-            tmpdir=tmpdir,
+            base_directory=tmpdir,
             params=mysql_params,
             user=config['user'],
             host=mysql_host,
