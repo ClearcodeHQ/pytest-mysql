@@ -74,11 +74,9 @@ def mysql(process_fixture_name, user=None, passwd=None, db=None,
         mysql_passwd = passwd or config['passwd']
         mysql_db = db or config['dbname']
 
-        unixsocket = process.socket_path
-
         mysql_conn = MySQLdb.connect(
             host=mysql_host,
-            unix_socket=unixsocket,
+            unix_socket=process.unixsocket.strpath,
             user=mysql_user,
             passwd=mysql_passwd,
         )

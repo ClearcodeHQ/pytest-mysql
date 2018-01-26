@@ -18,7 +18,6 @@
 """Process fixture factory for MySQL database."""
 
 import os
-import subprocess
 
 import pytest
 
@@ -39,29 +38,6 @@ def get_config(request):
             request.config.getini(option_name)
         config[option] = conf
     return config
-
-
-def init_mysql_directory(mysql_init, datadir, tmpdir, logfile_path):
-    """
-    Initialise mysql directory.
-
-    #. Remove mysql directory if exist.
-    #. `Initialize MySQL data directory
-        <https://dev.mysql.com/doc/refman/5.0/en/mysql-install-db.html>`_
-
-    :param str mysql_init: mysql_init executable
-    :param str datadir: path to datadir
-    :param str tmpdir: path to tmpdir
-
-    """
-    init_directory = (
-        mysql_init,
-        '--initialize-insecure',
-        '--datadir=%s' % datadir,
-        '--tmpdir=%s' % tmpdir,
-        '--log-error=%s' % logfile_path,
-    )
-    subprocess.check_output(' '.join(init_directory), shell=True)
 
 
 def mysql_proc(mysqld_exec=None, admin_executable=None, mysqld_safe=None,
@@ -98,6 +74,7 @@ def mysql_proc(mysqld_exec=None, admin_executable=None, mysqld_safe=None,
             `See <https://dev.mysql.com/doc/refman/5.6/en/mysqladmin.html>`_
 
         :param FixtureRequest request: fixture request object
+        :param tmpdir_factory: pytest fixture for temporary directories
         :rtype: pytest_dbfixtures.executors.TCPExecutor
         :returns: tcp executor
 
@@ -112,15 +89,6 @@ def mysql_proc(mysqld_exec=None, admin_executable=None, mysqld_safe=None,
 
         tmpdir = tmpdir_factory.mktemp('pytest-mysql')
 
-        datadir = tmpdir.mkdir(
-            'mysqldata_{port}'.format(port=mysql_port)
-        )
-        pidfile = tmpdir.join(
-            'mysql-server.{port}.pid'.format(port=mysql_port)
-        )
-        unixsocket = tmpdir.join(
-            'mysql.{port}.sock'.format(port=mysql_port)
-        )
         logsdir = config['logsdir']
         logfile_path = os.path.join(
             logsdir,
@@ -130,42 +98,20 @@ def mysql_proc(mysqld_exec=None, admin_executable=None, mysqld_safe=None,
             )
         )
 
-        init_mysql_directory(mysql_mysqld, datadir, tmpdir, logfile_path)
-
         mysql_executor = MySQLExecutor(
-            '''
-            {mysql_server} --datadir={datadir} --pid-file={pidfile}
-            --port={port} --socket={socket} --log-error={logfile_path}
-            --tmpdir={tmpdir} --skip-syslog {params}
-            '''
-            .format(
-                mysql_server=mysql_mysqld_safe,
-                port=mysql_port,
-                datadir=datadir,
-                pidfile=pidfile,
-                socket=unixsocket,
-                logfile_path=logfile_path,
-                params=mysql_params,
-                tmpdir=tmpdir,
-            ),
+            mysqld_safe=mysql_mysqld_safe,
+            mysqld=mysql_mysqld,
+            admin_exec=mysql_admin_exec,
+            logfile_path=logfile_path,
+            base_directory=tmpdir,
+            params=mysql_params,
+            user=config['user'],
             host=mysql_host,
-            port=mysql_port,
-            timeout=60,
+            port=mysql_port
         )
-        mysql_executor.socket_path = unixsocket.strpath
         mysql_executor.start()
 
-        def stop_server_and_remove_directory():
-            shutdown_server = (
-                mysql_admin_exec,
-                '--socket=%s' % unixsocket,
-                '--user=%s' % config['user'],
-                'shutdown'
-            )
-            subprocess.check_output(' '.join(shutdown_server), shell=True)
-            mysql_executor.stop()
-
-        request.addfinalizer(stop_server_and_remove_directory)
+        request.addfinalizer(mysql_executor.stop)
 
         return mysql_executor
 
