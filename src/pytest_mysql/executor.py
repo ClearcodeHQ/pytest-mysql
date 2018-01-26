@@ -95,7 +95,9 @@ class MySQLExecutor(TCPExecutor):
 
     def shutdown(self):
         """Send shutdown command to the server."""
-        shutdown_command = '{admin} --socket={socket} --user={user} shutdown'.format(
+        shutdown_command = (
+            '{admin} --socket={socket} --user={user} shutdown'
+        ).format(
             admin=self.admin_exec,
             socket=self.unixsocket,
             user=self.user
