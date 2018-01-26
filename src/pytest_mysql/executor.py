@@ -10,21 +10,26 @@ class MySQLExecutor(TCPExecutor):
             params, tmpdir, host, port, timeout=60
     ):
         """Specialised Executor to run and manage MySQL server process."""
+        self.mysqld_safe = mysqld_safe
+        self.datadir = datadir
+        self.pidfile = pidfile
+        self.unixsocket = unixsocket
+        self.logfile_path = logfile_path
+        self.tmpdir = tmpdir
         command = '''
         {mysql_server} --datadir={datadir} --pid-file={pidfile}
         --port={port} --socket={socket} --log-error={logfile_path}
         --tmpdir={tmpdir} --skip-syslog {params}
         '''.format(
-            mysql_server=mysqld_safe,
+            mysql_server=self.mysqld_safe,
             port=port,
-            datadir=datadir,
-            pidfile=pidfile,
-            socket=unixsocket,
-            logfile_path=logfile_path,
+            datadir=self.datadir,
+            pidfile=self.pidfile,
+            socket=self.unixsocket,
+            logfile_path=self.logfile_path,
             params=params,
-            tmpdir=tmpdir,
+            tmpdir=self.tmpdir,
         )
-        self.socket_path = unixsocket.strpath
         super(MySQLExecutor, self).__init__(
             command, host, port, timeout=timeout
         )
