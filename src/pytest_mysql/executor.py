@@ -75,14 +75,17 @@ class MySQLExecutor(TCPExecutor):
         """
         if self._initialised:
             return
-        init_directory = (
-            self.mysqd,
-            '--initialize-insecure',
-            '--datadir=%s' % self.datadir,
-            '--tmpdir=%s' % self.base_directory,
-            '--log-error=%s' % self.logfile_path,
+        init_command = (
+            '{mysqld} --initialize-insecure '
+            '--datadir={datadir} --tmpdir={tmpdir} '
+            '--log-error={log}'
+        ).format(
+            mysqld=self.mysqd,
+            datadir=self.datadir,
+            tmpdir=self.base_directory,
+            log=self.logfile_path
         )
-        subprocess.check_output(' '.join(init_directory), shell=True)
+        subprocess.check_output(init_command, shell=True)
         self._initialised = True
 
     def start(self):
@@ -92,13 +95,12 @@ class MySQLExecutor(TCPExecutor):
 
     def shutdown(self):
         """Send shutdown command to the server."""
-        shutdown_server = (
-            self.admin_exec,
-            '--socket=%s' % self.unixsocket,
-            '--user=%s' % self.user,
-            'shutdown'
+        shutdown_command = '{admin} --socket={socket} --user={user} shutdown'.format(
+            admin=self.admin_exec,
+            socket=self.unixsocket,
+            user=self.user
         )
-        subprocess.check_output(' '.join(shutdown_server), shell=True)
+        subprocess.check_output(shutdown_command, shell=True)
 
     def stop(self):
         """Stop the server."""
