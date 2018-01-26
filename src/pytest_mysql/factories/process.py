@@ -88,15 +88,6 @@ def mysql_proc(mysqld_exec=None, admin_executable=None, mysqld_safe=None,
 
         tmpdir = tmpdir_factory.mktemp('pytest-mysql')
 
-        datadir = tmpdir.mkdir(
-            'mysqldata_{port}'.format(port=mysql_port)
-        )
-        pidfile = tmpdir.join(
-            'mysql-server.{port}.pid'.format(port=mysql_port)
-        )
-        unixsocket = tmpdir.join(
-            'mysql.{port}.sock'.format(port=mysql_port)
-        )
         logsdir = config['logsdir']
         logfile_path = os.path.join(
             logsdir,
@@ -110,9 +101,6 @@ def mysql_proc(mysqld_exec=None, admin_executable=None, mysqld_safe=None,
             mysqld_safe=mysql_mysqld_safe,
             mysqld=mysql_mysqld,
             admin_exec=mysql_admin_exec,
-            datadir=datadir,
-            pidfile=pidfile,
-            unixsocket=unixsocket,
             logfile_path=logfile_path,
             tmpdir=tmpdir,
             params=mysql_params,

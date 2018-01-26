@@ -8,17 +8,22 @@ class MySQLExecutor(TCPExecutor):
     """MySQL Executor for running MySQL server."""
 
     def __init__(
-            self, mysqld_safe, mysqld, admin_exec,
-            datadir, pidfile, unixsocket, logfile_path,
+            self, mysqld_safe, mysqld, admin_exec, logfile_path,
             params, tmpdir, user, host, port, timeout=60
     ):
         """Specialised Executor to run and manage MySQL server process."""
         self.mysqld_safe = mysqld_safe
         self.mysqd = mysqld
         self.admin_exec = admin_exec
-        self.datadir = datadir
-        self.pidfile = pidfile
-        self.unixsocket = unixsocket
+        self.datadir = tmpdir.mkdir(
+            'mysqldata_{port}'.format(port=port)
+        )
+        self.pidfile = tmpdir.join(
+            'mysql-server.{port}.pid'.format(port=port)
+        )
+        self.unixsocket = tmpdir.join(
+            'mysql.{port}.sock'.format(port=port)
+        )
         self.logfile_path = logfile_path
         self.tmpdir = tmpdir
         self.user = user
