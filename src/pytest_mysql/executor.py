@@ -8,17 +8,20 @@ class MySQLExecutor(TCPExecutor):
     """MySQL Executor for running MySQL server."""
 
     def __init__(
-            self, mysqld_safe, mysqld, datadir, pidfile, unixsocket, logfile_path,
-            params, tmpdir, host, port, timeout=60
+            self, mysqld_safe, mysqld, admin_exec,
+            datadir, pidfile, unixsocket, logfile_path,
+            params, tmpdir, user, host, port, timeout=60
     ):
         """Specialised Executor to run and manage MySQL server process."""
         self.mysqld_safe = mysqld_safe
         self.mysqd = mysqld
+        self.admin_exec = admin_exec
         self.datadir = datadir
         self.pidfile = pidfile
         self.unixsocket = unixsocket
         self.logfile_path = logfile_path
         self.tmpdir = tmpdir
+        self.user = user
         self._initialised = False
         command = '''
         {mysql_server} --datadir={datadir} --pid-file={pidfile}
@@ -63,7 +66,22 @@ class MySQLExecutor(TCPExecutor):
         subprocess.check_output(' '.join(init_directory), shell=True)
         self._initialised = True
 
-
     def start(self):
+        """Trigger initialisation during start."""
         self.initialize()
         super(MySQLExecutor, self).start()
+
+    def shutdown(self):
+        """Send shutdown command to the server."""
+        shutdown_server = (
+            self.admin_exec,
+            '--socket=%s' % self.unixsocket,
+            '--user=%s' % self.user,
+            'shutdown'
+        )
+        subprocess.check_output(' '.join(shutdown_server), shell=True)
+
+    def stop(self):
+        """Stop the server."""
+        self.shutdown()
+        super(MySQLExecutor, self).stop()

@@ -18,7 +18,6 @@
 """Process fixture factory for MySQL database."""
 
 import os
-import subprocess
 
 import pytest
 
@@ -110,28 +109,20 @@ def mysql_proc(mysqld_exec=None, admin_executable=None, mysqld_safe=None,
         mysql_executor = MySQLExecutor(
             mysqld_safe=mysql_mysqld_safe,
             mysqld=mysql_mysqld,
+            admin_exec=mysql_admin_exec,
             datadir=datadir,
             pidfile=pidfile,
             unixsocket=unixsocket,
             logfile_path=logfile_path,
             tmpdir=tmpdir,
             params=mysql_params,
+            user=config['user'],
             host=mysql_host,
             port=mysql_port
         )
         mysql_executor.start()
 
-        def stop_server_and_remove_directory():
-            shutdown_server = (
-                mysql_admin_exec,
-                '--socket=%s' % unixsocket,
-                '--user=%s' % config['user'],
-                'shutdown'
-            )
-            subprocess.check_output(' '.join(shutdown_server), shell=True)
-            mysql_executor.stop()
-
-        request.addfinalizer(stop_server_and_remove_directory)
+        request.addfinalizer(mysql_executor.stop)
 
         return mysql_executor
 
