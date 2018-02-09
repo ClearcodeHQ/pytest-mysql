@@ -1,11 +1,19 @@
 """Specified MySQL Executor."""
 import subprocess
+from pkg_resources import parse_version
 
+import re
 from mirakuru import TCPExecutor
+
+
+def MySQLUnsupported(Exception):
+    """Raised when an unsupported version of MySQL has been encountered."""
 
 
 class MySQLExecutor(TCPExecutor):
     """MySQL Executor for running MySQL server."""
+
+    VERSION_RE = re.compile('.* (?P<version>[\d.]+)')
 
     def __init__(
             self, mysqld_safe, mysqld, admin_exec, logfile_path,
@@ -60,6 +68,12 @@ class MySQLExecutor(TCPExecutor):
             command, host, port, timeout=timeout
         )
 
+    def version(self):
+        """Read MySQL's version."""
+
+        version_output = subprocess.check_output([self.mysqd, '--version']).decode('utf-8')
+        return self.VERSION_RE.match(version_output).groupdict()['version']
+
     def initialize(self):
         """
         Initialise mysql directory.
@@ -90,6 +104,9 @@ class MySQLExecutor(TCPExecutor):
 
     def start(self):
         """Trigger initialisation during start."""
+        if parse_version(self.version()) < parse_version('5.7.6'):
+            raise MySQLUnsupported('Minimum supported version is 5.7.6')
+
         self.initialize()
         super(MySQLExecutor, self).start()
 
