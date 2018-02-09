@@ -38,6 +38,11 @@ What is this?
 This is a pytest plugin, that enables you to test your code that relies on a running MySQL Database.
 It allows you to specify fixtures for MySQL process and client.
 
+.. warning::
+
+    Only MySQL 5.7.6 and up are supported. For older versions, please use pytest-mysql 1.1.1
+    Although Pull Request to add back support for older MySQL versions are welcome.
+
 How to use
 ==========
 
