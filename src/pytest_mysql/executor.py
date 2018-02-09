@@ -6,7 +6,7 @@ import re
 from mirakuru import TCPExecutor
 
 
-def MySQLUnsupported(Exception):
+class MySQLUnsupported(Exception):
     """Exception raised when an unsupported MySQL has been encountered."""
 
 
@@ -35,7 +35,7 @@ class MySQLExecutor(TCPExecutor):
         :param int timeut: executor's timeout for start and stop actions
         """
         self.mysqld_safe = mysqld_safe
-        self.mysqd = mysqld
+        self.mysqld = mysqld
         self.admin_exec = admin_exec
         self.base_directory = base_directory
         self.datadir = self.base_directory.mkdir(
@@ -71,7 +71,7 @@ class MySQLExecutor(TCPExecutor):
     def version(self):
         """Read MySQL's version."""
         version_output = subprocess.check_output(
-            [self.mysqd, '--version']
+            [self.mysqld, '--version']
         ).decode('utf-8')
         return self.VERSION_RE.match(version_output).groupdict()['version']
 
@@ -95,7 +95,7 @@ class MySQLExecutor(TCPExecutor):
             '--datadir={datadir} --tmpdir={tmpdir} '
             '--log-error={log}'
         ).format(
-            mysqld=self.mysqd,
+            mysqld=self.mysqld,
             datadir=self.datadir,
             tmpdir=self.base_directory,
             log=self.logfile_path
