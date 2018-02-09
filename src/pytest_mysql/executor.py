@@ -7,7 +7,7 @@ from mirakuru import TCPExecutor
 
 
 def MySQLUnsupported(Exception):
-    """Raised when an unsupported version of MySQL has been encountered."""
+    """Exception raised when an unsupported MySQL has been encountered."""
 
 
 class MySQLExecutor(TCPExecutor):
@@ -70,8 +70,9 @@ class MySQLExecutor(TCPExecutor):
 
     def version(self):
         """Read MySQL's version."""
-
-        version_output = subprocess.check_output([self.mysqd, '--version']).decode('utf-8')
+        version_output = subprocess.check_output(
+            [self.mysqd, '--version']
+        ).decode('utf-8')
         return self.VERSION_RE.match(version_output).groupdict()['version']
 
     def initialize(self):
