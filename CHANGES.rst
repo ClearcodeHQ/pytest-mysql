@@ -9,6 +9,7 @@ unreleased
 - [breaking] --mysql-exec cmd option replaced with --mysql-mysqld-safe
 - [breaking] dropped mysql_init ini option, --mysql-init cmd option
 - [breaking] added mysql_mysqld option and --mysql-mysqld cmd option
+- [enhancement] check mysql's version and raise exception on unsupported
 
 1.1.1
 -------

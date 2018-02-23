@@ -109,10 +109,7 @@ def mysql_proc(mysqld_exec=None, admin_executable=None, mysqld_safe=None,
             host=mysql_host,
             port=mysql_port
         )
-        mysql_executor.start()
-
-        request.addfinalizer(mysql_executor.stop)
-
-        return mysql_executor
+        with mysql_executor:
+            yield mysql_executor
 
     return mysql_proc_fixture

@@ -1,11 +1,19 @@
 """Specified MySQL Executor."""
 import subprocess
+from pkg_resources import parse_version
 
+import re
 from mirakuru import TCPExecutor
+
+
+class MySQLUnsupported(Exception):
+    """Exception raised when an unsupported MySQL has been encountered."""
 
 
 class MySQLExecutor(TCPExecutor):
     """MySQL Executor for running MySQL server."""
+
+    VERSION_RE = re.compile('.* (?P<version>[\d.]+)')
 
     def __init__(
             self, mysqld_safe, mysqld, admin_exec, logfile_path,
@@ -24,10 +32,10 @@ class MySQLExecutor(TCPExecutor):
         :param str user: mysql user name
         :param str host: server's host
         :param int port: server's port
-        :param int timeut: executor's timeout for start and stop actions
+        :param int timeout: executor's timeout for start and stop actions
         """
         self.mysqld_safe = mysqld_safe
-        self.mysqd = mysqld
+        self.mysqld = mysqld
         self.admin_exec = admin_exec
         self.base_directory = base_directory
         self.datadir = self.base_directory.mkdir(
@@ -60,6 +68,13 @@ class MySQLExecutor(TCPExecutor):
             command, host, port, timeout=timeout
         )
 
+    def version(self):
+        """Read MySQL's version."""
+        version_output = subprocess.check_output(
+            [self.mysqld, '--version']
+        ).decode('utf-8')
+        return self.VERSION_RE.match(version_output).groupdict()['version']
+
     def initialize(self):
         """
         Initialise mysql directory.
@@ -80,7 +95,7 @@ class MySQLExecutor(TCPExecutor):
             '--datadir={datadir} --tmpdir={tmpdir} '
             '--log-error={log}'
         ).format(
-            mysqld=self.mysqd,
+            mysqld=self.mysqld,
             datadir=self.datadir,
             tmpdir=self.base_directory,
             log=self.logfile_path
@@ -90,6 +105,9 @@ class MySQLExecutor(TCPExecutor):
 
     def start(self):
         """Trigger initialisation during start."""
+        if parse_version(self.version()) < parse_version('5.7.6'):
+            raise MySQLUnsupported('Minimum supported version is 5.7.6')
+
         self.initialize()
         super(MySQLExecutor, self).start()
 
