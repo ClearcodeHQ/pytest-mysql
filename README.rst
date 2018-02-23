@@ -127,6 +127,18 @@ Example usage:
         [pytest]
         mysql_port = 8888
 
+Running on Docker/as root
+=========================
+
+Unfortunately, running MySQL as root (thus by default on docker) is not possible.
+MySQL (and MariaDB as well) will not allow it.
+
+.. code-block::
+
+    USER nobody
+
+This line should switch your docker process to run on user nobody. See `this comment for example <https://github.com/ClearcodeHQ/pytest-mysql/issues/62#issuecomment-367975723>`_
+
 Package resources
 -----------------
 
