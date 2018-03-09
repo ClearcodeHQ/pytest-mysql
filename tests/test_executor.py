@@ -15,7 +15,14 @@ from pytest_mysql.executor import MySQLExecutor, MySQLUnsupported
         ),
         '5.7.21'
     ),
-    (b'mysql 5.5.55', '5.5.55')
+    (b'mysql 5.5.55', '5.5.55'),
+    (
+        (
+            b'mysqld  Ver 10.1.30-MariaDB-0ubuntu0.17.10.1 '
+            b'for debian-linux-gnu on x86_64 (Ubuntu 17.10)'
+        ),
+        '10.1.30'
+    )
 ))
 def test_version_check(verstr, version, tmpdir_factory):
     """Test executor's version property."""

@@ -13,7 +13,7 @@ class MySQLUnsupported(Exception):
 class MySQLExecutor(TCPExecutor):
     """MySQL Executor for running MySQL server."""
 
-    VERSION_RE = re.compile('.* (?P<version>[\d.]+)')
+    VERSION_RE = re.compile('(?:[a-z_ ]+)(Ver)? (?P<version>[\d.]+).*', re.I)
 
     def __init__(
             self, mysqld_safe, mysqld, admin_exec, logfile_path,
@@ -74,6 +74,9 @@ class MySQLExecutor(TCPExecutor):
             [self.mysqld, '--version']
         ).decode('utf-8')
         return self.VERSION_RE.match(version_output).groupdict()['version']
+
+    def implementation(self):
+        pass
 
     def initialize(self):
         """
