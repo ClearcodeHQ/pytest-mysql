@@ -77,6 +77,7 @@ class MySQLExecutor(TCPExecutor):
         return self.VERSION_RE.match(version_output).groupdict()['version']
 
     def implementation(self):
+        """Detect MySQL Implementation."""
         version_output = subprocess.check_output(
             [self.mysqld, '--version']
         ).decode('utf-8')
@@ -117,7 +118,7 @@ class MySQLExecutor(TCPExecutor):
         if parse_version(self.version()) < parse_version('5.7.6'):
             raise MySQLUnsupported('Minimum supported version is 5.7.6')
         if self.implementation() != 'mysql':
-            raise MySQLUnsupported('Only MySQL servers are supported at the moment.')
+            raise MySQLUnsupported('Only MySQL servers are supported.')
 
         self.initialize()
         super(MySQLExecutor, self).start()

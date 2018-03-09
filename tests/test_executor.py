@@ -45,7 +45,6 @@ def test_version_check(verstr, version, tmpdir_factory):
         assert version == executor.version()
 
 
-
 @pytest.mark.parametrize('verstr, implementation', (
     (b'mysql_install_db Ver 5.7.21, for Linux on x86_64', 'mysql'),
     (
@@ -65,6 +64,7 @@ def test_version_check(verstr, version, tmpdir_factory):
     )
 ))
 def test_implementation(verstr, implementation, tmpdir_factory):
+    """Check detecting implementation."""
     executor = MySQLExecutor(
         mysqld_safe='',
         mysqld='',
