@@ -29,9 +29,9 @@ after_success:
 - coveralls
 jobs:
   include:
-    - stage: mariadb:
+    - stage: mariadb
       before_script: skip
-      python: 3.6
+      python: '3.6'
       addon:
         mariadb: 10.2
       script:
