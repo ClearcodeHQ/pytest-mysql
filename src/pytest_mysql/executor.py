@@ -13,7 +13,8 @@ class MySQLUnsupported(Exception):
 class MySQLExecutor(TCPExecutor):
     """MySQL Executor for running MySQL server."""
 
-    VERSION_RE = re.compile('.* (?P<version>[\d.]+)')
+    VERSION_RE = re.compile('(?:[a-z_ ]+)(Ver)? (?P<version>[\d.]+).*', re.I)
+    IMPLEMENTATION_RE = re.compile(r'.*MariaDB.*')
 
     def __init__(
             self, mysqld_safe, mysqld, admin_exec, logfile_path,
@@ -75,6 +76,15 @@ class MySQLExecutor(TCPExecutor):
         ).decode('utf-8')
         return self.VERSION_RE.match(version_output).groupdict()['version']
 
+    def implementation(self):
+        """Detect MySQL Implementation."""
+        version_output = subprocess.check_output(
+            [self.mysqld, '--version']
+        ).decode('utf-8')
+        if self.IMPLEMENTATION_RE.search(version_output):
+            return 'mariadb'
+        return 'mysql'
+
     def initialize(self):
         """
         Initialise mysql directory.
@@ -107,6 +117,8 @@ class MySQLExecutor(TCPExecutor):
         """Trigger initialisation during start."""
         if parse_version(self.version()) < parse_version('5.7.6'):
             raise MySQLUnsupported('Minimum supported version is 5.7.6')
+        if self.implementation() != 'mysql':
+            raise MySQLUnsupported('Only MySQL servers are supported.')
 
         self.initialize()
         super(MySQLExecutor, self).start()
