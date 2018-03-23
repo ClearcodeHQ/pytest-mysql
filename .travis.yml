@@ -22,12 +22,20 @@ before_script:
   - bash .travis.install-mysql-5.7.sh
 script:
 - mysqld --version
-- mariadb --version
 - py.test -n $XDIST --showlocals --cov src/pytest_mysql tests
 - pylama
 - pyroma .
 after_success:
 - coveralls
+jobs:
+  include:
+    - stage: mariadb:
+      before_script: skip
+      python: 3.6
+      addon:
+        mariadb: 10.2
+      script:
+        py.test --showlocals --cov src/pytest_mysql tests
 deploy:
   provider: pypi
   user: thearoom
