@@ -35,7 +35,8 @@ jobs:
       addon:
         mariadb: 10.2
       script:
-        py.test --showlocals --cov src/pytest_mysql tests
+        - mariadb --version
+        - py.test --showlocals --cov src/pytest_mysql tests
 deploy:
   provider: pypi
   user: thearoom
