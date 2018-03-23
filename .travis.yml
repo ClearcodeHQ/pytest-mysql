@@ -27,7 +27,7 @@ jobs:
   include:
     - stage: xdist
       python: '3.6'
-      script: py.test -n 2 --showlocals --cov src/pytest_mysql tests
+      script: py.test -n 1 --showlocals --cov src/pytest_mysql tests
 deploy:
   provider: pypi
   user: thearoom
