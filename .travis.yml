@@ -36,6 +36,7 @@ jobs:
         mariadb: 10.2
       script:
         - mariadb --version
+        - mysql --version
         - py.test --showlocals --cov src/pytest_mysql tests
 deploy:
   provider: pypi
