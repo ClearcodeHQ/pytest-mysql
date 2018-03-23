@@ -7,26 +7,28 @@ python:
 - '3.5'
 - '3.6'
 - pypy
-env:
-- INSTALLATION="python setup.py develop" XDIST=1
-- INSTALLATION="pip install ." XDIST=0
-# blocklist branches
+# blacklist branches
 branches:
   except:
   - requires-io-master
 install:
 - pip install -r requirements-test.txt
-- "$INSTALLATION"
+- pip install .
 - pip install pytest-mysql[tests] coveralls wheel
 before_script:
   - bash .travis.install-mysql-5.7.sh
 script:
 - mysqld --version
-- py.test -n $XDIST --showlocals --cov src/pytest_mysql tests
+- py.test -n 0 --showlocals --cov src/pytest_mysql tests
 - pylama
 - pyroma .
 after_success:
 - coveralls
+jobs:
+  include:
+    - stage: xdist
+      python: '3.6'
+      script: py.test -n 2 --showlocals --cov src/pytest_mysql tests
 deploy:
   provider: pypi
   user: thearoom
@@ -36,4 +38,5 @@ deploy:
     tags: true
     all_branches: true
     repo: ClearcodeHQ/pytest-mysql
+    python: '3.6'
   distributions: sdist bdist_wheel
