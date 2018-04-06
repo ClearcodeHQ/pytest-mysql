@@ -43,7 +43,7 @@ jobs:
           name: run tests
           command: |
             . venv/bin/activate
-            py.test -n 0 --showlocals --cov src/pytest_mysql tests
+            py.test -vv --mysql-mysqld /usr/local/sbin/mysqld -n 0 --showlocals --cov src/pytest_mysql tests
 
       - store_artifacts:
           path: test-reports
