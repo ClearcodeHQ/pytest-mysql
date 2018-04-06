@@ -7,7 +7,7 @@ jobs:
   build:
     docker:
       - image: circleci/python:3.6.2
-      - image: circleci/mariadb:latest-ram
+      - image: circleci/mariadb:latest
 
     working_directory: ~/repo
 
