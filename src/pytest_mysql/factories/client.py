@@ -70,7 +70,7 @@ def mysql(process_fixture_name, user=None, passwd=None, db=None,
             process.start()
 
         mysql_host = process.host
-        mysql_user = user or config['user']
+        mysql_user = 'root'
         mysql_passwd = passwd or config['passwd']
         mysql_db = db or config['dbname']
 
