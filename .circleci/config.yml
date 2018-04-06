@@ -35,20 +35,13 @@ jobs:
           key: v1-dependencies-{{ checksum "requirements-test.txt" }}-{{ checksum "setup.py" }}
 
       # run tests!
-      # this example uses Django's built-in test-runner
-      # other common Python testing frameworks include pytest and nose
-      # https://pytest.org
-      # https://nose.readthedocs.io
       - run:
-          name: versions
+          name: run tests
           command: |
             python3 --version
             mysqld --version
-
-          name: run tests
-          command: |
             . venv/bin/activate
-            py.test -vv --mysql-mysqld /usr/sbin/mysqld -n 0 --showlocals --cov src/pytest_mysql tests
+            py.test -vv -n 0 --showlocals --cov src/pytest_mysql tests
 
       - store_artifacts:
           path: test-reports
