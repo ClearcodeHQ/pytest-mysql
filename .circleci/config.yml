@@ -7,7 +7,7 @@ jobs:
   build:
     docker:
       - image: circleci/python:3.6.2
-      - image: circleci/mariadb:latest
+      - image: circleci/mariadb:latest-ram
 
     working_directory: ~/repo
 
@@ -40,6 +40,11 @@ jobs:
       # https://pytest.org
       # https://nose.readthedocs.io
       - run:
+          name: versions
+          command: |
+            python3 --version
+            mysqld --version
+
           name: run tests
           command: |
             . venv/bin/activate
