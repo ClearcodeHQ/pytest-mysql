@@ -162,7 +162,7 @@ class MySQLExecutor(TCPExecutor):
         ).format(
             admin=self.admin_exec,
             socket=self.unixsocket,
-            user=self.user
+            user='root'
         )
         subprocess.check_output(shutdown_command, shell=True)
 
