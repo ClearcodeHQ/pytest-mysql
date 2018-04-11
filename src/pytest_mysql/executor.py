@@ -13,7 +13,7 @@ class MySQLUnsupported(Exception):
 class MySQLExecutor(TCPExecutor):
     """MySQL Executor for running MySQL server."""
 
-    VERSION_RE = re.compile('(?:[a-z_ ]+)(Ver)? (?P<version>[\d.]+).*', re.I)
+    VERSION_RE = re.compile(r'(?:[a-z_ ]+)(Ver)? (?P<version>[\d.]+).*', re.I)
     IMPLEMENTATION_RE = re.compile(r'.*MariaDB.*')
 
     def __init__(
