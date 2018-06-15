@@ -50,6 +50,7 @@ jobs:
       - run:
           name: coveralls
           command: |
+            . venv/bin/activate
             pip install coveralls
             coveralls
 
