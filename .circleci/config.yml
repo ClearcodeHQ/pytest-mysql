@@ -47,6 +47,12 @@ jobs:
             . venv/bin/activate
             py.test -vv -n 0 --showlocals --mysql-user circleci --cov src/pytest_mysql tests
 
+      - run:
+          name: coveralls
+          command: |
+            pip install coveralls
+            coveralls
+
       - store_artifacts:
           path: test-reports
           destination: test-reports
