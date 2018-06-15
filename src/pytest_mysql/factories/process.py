@@ -40,8 +40,10 @@ def get_config(request):
     return config
 
 
-def mysql_proc(mysqld_exec=None, admin_executable=None, mysqld_safe=None,
-               host=None, port=-1, params=None, logs_prefix='', install_db=None):
+def mysql_proc(
+        mysqld_exec=None, admin_executable=None, mysqld_safe=None, host=None,
+        port=-1, params=None, logs_prefix='', install_db=None
+):
     """
     Process fixture factory for MySQL server.
 
