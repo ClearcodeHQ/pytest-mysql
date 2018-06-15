@@ -52,7 +52,7 @@ jobs:
           command: |
             . venv/bin/activate
             pip install coveralls
-            coveralls
+            coveralls -- verbose
 
       - store_artifacts:
           path: test-reports
