@@ -21,7 +21,9 @@ jobs:
           - v1-dependencies-
       - run:
           name: envvars
-          command: COVERALLS_REPO_TOKEN=$COVERALLS_REPO_TOKEN python -c 'import os; print(os.environ)'
+          command: |
+            source $CIRCLE_SHELL_ENV
+            python -c 'import os; print(os.environ)'
 
       - run:
           name: install mariadb
