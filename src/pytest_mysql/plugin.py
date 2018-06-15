@@ -23,6 +23,9 @@ from pytest_mysql import factories
 
 _help_mysqld = 'Path to MySQLd executable'
 _help_admin = 'Path to MySQL\'s admin executable'
+_help_install_db = (
+    'Path to MySQL\'s legacy install_db script (also used in MariaDB)'
+)
 _help_mysqld_safe = 'Path to MySQL\'s init executable'
 _help_logsdir = "Logs directory location"
 _help_host = 'Host at which MySQL will accept connections'
@@ -51,6 +54,12 @@ def pytest_addoption(parser):
         name='mysql_admin',
         help=_help_admin,
         default='/usr/bin/mysqladmin'
+    )
+
+    parser.addini(
+        name='mysql_install_db',
+        help=_help_install_db,
+        default='/usr/bin/mysql_install_db'
     )
 
     parser.addini(
@@ -117,6 +126,14 @@ def pytest_addoption(parser):
         metavar='path',
         dest='mysql_admin',
         help=_help_admin
+    )
+
+    parser.addoption(
+        '--mysql-install-db',
+        action='store',
+        metavar='path',
+        dest='mysql_install_db',
+        help=_help_install_db
     )
 
     parser.addoption(

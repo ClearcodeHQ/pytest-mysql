@@ -35,6 +35,7 @@ class MySQLExecutor(TCPExecutor):
         :param str host: server's host
         :param int port: server's port
         :param int timeout: executor's timeout for start and stop actions
+        :param int mysql_init:
         """
         self.mysqld_safe = mysqld_safe
         self.mysqld = mysqld
