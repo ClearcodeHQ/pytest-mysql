@@ -18,7 +18,8 @@ class MySQLExecutor(TCPExecutor):
 
     def __init__(
             self, mysqld_safe, mysqld, admin_exec, logfile_path,
-            params, base_directory, user, host, port, timeout=60, mysql_init=None
+            params, base_directory, user, host, port, timeout=60,
+            mysql_init=None
     ):
         """
         Specialised Executor to run and manage MySQL server process.
@@ -144,7 +145,8 @@ class MySQLExecutor(TCPExecutor):
     def start(self):
         """Trigger initialisation during start."""
         implementation = self.implementation()
-        if implementation == 'mysql' and  parse_version(self.version()) > parse_version('5.7.6'):
+        if implementation == 'mysql' and \
+                parse_version(self.version()) > parse_version('5.7.6'):
             self.initialize_mysqld()
         elif implementation in ['mysql', 'mariadb']:
             if self.mysql_init:
@@ -152,7 +154,9 @@ class MySQLExecutor(TCPExecutor):
             else:
                 raise MySQLUnsupported('mysqld_init path is missing.')
         else:
-            raise MySQLUnsupported('Only MySQL and MariaDB servers are supported with MariaDB.')
+            raise MySQLUnsupported(
+                'Only MySQL and MariaDB servers are supported with MariaDB.'
+            )
         super(MySQLExecutor, self).start()
 
     def shutdown(self):
