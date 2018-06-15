@@ -107,7 +107,8 @@ def mysql_proc(mysqld_exec=None, admin_executable=None, mysqld_safe=None,
             params=mysql_params,
             user=config['user'],
             host=mysql_host,
-            port=mysql_port
+            port=mysql_port,
+            mysql_init='/usr/bin/mysql_install_db',
         )
         with mysql_executor:
             yield mysql_executor
