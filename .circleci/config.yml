@@ -53,7 +53,7 @@ jobs:
             echo $
             . venv/bin/activate
             pip install coveralls
-            COVERALLS_REPO_TOKEN=mY7pR8pqFD9wXvIIzzqVB0U1eaVwAR4vZ coveralls
+            coveralls
 
       - store_artifacts:
           path: test-reports
