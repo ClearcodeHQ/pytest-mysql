@@ -19,6 +19,11 @@ jobs:
           - v1-dependencies-{{ checksum "requirements-test.txt" }}-{{ checksum "setup.py" }}
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
+      - run:
+          name: envvars
+          command: |
+            echo $COVERALLS_REPO_TOKEN
+            echo $TEST
 
       - run:
           name: install mariadb
@@ -50,7 +55,6 @@ jobs:
       - run:
           name: coveralls
           command: |
-            echo $
             . venv/bin/activate
             pip install coveralls
             coveralls
