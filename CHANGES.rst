@@ -4,13 +4,12 @@ CHANGELOG
 unreleased
 -------
 
-- Add support for MySQL 5.7.6 and up with new configuration options.
-    Legacy configuration supports older MySQL and MariaDB
+- [Enhancements] Add support for MySQL 5.7.6 and up with new configuration options. Legacy configuration supports older MySQL and MariaDB databases.
 - [breaking] mysql_exec ini option replaced with mysql_mysqld_safe
 - [breaking] --mysql-exec cmd option replaced with --mysql-mysqld-safe
-- [breaking] dropped mysql_init ini option, --mysql-init cmd option
+- [breaking] replaced mysql_init ini option with mysql_install_db
+- [breaking] replaced --mysql-init cmd option with --mysql-install-db 
 - [breaking] added mysql_mysqld option and --mysql-mysqld cmd option
-- [enhancement] check mysql's version and raise exception on unsupported
 
 1.1.1
 -------
