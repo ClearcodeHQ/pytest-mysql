@@ -19,7 +19,7 @@ class MySQLExecutor(TCPExecutor):
     def __init__(
             self, mysqld_safe, mysqld, admin_exec, logfile_path,
             params, base_directory, user, host, port, timeout=60,
-            mysql_init=None
+            install_db=None
     ):
         """
         Specialised Executor to run and manage MySQL server process.
@@ -35,10 +35,11 @@ class MySQLExecutor(TCPExecutor):
         :param str host: server's host
         :param int port: server's port
         :param int timeout: executor's timeout for start and stop actions
+        :param int install_db:
         """
         self.mysqld_safe = mysqld_safe
         self.mysqld = mysqld
-        self.mysql_init = mysql_init
+        self.install_db = install_db
         self.admin_exec = admin_exec
         self.base_directory = base_directory
         self.datadir = self.base_directory.mkdir(
@@ -134,7 +135,7 @@ class MySQLExecutor(TCPExecutor):
             '{mysql_init} --user={user} '
             '--datadir={datadir} --tmpdir={tmpdir}'
         ).format(
-            mysql_init=self.mysql_init,
+            mysql_init=self.install_db,
             user=self.user,
             datadir=self.datadir,
             tmpdir=self.base_directory,
@@ -149,7 +150,7 @@ class MySQLExecutor(TCPExecutor):
                 parse_version(self.version()) > parse_version('5.7.6'):
             self.initialize_mysqld()
         elif implementation in ['mysql', 'mariadb']:
-            if self.mysql_init:
+            if self.install_db:
                 self.initialise_mysql_db_install()
             else:
                 raise MySQLUnsupported('mysqld_init path is missing.')
