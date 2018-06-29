@@ -112,7 +112,7 @@ def mysql_proc(
             user=config['user'],
             host=mysql_host,
             port=mysql_port,
-            mysql_init=mysql_install_db,
+            install_db=mysql_install_db
         )
         with mysql_executor:
             yield mysql_executor
