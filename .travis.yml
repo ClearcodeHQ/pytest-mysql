@@ -30,6 +30,7 @@ jobs:
       script: py.test -n 1 --showlocals --cov src/pytest_mysql tests
     - stage: deploy
       python: '3.6'
+      tags: true
       script: skip
       deploy:
         provider: pypi
