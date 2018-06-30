@@ -20,16 +20,16 @@ pytest-mysql
 Package status
 --------------
 
-.. image:: https://travis-ci.org/ClearcodeHQ/pytest-mysql.svg?branch=v1.1.1
+.. image:: https://travis-ci.org/ClearcodeHQ/pytest-mysql.svg?branch=v2.0.0
     :target: https://travis-ci.org/ClearcodeHQ/pytest-mysql
     :alt: Tests
 
-.. image:: https://coveralls.io/repos/ClearcodeHQ/pytest-mysql/badge.png?branch=v1.1.1
-    :target: https://coveralls.io/r/ClearcodeHQ/pytest-mysql?branch=v1.1.1
+.. image:: https://coveralls.io/repos/ClearcodeHQ/pytest-mysql/badge.png?branch=v2.0.0
+    :target: https://coveralls.io/r/ClearcodeHQ/pytest-mysql?branch=v2.0.0
     :alt: Coverage Status
 
-.. image:: https://requires.io/github/ClearcodeHQ/pytest-mysql/requirements.svg?tag=v1.1.1
-     :target: https://requires.io/github/ClearcodeHQ/pytest-mysql/requirements/?tag=v1.1.1
+.. image:: https://requires.io/github/ClearcodeHQ/pytest-mysql/requirements.svg?tag=v2.0.0
+     :target: https://requires.io/github/ClearcodeHQ/pytest-mysql/requirements/?tag=v2.0.0
      :alt: Requirements Status
 
 What is this?
@@ -40,7 +40,7 @@ It allows you to specify fixtures for MySQL process and client.
 
 .. warning::
 
-    Only MySQL 5.7.6 and up are supported. For older versions, please use pytest-mysql 1.1.1
+    Only MySQL 5.7.6 and up are supported. For older versions, please use pytest-mysql 2.0.0
     Although Pull Request to add back support for older MySQL versions are welcome.
 
 How to use
@@ -78,29 +78,32 @@ You can pick which you prefer, but remember that these settings are handled in t
     * ``Command line option``
     * ``Configuration option in your pytest.ini file``
 
-+--------------------------+--------------------------+---------------------+-------------------+----------------------+
-| MySQL option             | Fixture factory argument | Command line option | pytest.ini option | Default              |
-+==========================+==========================+=====================+===================+======================+
-| Path to executable       | mysqld_exec              | --mysql-mysqld      | mysql_mysqld      | mysqld               |
-+--------------------------+--------------------------+---------------------+-------------------+----------------------+
-| Path to safe executable  | mysqld_safe              | --mysql-mysqld-safe | mysql_mysqld_safe | /usr/bin/mysqld_safe |
-+--------------------------+--------------------------+---------------------+-------------------+----------------------+
-| Path to Admin executable | admin_executable         | --mysql-admin       | mysql_admin       | /usr/bin/mysqladmin  |
-+--------------------------+--------------------------+---------------------+-------------------+----------------------+
-| host                     | host                     | --mysql-host        | mysql_host        | localhost            |
-+--------------------------+--------------------------+---------------------+-------------------+----------------------+
-| port                     | port                     | --mysql-port        | mysql_port        | random               |
-+--------------------------+--------------------------+---------------------+-------------------+----------------------+
-| MySQL user to work with  | user                     | --mysql-user        | mysql_user        | root                 |
-+--------------------------+--------------------------+---------------------+-------------------+----------------------+
-| User's password          | passwd                   | --mysql-passwd      | mysql_passwd      |                      |
-+--------------------------+--------------------------+---------------------+-------------------+----------------------+
-| Test database name       | dbname                   | --mysql-dbname      | mysqldbname       | test                 |
-+--------------------------+--------------------------+---------------------+-------------------+----------------------+
-| Starting parameters      | params                   | --mysql-params      | mysql_params      |                      |
-+--------------------------+--------------------------+---------------------+-------------------+----------------------+
-| Log directory location   | logsdir                  | --mysql-logsdir     | mysql_logsdir     | $TMPDIR              |
-+--------------------------+--------------------------+---------------------+-------------------+----------------------+
++--------------------------+--------------------------+---------------------+-------------------+---------------------------+
+| MySQL option             | Fixture factory argument | Command line option | pytest.ini option | Default                   |
++==========================+==========================+=====================+===================+===========================+
+| Path to executable       | mysqld_exec              | --mysql-mysqld      | mysql_mysqld      | mysqld                    |
++--------------------------+--------------------------+---------------------+-------------------+---------------------------+
+| Path to safe executable  | mysqld_safe              | --mysql-mysqld-safe | mysql_mysqld_safe | /usr/bin/mysqld_safe      |
++--------------------------+--------------------------+---------------------+-------------------+---------------------------+
+| Path to mysql_install_db | install_db               | --mysql-install-db  | mysql_install_db  | /usr/bin/mysql_install_db |
+| for legacy installations |                          |                     |                   |                           |
++--------------------------+--------------------------+---------------------+-------------------+---------------------------+
+| Path to Admin executable | admin_executable         | --mysql-admin       | mysql_admin       | /usr/bin/mysqladmin       |
++--------------------------+--------------------------+---------------------+-------------------+---------------------------+
+| host                     | host                     | --mysql-host        | mysql_host        | localhost                 |
++--------------------------+--------------------------+---------------------+-------------------+---------------------------+
+| port                     | port                     | --mysql-port        | mysql_port        | random                    |
++--------------------------+--------------------------+---------------------+-------------------+---------------------------+
+| MySQL user to work with  | user                     | --mysql-user        | mysql_user        | root                      |
++--------------------------+--------------------------+---------------------+-------------------+---------------------------+
+| User's password          | passwd                   | --mysql-passwd      | mysql_passwd      |                           |
++--------------------------+--------------------------+---------------------+-------------------+---------------------------+
+| Test database name       | dbname                   | --mysql-dbname      | mysqldbname       | test                      |
++--------------------------+--------------------------+---------------------+-------------------+---------------------------+
+| Starting parameters      | params                   | --mysql-params      | mysql_params      |                           |
++--------------------------+--------------------------+---------------------+-------------------+---------------------------+
+| Log directory location   | logsdir                  | --mysql-logsdir     | mysql_logsdir     | $TMPDIR                   |
++--------------------------+--------------------------+---------------------+-------------------+---------------------------+
 
 Example usage:
 

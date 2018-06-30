@@ -30,7 +30,7 @@ def get_config(request):
     config = {}
     options = [
         'mysqld', 'mysqld_safe', 'admin', 'host', 'port',
-        'user', 'passwd', 'dbname', 'params', 'logsdir'
+        'user', 'passwd', 'dbname', 'params', 'logsdir', 'install_db'
     ]
     for option in options:
         option_name = 'mysql_' + option
@@ -40,8 +40,10 @@ def get_config(request):
     return config
 
 
-def mysql_proc(mysqld_exec=None, admin_executable=None, mysqld_safe=None,
-               host=None, port=-1, params=None, logs_prefix=''):
+def mysql_proc(
+        mysqld_exec=None, admin_executable=None, mysqld_safe=None, host=None,
+        port=-1, params=None, logs_prefix='', install_db=None
+):
     """
     Process fixture factory for MySQL server.
 
@@ -57,6 +59,7 @@ def mysql_proc(mysqld_exec=None, admin_executable=None, mysqld_safe=None,
         [(2000,3000), {4002,4003}] -random of given range and set
     :param str params: additional command-line mysqld parameters
     :param str logs_prefix: prefix for log filename
+    :param str install_db: path to legacy mysql_install_db script
     :rtype: func
     :returns: function which makes a redis process
 
@@ -86,6 +89,7 @@ def mysql_proc(mysqld_exec=None, admin_executable=None, mysqld_safe=None,
         mysql_port = get_port(port) or get_port(config['port'])
         mysql_host = host or config['host']
         mysql_params = params or config['params']
+        mysql_install_db = install_db or config['install_db']
 
         tmpdir = tmpdir_factory.mktemp('pytest-mysql')
 
@@ -107,7 +111,8 @@ def mysql_proc(mysqld_exec=None, admin_executable=None, mysqld_safe=None,
             params=mysql_params,
             user=config['user'],
             host=mysql_host,
-            port=mysql_port
+            port=mysql_port,
+            install_db=mysql_install_db
         )
         with mysql_executor:
             yield mysql_executor

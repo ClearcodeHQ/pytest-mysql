@@ -13,12 +13,13 @@ class MySQLUnsupported(Exception):
 class MySQLExecutor(TCPExecutor):
     """MySQL Executor for running MySQL server."""
 
-    VERSION_RE = re.compile('(?:[a-z_ ]+)(Ver)? (?P<version>[\d.]+).*', re.I)
+    VERSION_RE = re.compile(r'(?:[a-z_ ]+)(Ver)? (?P<version>[\d.]+).*', re.I)
     IMPLEMENTATION_RE = re.compile(r'.*MariaDB.*')
 
     def __init__(
             self, mysqld_safe, mysqld, admin_exec, logfile_path,
-            params, base_directory, user, host, port, timeout=60
+            params, base_directory, user, host, port, timeout=60,
+            install_db=None
     ):
         """
         Specialised Executor to run and manage MySQL server process.
@@ -34,9 +35,11 @@ class MySQLExecutor(TCPExecutor):
         :param str host: server's host
         :param int port: server's port
         :param int timeout: executor's timeout for start and stop actions
+        :param int install_db:
         """
         self.mysqld_safe = mysqld_safe
         self.mysqld = mysqld
+        self.install_db = install_db
         self.admin_exec = admin_exec
         self.base_directory = base_directory
         self.datadir = self.base_directory.mkdir(
@@ -85,7 +88,7 @@ class MySQLExecutor(TCPExecutor):
             return 'mariadb'
         return 'mysql'
 
-    def initialize(self):
+    def initialize_mysqld(self):
         """
         Initialise mysql directory.
 
@@ -113,14 +116,48 @@ class MySQLExecutor(TCPExecutor):
         subprocess.check_output(init_command, shell=True)
         self._initialised = True
 
+    def initialise_mysql_db_install(self):
+        """
+        Initialise mysql directory for older MySQL installations or MariaDB.
+
+        #. Remove mysql directory if exist.
+        #. `Initialize MySQL data directory
+            <https://dev.mysql.com/doc/refman/5.7/en/data-directory-initialization-mysqld.html>`_
+
+        :param str mysql_init: mysql_init executable
+        :param str datadir: path to datadir
+        :param str base_directory: path to base_directory
+
+        """
+        if self._initialised:
+            return
+        init_command = (
+            '{mysql_init} --user={user} '
+            '--datadir={datadir} --tmpdir={tmpdir}'
+        ).format(
+            mysql_init=self.install_db,
+            user=self.user,
+            datadir=self.datadir,
+            tmpdir=self.base_directory,
+        )
+        subprocess.check_output(init_command, shell=True)
+        self._initialised = True
+
     def start(self):
         """Trigger initialisation during start."""
-        if parse_version(self.version()) < parse_version('5.7.6'):
-            raise MySQLUnsupported('Minimum supported version is 5.7.6')
-        if self.implementation() != 'mysql':
-            raise MySQLUnsupported('Only MySQL servers are supported.')
-
-        self.initialize()
+        implementation = self.implementation()
+        if implementation == 'mysql' and \
+                parse_version(self.version()) > parse_version('5.7.6'):
+            self.initialize_mysqld()
+        elif implementation in ['mysql', 'mariadb']:
+            if self.install_db:
+                self.initialise_mysql_db_install()
+            else:
+                raise MySQLUnsupported('mysqld_init path is missing.')
+        else:
+            raise MySQLUnsupported(
+                'Only MySQL and MariaDB servers are supported with MariaDB.'
+            )
         super(MySQLExecutor, self).start()
 
     def shutdown(self):
@@ -130,7 +167,7 @@ class MySQLExecutor(TCPExecutor):
         ).format(
             admin=self.admin_exec,
             socket=self.unixsocket,
-            user=self.user
+            user='root'
         )
         subprocess.check_output(shutdown_command, shell=True)
 
