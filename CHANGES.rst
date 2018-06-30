@@ -1,6 +1,12 @@
 CHANGELOG
 =========
 
+unreleased
+-------
+
+- [build] extracted xdist into separate stage on travis
+- [build] have deployemt as separate stage on travis
+
 2.0.0
 -------
 
