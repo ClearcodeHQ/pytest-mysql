@@ -1,7 +1,7 @@
 CHANGELOG
 =========
 
-unreleased
+2.0.0
 -------
 
 - [Enhancements] Add support for MySQL 5.7.6 and up with new configuration options. Legacy configuration supports older MySQL and MariaDB databases.
