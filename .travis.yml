@@ -1,5 +1,6 @@
 sudo: true
 language: python
+conditions: v1
 python:
 - '2.7'
 - '3.3'
@@ -7,33 +8,40 @@ python:
 - '3.5'
 - '3.6'
 - pypy
-env:
-- INSTALLATION="python setup.py develop" XDIST=1
-- INSTALLATION="pip install ." XDIST=0
-# blocklist branches
+# blacklist branches
 branches:
   except:
   - requires-io-master
 install:
 - pip install -r requirements-test.txt
-- "$INSTALLATION"
-- pip install pytest-mysql[tests] coveralls wheel
+- pip install -e .[tests] coveralls wheel
 before_script:
   - bash .travis.install-mysql-5.7.sh
 script:
 - mysqld --version
-- py.test -n $XDIST --showlocals --cov src/pytest_mysql tests
+- py.test -n 0 --showlocals --cov src/pytest_mysql tests
 - pylama
 - pyroma .
 after_success:
 - coveralls
-deploy:
-  provider: pypi
-  user: thearoom
-  password:
-    secure: HH8s4whwONXVZ6lIKYsVDYypm/Sc05cGCtoGNHbT/VG3Ogmhnt78k7o7XR3SP6FTmeLr/w00gQmaLLPCpQw2UgKsq5tRYF5QKEX3DcP6oeh1yV+4pO4HL6oxffO2WFCYPcxfCqkAeOOpaskTXeheXoXXIuM6G22ioSEpcUPFhDRgZHVdyApWhobzZxnWc4H0X/Lqw6IfoE1BoFKF9qmvDUrRqL44xTec1Rbmx9PXowghijC4A9DZzFAxb8HpUb4omy+4LR37n4VL+rmLuJn92SKzLW+OofjcfwcCOY3U1GV7AyQnhvtaSnUOY9fAEOMq/10xuiCjtO5VQ9KNBIeDXLSrv6dos4dV2TE8RJrcRo7zQFpK4p/COX0DUqiAObEls1XDl2DInce8EpEPO3tNipPF9za7fse/ruT71/aCzbI25VDqTgBX7qMGWrizCkiymnFFVweaCElk0k4e4WY64mjgQDXfCnncbf3x18BGxqNlKqKa9ExUh0fktx16I5RS8AZyDczyorhjAH4dnNsHCxzq0GwIcrzY69MlnTBzy51fUzwQAMWLvyRu0iq0A4/yzpfsvfjwrxtqUYs6Jqj5c3uharfIcD6NUe++heVO0eUm45kiTJZt5axvlLB1Rn1cOVVe/Gwqn4BWHcAjoib9nQN0hySc1jdQTAMfmhRmRcQ=
-  on:
-    tags: true
-    all_branches: true
-    repo: ClearcodeHQ/pytest-mysql
-  distributions: sdist bdist_wheel
+jobs:
+  include:
+    - stage: xdist
+      python: '3.6'
+      script: py.test -n 1 --showlocals --cov src/pytest_mysql tests
+    - stage: deploy
+      python: '3.6'
+      if: tag = true
+      script: skip
+      after_success: skip
+      deploy:
+        provider: pypi
+        user: thearoom
+        password:
+          secure: HH8s4whwONXVZ6lIKYsVDYypm/Sc05cGCtoGNHbT/VG3Ogmhnt78k7o7XR3SP6FTmeLr/w00gQmaLLPCpQw2UgKsq5tRYF5QKEX3DcP6oeh1yV+4pO4HL6oxffO2WFCYPcxfCqkAeOOpaskTXeheXoXXIuM6G22ioSEpcUPFhDRgZHVdyApWhobzZxnWc4H0X/Lqw6IfoE1BoFKF9qmvDUrRqL44xTec1Rbmx9PXowghijC4A9DZzFAxb8HpUb4omy+4LR37n4VL+rmLuJn92SKzLW+OofjcfwcCOY3U1GV7AyQnhvtaSnUOY9fAEOMq/10xuiCjtO5VQ9KNBIeDXLSrv6dos4dV2TE8RJrcRo7zQFpK4p/COX0DUqiAObEls1XDl2DInce8EpEPO3tNipPF9za7fse/ruT71/aCzbI25VDqTgBX7qMGWrizCkiymnFFVweaCElk0k4e4WY64mjgQDXfCnncbf3x18BGxqNlKqKa9ExUh0fktx16I5RS8AZyDczyorhjAH4dnNsHCxzq0GwIcrzY69MlnTBzy51fUzwQAMWLvyRu0iq0A4/yzpfsvfjwrxtqUYs6Jqj5c3uharfIcD6NUe++heVO0eUm45kiTJZt5axvlLB1Rn1cOVVe/Gwqn4BWHcAjoib9nQN0hySc1jdQTAMfmhRmRcQ=
+        on:
+          tags: true
+          all_branches: true
+          repo: ClearcodeHQ/pytest-mysql
+          python: '3.6'
+        distributions: sdist bdist_wheel
