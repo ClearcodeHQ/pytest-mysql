@@ -1,5 +1,6 @@
 sudo: true
 language: python
+conditions: v1
 python:
 - '2.7'
 - '3.3'
@@ -30,7 +31,7 @@ jobs:
       script: py.test -n 1 --showlocals --cov src/pytest_mysql tests
     - stage: deploy
       python: '3.6'
-      tags: true
+      if: tag = true
       script: skip
       after_success: skip
       deploy:
