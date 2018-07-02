@@ -23,6 +23,7 @@ jobs:
       - run:
           name: install mariadb
           command: |
+            sudo apt update
             sudo apt install mariadb-server
 
       - run:
