@@ -22,7 +22,23 @@ from pytest_mysql.executor import MySQLExecutor, MySQLUnsupported
             b'for debian-linux-gnu on x86_64 (Ubuntu 17.10)'
         ),
         '10.1.30'
-    )
+    ),
+    (b'mysql 8.0.12', '8.0.12'),
+    (
+        (
+            b'Ver 8.0.12'
+            b' for macos10.13 on x86_64 (MySQL Community Server - GPL)'
+        ),
+        '8.0.12'
+    ),
+    (b'mysql 5.7.23', '5.7.23'),
+    (
+        (
+            b'mysqld  Ver 5.7.23 '
+            b'for osx10.13 on x86_64 (Homebrew)'
+        ),
+        '5.7.23'
+    ),
 ))
 def test_version_check(verstr, version, tmpdir_factory):
     """Test executor's version property."""
@@ -61,7 +77,23 @@ def test_version_check(verstr, version, tmpdir_factory):
             b'for debian-linux-gnu on x86_64 (Ubuntu 17.10)'
         ),
         'mariadb'
-    )
+    ),
+    (b'mysql 8.0.12', 'mysql'),
+    (
+        (
+            b'Ver 8.0.12'
+            b' for macos10.13 on x86_64 (MySQL Community Server - GPL)'
+        ),
+        'mysql'
+    ),
+    (b'mysql 5.7.23', 'mysql'),
+    (
+        (
+            b'mysqld  Ver 5.7.23 '
+            b'for osx10.13 on x86_64 (Homebrew)'
+        ),
+        'mysql'
+    ),
 ))
 def test_implementation(verstr, implementation, tmpdir_factory):
     """Check detecting implementation."""
