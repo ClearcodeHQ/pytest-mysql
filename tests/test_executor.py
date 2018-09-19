@@ -26,7 +26,7 @@ from pytest_mysql.executor import MySQLExecutor, MySQLUnsupported
     (b'mysql 8.0.12', '8.0.12'),
     (
         (
-            b'Ver 8.0.12'
+            b'mysqld  Ver 8.0.12'
             b' for macos10.13 on x86_64 (MySQL Community Server - GPL)'
         ),
         '8.0.12'
