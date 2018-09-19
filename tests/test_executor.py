@@ -23,8 +23,8 @@ from pytest_mysql.executor import MySQLExecutor, MySQLUnsupported
         ),
         '10.1.30'
     ),
-    ('mysqld  Ver 8.0.12 for macos10.13 on x86_64 (MySQL Community Server - GPL)', '8.0.12'),
-    ('mysqld  Ver 5.7.23 for osx10.13 on x86_64 (Homebrew)', '5.7.23')
+    (b'mysqld  Ver 8.0.12 for macos10.13 on x86_64 (MySQL Community Server - GPL)', '8.0.12'),
+    (b'mysqld  Ver 5.7.23 for osx10.13 on x86_64 (Homebrew)', '5.7.23')
 ))
 def test_version_check(verstr, version, tmpdir_factory):
     """Test executor's version property."""
