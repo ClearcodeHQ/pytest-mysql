@@ -32,8 +32,13 @@ from pytest_mysql.executor import MySQLExecutor, MySQLUnsupported
     ),
     (
         (
-            b'mysqld  Ver 5.7.23 for osx10.13 on x86_64 '
-            b'(Homebrew)'
+            b'mysqld  Ver 5.7.23 for osx10.13 on x86_64 (Homebrew)'
+        ),
+        '5.7.23'
+    ),
+    (
+        (
+            b'\nmysqld  Ver 5.7.23 for osx10.13 on x86_64 (Homebrew)'
         ),
         '5.7.23'
     )
