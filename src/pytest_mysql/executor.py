@@ -77,7 +77,7 @@ class MySQLExecutor(TCPExecutor):
         version_output = subprocess.check_output(
             [self.mysqld, '--version']
         ).decode('utf-8')
-        return self.VERSION_RE.match(version_output).groupdict()['version']
+        return self.VERSION_RE.search(version_output).groupdict()['version']
 
     def implementation(self):
         """Detect MySQL Implementation."""
