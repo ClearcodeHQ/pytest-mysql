@@ -10,6 +10,16 @@ class MySQLUnsupported(Exception):
     """Exception raised when an unsupported MySQL has been encountered."""
 
 
+class VersionNotDetected(Exception):
+    """Exception raised when exector could not detect mysqls' version."""
+
+    def __init__(self, output):
+        """Create error message."""
+        super(Exception, self).__init__(
+            'Could not detect version in {}'.format(output)
+        )
+
+
 class MySQLExecutor(TCPExecutor):
     """MySQL Executor for running MySQL server."""
 
@@ -77,7 +87,12 @@ class MySQLExecutor(TCPExecutor):
         version_output = subprocess.check_output(
             [self.mysqld, '--version']
         ).decode('utf-8')
-        return self.VERSION_RE.search(version_output).groupdict()['version']
+        try:
+            return self.VERSION_RE.search(
+                version_output
+            ).groupdict()['version']
+        except AttributeError:
+            raise VersionNotDetected(version_output)
 
     def implementation(self):
         """Detect MySQL Implementation."""
