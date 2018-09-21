@@ -4,6 +4,7 @@ CHANGELOG
 unreleased
 -------
 
+- [fix] Improved mysql version detection on osx
 - [build] extracted xdist into separate stage on travis
 - [build] have deployemt as separate stage on travis
 
