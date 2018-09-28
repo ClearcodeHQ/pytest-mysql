@@ -1,7 +1,7 @@
 CHANGELOG
 =========
 
-unreleased
+2.0.1
 -------
 
 - [fix] Improved mysql version detection on osx
