@@ -37,7 +37,7 @@ def test_mysql_newfixture(mysql, mysql2):
 
 
 mysql_rand_proc = factories.mysql_proc(port=None, params='--skip-sync-frm')
-mysql_rand = factories.mysql('mysql_proc2')
+mysql_rand = factories.mysql('mysql_rand_proc')
 
 
 def test_random_port(mysql_rand):
