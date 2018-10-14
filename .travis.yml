@@ -18,18 +18,27 @@ before_script:
   - bash .travis.install-mysql-5.7.sh
 script:
 - mysqld --version
-- py.test -n 0 --showlocals --cov src/pytest_mysql tests
-- pylama
-- pyroma .
+- py.test -n 0 --showlocals --cov pytest_mysql tests
 after_success:
 - coveralls
 jobs:
   include:
     - stage: xdist
-      python: '3.6'
-      script: py.test -n 1 --showlocals --cov src/pytest_mysql tests
+      python: 3.6
+      script: py.test -n 1 --showlocals --cov pytest_mysql tests
+    - stage: linters
+      python: 3.6
+      install:
+      - pip install -r requirements-lint.txt
+      - pip install .[tests] coveralls wheel
+      script:
+      - pycodestyle
+      - pydocstyle
+      - pylint pytest_mysql tests
+      - pyroma .
+      after_success: skip
     - stage: deploy
-      python: '3.6'
+      python: 3.6
       if: tag IS present
       script: skip
       deploy:

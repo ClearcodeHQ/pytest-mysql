@@ -1,8 +1,8 @@
 """Specified MySQL Executor."""
+import re
 import subprocess
 from pkg_resources import parse_version
 
-import re
 from mirakuru import TCPExecutor
 
 
@@ -15,7 +15,7 @@ class VersionNotDetected(Exception):
 
     def __init__(self, output):
         """Create error message."""
-        super(Exception, self).__init__(
+        super(VersionNotDetected, self).__init__(
             'Could not detect version in {}'.format(output)
         )
 
@@ -186,7 +186,7 @@ class MySQLExecutor(TCPExecutor):
         )
         subprocess.check_output(shutdown_command, shell=True)
 
-    def stop(self):
+    def stop(self, sig=None):
         """Stop the server."""
         self.shutdown()
-        super(MySQLExecutor, self).stop()
+        super(MySQLExecutor, self).stop(sig)
