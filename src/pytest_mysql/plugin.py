@@ -20,7 +20,7 @@ from tempfile import gettempdir
 
 from pytest_mysql import factories
 
-
+# pylint:disable=invalid-name
 _help_mysqld = 'Path to MySQLd executable'
 _help_admin = 'Path to MySQL\'s admin executable'
 _help_install_db = (

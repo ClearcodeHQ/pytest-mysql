@@ -23,7 +23,7 @@ import MySQLdb
 from pytest_mysql.factories.process import get_config
 
 
-def mysql(process_fixture_name, user=None, passwd=None, db=None,
+def mysql(process_fixture_name, passwd=None, dbname=None,
           charset='utf8', collation='utf8_general_ci'):
     """
     Client fixture factory for MySQL server.
@@ -36,9 +36,8 @@ def mysql(process_fixture_name, user=None, passwd=None, db=None,
     <https://dev.mysql.com/doc/refman/5.5/en/charset-database.html>`_
 
     :param str process_fixture_name: process fixture name
-    :param str user: mysql server user
     :param str passwd: mysql server's password
-    :param str db: database's name
+    :param str dbname: database's name
     :param str charset: MySQL characterset to use by default
         for *tests* database
     :param str collation: MySQL collation to use by default
@@ -72,7 +71,7 @@ def mysql(process_fixture_name, user=None, passwd=None, db=None,
         mysql_host = process.host
         mysql_user = 'root'
         mysql_passwd = passwd or config['passwd']
-        mysql_db = db or config['dbname']
+        mysql_db = dbname or config['dbname']
 
         mysql_conn = MySQLdb.connect(
             host=mysql_host,
