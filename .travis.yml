@@ -30,7 +30,7 @@ jobs:
       python: 3.6
       install:
       - pip install -r requirements-lint.txt
-      - pip install .[tests] coveralls wheel
+      - pip install .[tests]
       script:
       - pycodestyle
       - pydocstyle
