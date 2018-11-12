@@ -1,5 +1,5 @@
 # test runs requirements (versions we'll be testing against) - automatically updated by requires.io
-coverage==4.5.1 # pytest-cov
+coverage==4.5.2 # pytest-cov
 pytest==3.10.1
 mirakuru==1.1.0
 mysqlclient==1.3.13
