@@ -1,3 +1,7 @@
+.. image:: https://raw.githubusercontent.com/ClearcodeHQ/pytest-mysql/master/logo.png
+    :width: 100px
+    :height: 100px
+    
 pytest-mysql
 ============
 

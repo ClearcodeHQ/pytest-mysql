@@ -11,3 +11,4 @@ of pytest-mysql along its history.
 * Tomasz Święcicki
 * Tomasz Karbownicki
 * Michał Masłowski
+* Damian Skrzypczak
