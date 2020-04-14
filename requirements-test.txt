@@ -1,5 +1,5 @@
 # test runs requirements (versions we'll be testing against) - automatically updated by requires.io
-coverage==5.0.4 # pytest-cov
+coverage==5.1 # pytest-cov
 pytest==5.4.1
 mirakuru==2.2.0; python_version>'3.5'
 mirakuru<2.1.0; python_version<='3.5'
