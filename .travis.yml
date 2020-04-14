@@ -2,10 +2,12 @@ dist: xenial
 language: python
 conditions: v1
 python:
+- 3.8
 - 3.5
 - 3.6
 - 3.7
-- 3.8-dev
+- 3.9-dev
+- nightly
 - pypy3
 # blacklist branches
 branches:
@@ -17,14 +19,14 @@ install:
 - pip install -e .[tests] coveralls wheel
 script:
 - mysqld --version
-- py.test -n 0 --showlocals --cov pytest_mysql tests
+- py.test -n 0
 after_success:
 - coveralls
 jobs:
   include:
     - stage: xdist
       python: 3.7
-      script: py.test -n 1 --showlocals --cov pytest_mysql tests
+      script: py.test -n 1
     - stage: linters
       python: 3.7
       install:
