@@ -6,7 +6,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/python:3.6.8
+      - image: circleci/python:latest
 
     working_directory: ~/repo
 
@@ -46,7 +46,7 @@ jobs:
             python3 --version
             mysqld --version
             . venv/bin/activate
-            py.test -vv -n 0 --showlocals --mysql-user circleci --cov src/pytest_mysql tests
+            py.test -n 0 --mysql-user circleci --mysql-mysqld /usr/sbin/mysqld -c pytest.ini
 
       - store_artifacts:
           path: test-reports
