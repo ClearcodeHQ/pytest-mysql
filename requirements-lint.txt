@@ -4,3 +4,4 @@ pydocstyle==5.0.2
 pylint==2.5.2
 pygments
 pyroma==2.6
+-r requirements-test.txt
