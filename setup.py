@@ -37,7 +37,7 @@ def read(fname):
 
 requirements = [
     'pytest>=3.0.0',
-    'mirakuru',
+    'mirakuru>=2.3.0',
     'port-for',
     'mysqlclient'
 ]
