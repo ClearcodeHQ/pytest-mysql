@@ -15,7 +15,7 @@ branches:
   - /^dependabot.*$/
 install:
 - pip install -r requirements-test.txt
-- pip install -e .[tests] coveralls wheel
+- pip install coveralls wheel
 script:
 - mysqld --version
 - py.test -n 0
@@ -28,7 +28,6 @@ jobs:
     - stage: linters
       install:
       - pip install -r requirements-lint.txt
-      - pip install .[tests]
       script:
       - pycodestyle
       - pydocstyle
