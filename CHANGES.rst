@@ -1,7 +1,7 @@
 CHANGELOG
 =========
 
-unreleased
+2.0.2
 -------
 
 - [enhancement] Preemptively read data after each test in mysql client fixture.
