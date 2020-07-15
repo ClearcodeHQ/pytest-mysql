@@ -18,6 +18,11 @@ def test_mysql(mysql):
     cursor.close()
 
 
+def test_mysql_test_without_cursor(mysql):
+    """Run test without cursor and without fetching the data."""
+    mysql.query("SELECT VERSION();")
+
+
 def test_mysql_newfixture(mysql, mysql2):
     """More complext test with several mysql_processes."""
     cursor = mysql.cursor()

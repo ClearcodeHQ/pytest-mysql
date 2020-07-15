@@ -90,12 +90,11 @@ def mysql(process_fixture_name, passwd=None, dbname=None,
         )
         mysql_conn.query('USE %s' % mysql_db)
 
-        def drop_database():
-            mysql_conn.query('DROP DATABASE IF EXISTS %s' % mysql_db)
-            mysql_conn.close()
+        yield mysql_conn
 
-        request.addfinalizer(drop_database)
-
-        return mysql_conn
+        # clean up after test that forgot to fetch selected data
+        mysql_conn.store_result()
+        mysql_conn.query('DROP DATABASE IF EXISTS %s' % mysql_db)
+        mysql_conn.close()
 
     return mysql_fixture

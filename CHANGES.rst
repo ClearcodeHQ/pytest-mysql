@@ -4,7 +4,9 @@ CHANGELOG
 unreleased
 -------
 
-- [enhnacement] Require at least mirakuru 2.3.0 - forced by changed stop method paramters change
+- [enhancement] Preemptively read data after each test in mysql client fixture.
+  This will make test run if the test itself forgot to fetch queried data.
+- [enhnacement] Require at least mirakuru 2.3.0 - forced by changed stop method parameters change
 
 2.0.1
 -------
