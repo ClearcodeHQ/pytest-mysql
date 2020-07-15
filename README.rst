@@ -87,12 +87,12 @@ You can pick which you prefer, but remember that these settings are handled in t
 +==========================+==========================+=====================+===================+===========================+
 | Path to executable       | mysqld_exec              | --mysql-mysqld      | mysql_mysqld      | mysqld                    |
 +--------------------------+--------------------------+---------------------+-------------------+---------------------------+
-| Path to safe executable  | mysqld_safe              | --mysql-mysqld-safe | mysql_mysqld_safe | /usr/bin/mysqld_safe      |
+| Path to safe executable  | mysqld_safe              | --mysql-mysqld-safe | mysql_mysqld_safe | mysqld_safe               |
 +--------------------------+--------------------------+---------------------+-------------------+---------------------------+
-| Path to mysql_install_db | install_db               | --mysql-install-db  | mysql_install_db  | /usr/bin/mysql_install_db |
+| Path to mysql_install_db | install_db               | --mysql-install-db  | mysql_install_db  | mysql_install_db          |
 | for legacy installations |                          |                     |                   |                           |
 +--------------------------+--------------------------+---------------------+-------------------+---------------------------+
-| Path to Admin executable | admin_executable         | --mysql-admin       | mysql_admin       | /usr/bin/mysqladmin       |
+| Path to Admin executable | admin_executable         | --mysql-admin       | mysql_admin       | mysqladmin                |
 +--------------------------+--------------------------+---------------------+-------------------+---------------------------+
 | host                     | host                     | --mysql-host        | mysql_host        | localhost                 |
 +--------------------------+--------------------------+---------------------+-------------------+---------------------------+

@@ -47,19 +47,19 @@ def pytest_addoption(parser):
     parser.addini(
         name='mysql_mysqld_safe',
         help=_help_mysqld_safe,
-        default='/usr/bin/mysqld_safe'
+        default='mysqld_safe'
     )
 
     parser.addini(
         name='mysql_admin',
         help=_help_admin,
-        default='/usr/bin/mysqladmin'
+        default='mysqladmin'
     )
 
     parser.addini(
         name='mysql_install_db',
         help=_help_install_db,
-        default='/usr/bin/mysql_install_db'
+        default='mysql_install_db'
     )
 
     parser.addini(
