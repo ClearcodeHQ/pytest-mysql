@@ -60,8 +60,10 @@ setup(
         read('README.rst') + '\n\n' + read('CHANGES.rst')
     ),
     keywords='tests py.test pytest fixture mysql',
-    author='Clearcode - The A Room',
-    author_email='thearoom@clearcode.cc',
+    author="Pyziomki, a Clearcode's team",
+    author_email="pyziomki[at]clearcode.cc",
+    maintainer='Grzegorz Śliwiński',
+    maintainer_email='g.sliwnski+pypi@clearcode.cc',
     url='https://github.com/ClearcodeHQ/pytest-mysql',
     license='LGPLv3',
     classifiers=[
