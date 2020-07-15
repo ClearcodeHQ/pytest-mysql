@@ -61,7 +61,7 @@ setup(
     ),
     keywords='tests py.test pytest fixture mysql',
     author="Pyziomki, a Clearcode's team",
-    author_email="pyziomki[at]clearcode.cc",
+    author_email="notextisting.email@clearcode.cc",
     maintainer='Grzegorz Śliwiński',
     maintainer_email='g.sliwnski+pypi@clearcode.cc',
     url='https://github.com/ClearcodeHQ/pytest-mysql',
