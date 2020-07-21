@@ -1,7 +1,7 @@
 CHANGELOG
 =========
 
-unreleased
+2.0.3
 -------
 
 - [enhancement] Do not assume that mysql executables are in /usr/bin

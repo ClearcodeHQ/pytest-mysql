@@ -24,16 +24,16 @@ pytest-mysql
 Package status
 --------------
 
-.. image:: https://travis-ci.org/ClearcodeHQ/pytest-mysql.svg?branch=v2.0.2
+.. image:: https://travis-ci.org/ClearcodeHQ/pytest-mysql.svg?branch=v2.0.3
     :target: https://travis-ci.org/ClearcodeHQ/pytest-mysql
     :alt: Tests
 
-.. image:: https://coveralls.io/repos/ClearcodeHQ/pytest-mysql/badge.png?branch=v2.0.2
-    :target: https://coveralls.io/r/ClearcodeHQ/pytest-mysql?branch=v2.0.2
+.. image:: https://coveralls.io/repos/ClearcodeHQ/pytest-mysql/badge.png?branch=v2.0.3
+    :target: https://coveralls.io/r/ClearcodeHQ/pytest-mysql?branch=v2.0.3
     :alt: Coverage Status
 
-.. image:: https://requires.io/github/ClearcodeHQ/pytest-mysql/requirements.svg?tag=v2.0.2
-     :target: https://requires.io/github/ClearcodeHQ/pytest-mysql/requirements/?tag=v2.0.2
+.. image:: https://requires.io/github/ClearcodeHQ/pytest-mysql/requirements.svg?tag=v2.0.3
+     :target: https://requires.io/github/ClearcodeHQ/pytest-mysql/requirements/?tag=v2.0.3
      :alt: Requirements Status
 
 What is this?
@@ -44,7 +44,7 @@ It allows you to specify fixtures for MySQL process and client.
 
 .. warning::
 
-    Only MySQL 5.7.6 and up are supported. For older versions, please use pytest-mysql 2.0.2
+    Only MySQL 5.7.6 and up are supported. For older versions, please use pytest-mysql 2.0.3
     Although Pull Request to add back support for older MySQL versions are welcome.
 
 How to use
