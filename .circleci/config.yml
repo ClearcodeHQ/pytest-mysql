@@ -46,7 +46,7 @@ jobs:
             python3 --version
             mysqld --version
             . venv/bin/activate
-            py.test -n 0 --mysql-user circleci --mysql-mysqld /usr/sbin/mysqld -c pytest.ini
+            py.test -n 0 --mysql-user circleci --mysql-mysqld /usr/sbin/mysqld -c setup.cfg
 
       - store_artifacts:
           path: test-reports
