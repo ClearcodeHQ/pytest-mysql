@@ -15,7 +15,7 @@ class VersionNotDetected(Exception):
 
     def __init__(self, output):
         """Create error message."""
-        super(VersionNotDetected, self).__init__(
+        super().__init__(
             'Could not detect version in {}'.format(output)
         )
 
@@ -78,7 +78,7 @@ class MySQLExecutor(TCPExecutor):
             params=params,
             tmpdir=self.base_directory,
         )
-        super(MySQLExecutor, self).__init__(
+        super().__init__(
             command, host, port, timeout=timeout
         )
 
@@ -91,8 +91,8 @@ class MySQLExecutor(TCPExecutor):
             return self.VERSION_RE.search(
                 version_output
             ).groupdict()['version']
-        except AttributeError:
-            raise VersionNotDetected(version_output)
+        except AttributeError as exc:
+            raise VersionNotDetected(version_output) from exc
 
     def implementation(self):
         """Detect MySQL Implementation."""
@@ -173,7 +173,7 @@ class MySQLExecutor(TCPExecutor):
             raise MySQLUnsupported(
                 'Only MySQL and MariaDB servers are supported with MariaDB.'
             )
-        super(MySQLExecutor, self).start()
+        super().start()
 
     def shutdown(self):
         """Send shutdown command to the server."""
@@ -189,4 +189,4 @@ class MySQLExecutor(TCPExecutor):
     def stop(self, sig=None, exp_sig=None):
         """Stop the server."""
         self.shutdown()
-        super(MySQLExecutor, self).stop(sig, exp_sig)
+        super().stop(sig, exp_sig)
