@@ -1,6 +1,6 @@
 # test runs requirements (versions we'll be testing against) - automatically updated by requires.io
 coverage==5.5 # pytest-cov
-pytest==6.2.3
+pytest==6.2.4
 mirakuru==2.3.0
 mysqlclient==2.0.3 # rq.filter: !=1.4.2.post1
 port-for==0.4
