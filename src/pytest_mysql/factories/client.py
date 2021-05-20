@@ -23,8 +23,13 @@ import MySQLdb
 from pytest_mysql.factories.process import get_config
 
 
-def mysql(process_fixture_name, passwd=None, dbname=None,
-          charset='utf8', collation='utf8_general_ci'):
+def mysql(
+    process_fixture_name,
+    passwd=None,
+    dbname=None,
+    charset="utf8",
+    collation="utf8_general_ci",
+):
     """
     Client fixture factory for MySQL server.
 
@@ -46,6 +51,7 @@ def mysql(process_fixture_name, passwd=None, dbname=None,
     :returns: function ``mysql_fixture`` with suit scope
     :rtype: func
     """
+
     @pytest.fixture
     def mysql_fixture(request):
         """
@@ -69,9 +75,9 @@ def mysql(process_fixture_name, passwd=None, dbname=None,
             process.start()
 
         mysql_host = process.host
-        mysql_user = 'root'
-        mysql_passwd = passwd or config['passwd']
-        mysql_db = dbname or config['dbname']
+        mysql_user = "root"
+        mysql_passwd = passwd or config["passwd"]
+        mysql_db = dbname or config["dbname"]
 
         mysql_conn = MySQLdb.connect(
             host=mysql_host,
@@ -81,20 +87,19 @@ def mysql(process_fixture_name, passwd=None, dbname=None,
         )
 
         mysql_conn.query(
-            '''CREATE DATABASE {name}
+            """CREATE DATABASE {name}
             DEFAULT CHARACTER SET {charset}
-            DEFAULT COLLATE {collation}'''
-            .format(
+            DEFAULT COLLATE {collation}""".format(
                 name=mysql_db, charset=charset, collation=collation
             )
         )
-        mysql_conn.query('USE %s' % mysql_db)
+        mysql_conn.query("USE %s" % mysql_db)
 
         yield mysql_conn
 
         # clean up after test that forgot to fetch selected data
         mysql_conn.store_result()
-        mysql_conn.query('DROP DATABASE IF EXISTS %s' % mysql_db)
+        mysql_conn.query("DROP DATABASE IF EXISTS %s" % mysql_db)
         mysql_conn.close()
 
     return mysql_fixture

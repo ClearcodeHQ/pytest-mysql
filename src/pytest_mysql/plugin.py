@@ -21,15 +21,15 @@ from tempfile import gettempdir
 from pytest_mysql import factories
 
 # pylint:disable=invalid-name
-_help_mysqld = 'Path to MySQLd executable'
-_help_admin = 'Path to MySQL\'s admin executable'
+_help_mysqld = "Path to MySQLd executable"
+_help_admin = "Path to MySQL's admin executable"
 _help_install_db = (
-    'Path to MySQL\'s legacy install_db script (also used in MariaDB)'
+    "Path to MySQL's legacy install_db script (also used in MariaDB)"
 )
-_help_mysqld_safe = 'Path to MySQL\'s init executable'
+_help_mysqld_safe = "Path to MySQL's init executable"
 _help_logsdir = "Logs directory location"
-_help_host = 'Host at which MySQL will accept connections'
-_help_port = 'Port at which MySQL will accept connections'
+_help_host = "Host at which MySQL will accept connections"
+_help_port = "Port at which MySQL will accept connections"
 _help_user = "MySQL username"
 _help_passwd = "MySQL password"
 _help_dbname = "Test database name"
@@ -38,154 +38,109 @@ _help_params = "Starting parameters for the MySQL"
 
 def pytest_addoption(parser):
     """Plugin configuration."""
-    parser.addini(
-        name='mysql_mysqld',
-        help=_help_mysqld,
-        default='mysqld'
-    )
+    parser.addini(name="mysql_mysqld", help=_help_mysqld, default="mysqld")
 
     parser.addini(
-        name='mysql_mysqld_safe',
-        help=_help_mysqld_safe,
-        default='mysqld_safe'
+        name="mysql_mysqld_safe", help=_help_mysqld_safe, default="mysqld_safe"
     )
 
-    parser.addini(
-        name='mysql_admin',
-        help=_help_admin,
-        default='mysqladmin'
-    )
+    parser.addini(name="mysql_admin", help=_help_admin, default="mysqladmin")
 
     parser.addini(
-        name='mysql_install_db',
+        name="mysql_install_db",
         help=_help_install_db,
-        default='mysql_install_db'
+        default="mysql_install_db",
     )
 
-    parser.addini(
-        name='mysql_host',
-        help=_help_host,
-        default='localhost'
-    )
+    parser.addini(name="mysql_host", help=_help_host, default="localhost")
 
     parser.addini(
-        name='mysql_port',
+        name="mysql_port",
         help=_help_port,
         default=None,
     )
 
-    parser.addini(
-        name='mysql_user',
-        help=_help_user,
-        default='root'
-    )
+    parser.addini(name="mysql_user", help=_help_user, default="root")
+
+    parser.addini(name="mysql_passwd", help=_help_passwd, default="")
+
+    parser.addini(name="mysql_dbname", help=_help_dbname, default="test")
+
+    parser.addini(name="mysql_params", help=_help_params, default="")
 
     parser.addini(
-        name='mysql_passwd',
-        help=_help_passwd,
-        default=''
-    )
-
-    parser.addini(
-        name='mysql_dbname',
-        help=_help_dbname,
-        default='test'
-    )
-
-    parser.addini(
-        name='mysql_params',
-        help=_help_params,
-        default=''
-    )
-
-    parser.addini(
-        name='mysql_logsdir',
+        name="mysql_logsdir",
         help=_help_logsdir,
         default=gettempdir(),
     )
 
     parser.addoption(
-        '--mysql-mysqld',
-        action='store',
-        metavar='path',
-        dest='mysql_mysqld',
-        help=_help_mysqld
+        "--mysql-mysqld",
+        action="store",
+        metavar="path",
+        dest="mysql_mysqld",
+        help=_help_mysqld,
     )
 
     parser.addoption(
-        '--mysql-mysqld-safe',
-        action='store',
-        metavar='path',
-        dest='mysql_mysqld_safe',
-        help=_help_mysqld_safe
+        "--mysql-mysqld-safe",
+        action="store",
+        metavar="path",
+        dest="mysql_mysqld_safe",
+        help=_help_mysqld_safe,
     )
 
     parser.addoption(
-        '--mysql-admin',
-        action='store',
-        metavar='path',
-        dest='mysql_admin',
-        help=_help_admin
+        "--mysql-admin",
+        action="store",
+        metavar="path",
+        dest="mysql_admin",
+        help=_help_admin,
     )
 
     parser.addoption(
-        '--mysql-install-db',
-        action='store',
-        metavar='path',
-        dest='mysql_install_db',
-        help=_help_install_db
+        "--mysql-install-db",
+        action="store",
+        metavar="path",
+        dest="mysql_install_db",
+        help=_help_install_db,
     )
 
     parser.addoption(
-        '--mysql-host',
-        action='store',
-        dest='mysql_host',
+        "--mysql-host",
+        action="store",
+        dest="mysql_host",
         help=_help_host,
     )
 
     parser.addoption(
-        '--mysql-port',
-        action='store',
-        dest='mysql_port',
-        help=_help_port
+        "--mysql-port", action="store", dest="mysql_port", help=_help_port
     )
 
     parser.addoption(
-        '--mysql-user',
-        action='store',
-        dest='mysql_user',
-        help=_help_user
+        "--mysql-user", action="store", dest="mysql_user", help=_help_user
     )
 
     parser.addoption(
-        '--mysql-passwd',
-        action='store',
-        dest='mysql_passwd',
-        help=_help_passwd
+        "--mysql-passwd", action="store", dest="mysql_passwd", help=_help_passwd
     )
 
     parser.addoption(
-        '--mysql-dbname',
-        action='store',
-        dest='mysql_dbname',
-        help=_help_dbname
+        "--mysql-dbname", action="store", dest="mysql_dbname", help=_help_dbname
     )
 
     parser.addoption(
-        '--mysql-params',
-        action='store',
-        dest='mysql_params',
-        help=_help_params
+        "--mysql-params", action="store", dest="mysql_params", help=_help_params
     )
 
     parser.addoption(
-        '--mysql-logsdir',
-        action='store',
-        metavar='path',
-        dest='mysql_logsdir',
-        help=_help_params
+        "--mysql-logsdir",
+        action="store",
+        metavar="path",
+        dest="mysql_logsdir",
+        help=_help_logsdir,
     )
 
 
 mysql_proc = factories.mysql_proc()
-mysql = factories.mysql('mysql_proc')
+mysql = factories.mysql("mysql_proc")

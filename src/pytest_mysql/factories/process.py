@@ -29,20 +29,36 @@ def get_config(request):
     """Return a dictionary with config options."""
     config = {}
     options = [
-        'mysqld', 'mysqld_safe', 'admin', 'host', 'port',
-        'user', 'passwd', 'dbname', 'params', 'logsdir', 'install_db'
+        "mysqld",
+        "mysqld_safe",
+        "admin",
+        "host",
+        "port",
+        "user",
+        "passwd",
+        "dbname",
+        "params",
+        "logsdir",
+        "install_db",
     ]
     for option in options:
-        option_name = 'mysql_' + option
-        conf = request.config.getoption(option_name) or \
-            request.config.getini(option_name)
+        option_name = "mysql_" + option
+        conf = request.config.getoption(option_name) or request.config.getini(
+            option_name
+        )
         config[option] = conf
     return config
 
 
 def mysql_proc(
-        mysqld_exec=None, admin_executable=None, mysqld_safe=None, host=None,
-        port=-1, params=None, logs_prefix='', install_db=None
+    mysqld_exec=None,
+    admin_executable=None,
+    mysqld_safe=None,
+    host=None,
+    port=-1,
+    params=None,
+    logs_prefix="",
+    install_db=None,
 ):
     """
     Process fixture factory for MySQL server.
@@ -64,7 +80,8 @@ def mysql_proc(
     :returns: function which makes a redis process
 
     """
-    @pytest.fixture(scope='session')
+
+    @pytest.fixture(scope="session")
     def mysql_proc_fixture(request, tmpdir_factory):
         """
         Process fixture for MySQL server.
@@ -83,23 +100,22 @@ def mysql_proc(
 
         """
         config = get_config(request)
-        mysql_mysqld = mysqld_exec or config['mysqld']
-        mysql_admin_exec = admin_executable or config['admin']
-        mysql_mysqld_safe = mysqld_safe or config['mysqld_safe']
-        mysql_port = get_port(port) or get_port(config['port'])
-        mysql_host = host or config['host']
-        mysql_params = params or config['params']
-        mysql_install_db = install_db or config['install_db']
+        mysql_mysqld = mysqld_exec or config["mysqld"]
+        mysql_admin_exec = admin_executable or config["admin"]
+        mysql_mysqld_safe = mysqld_safe or config["mysqld_safe"]
+        mysql_port = get_port(port) or get_port(config["port"])
+        mysql_host = host or config["host"]
+        mysql_params = params or config["params"]
+        mysql_install_db = install_db or config["install_db"]
 
-        tmpdir = tmpdir_factory.mktemp('pytest-mysql')
+        tmpdir = tmpdir_factory.mktemp("pytest-mysql")
 
-        logsdir = config['logsdir']
+        logsdir = config["logsdir"]
         logfile_path = os.path.join(
             logsdir,
-            '{prefix}mysql-server.{port}.log'.format(
-                prefix=logs_prefix,
-                port=mysql_port
-            )
+            "{prefix}mysql-server.{port}.log".format(
+                prefix=logs_prefix, port=mysql_port
+            ),
         )
 
         mysql_executor = MySQLExecutor(
@@ -109,10 +125,10 @@ def mysql_proc(
             logfile_path=logfile_path,
             base_directory=tmpdir,
             params=mysql_params,
-            user=config['user'],
+            user=config["user"],
             host=mysql_host,
             port=mysql_port,
-            install_db=mysql_install_db
+            install_db=mysql_install_db,
         )
         with mysql_executor:
             yield mysql_executor

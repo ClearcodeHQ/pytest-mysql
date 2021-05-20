@@ -35,62 +35,50 @@ def read(fname):
     return open(os.path.join(here, fname)).read()
 
 
-requirements = [
-    'pytest>=3.0.0',
-    'mirakuru>=2.3.0',
-    'port-for',
-    'mysqlclient'
-]
+requirements = ["pytest>=3.0.0", "mirakuru>=2.3.0", "port-for", "mysqlclient"]
 
 test_requires = [
-    'pytest-cov',
-    'pytest-xdist',
-    'Mock',
+    "pytest-cov",
+    "pytest-xdist",
+    "Mock",
 ]
 
-extras_require = {
-    'tests': test_requires
-}
+extras_require = {"tests": test_requires}
 
 setup(
-    name='pytest-mysql',
-    version='2.0.3',
-    description='MySQL process and client fixtures for pytest',
-    long_description=(
-        read('README.rst') + '\n\n' + read('CHANGES.rst')
-    ),
-    keywords='tests py.test pytest fixture mysql',
+    name="pytest-mysql",
+    version="2.0.3",
+    description="MySQL process and client fixtures for pytest",
+    long_description=(read("README.rst") + "\n\n" + read("CHANGES.rst")),
+    keywords="tests py.test pytest fixture mysql",
     author="Pyziomki, a Clearcode's team",
     author_email="notextisting.email@clearcode.cc",
-    maintainer='Grzegorz Śliwiński',
-    maintainer_email='g.sliwnski+pypi@clearcode.cc',
-    url='https://github.com/ClearcodeHQ/pytest-mysql',
-    license='LGPLv3',
+    maintainer="Grzegorz Śliwiński",
+    maintainer_email="g.sliwnski+pypi@clearcode.cc",
+    url="https://github.com/ClearcodeHQ/pytest-mysql",
+    license="LGPLv3",
     classifiers=[
-        'Development Status :: 5 - Production/Stable',
-        'Environment :: Web Environment',
-        'Intended Audience :: Developers',
-        'License :: OSI Approved :: '
-        'GNU Lesser General Public License v3 or later (LGPLv3+)',
-        'Natural Language :: English',
-        'Operating System :: OS Independent',
-        'Programming Language :: Python',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.6',
-        'Programming Language :: Python :: 3.7',
-        'Programming Language :: Python :: 3.8',
-        'Topic :: Software Development :: Libraries :: Python Modules',
+        "Development Status :: 5 - Production/Stable",
+        "Environment :: Web Environment",
+        "Intended Audience :: Developers",
+        "License :: OSI Approved :: "
+        "GNU Lesser General Public License v3 or later (LGPLv3+)",
+        "Natural Language :: English",
+        "Operating System :: OS Independent",
+        "Programming Language :: Python",
+        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
+        "Topic :: Software Development :: Libraries :: Python Modules",
     ],
-    package_dir={'': 'src'},
-    packages=find_packages('src'),
+    package_dir={"": "src"},
+    packages=find_packages("src"),
     install_requires=requirements,
     tests_require=test_requires,
-    test_suite='tests',
+    test_suite="tests",
     include_package_data=True,
     zip_safe=False,
     extras_require=extras_require,
-    entry_points={
-        'pytest11': [
-            'pytest_mysql = pytest_mysql.plugin'
-        ]},
+    entry_points={"pytest11": ["pytest_mysql = pytest_mysql.plugin"]},
 )
