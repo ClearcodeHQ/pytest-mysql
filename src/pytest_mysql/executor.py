@@ -15,21 +15,28 @@ class VersionNotDetected(Exception):
 
     def __init__(self, output):
         """Create error message."""
-        super().__init__(
-            'Could not detect version in {}'.format(output)
-        )
+        super().__init__("Could not detect version in {}".format(output))
 
 
 class MySQLExecutor(TCPExecutor):
     """MySQL Executor for running MySQL server."""
 
-    VERSION_RE = re.compile(r'(?:[a-z_ ]+)(Ver)? (?P<version>[\d.]+).*', re.I)
-    IMPLEMENTATION_RE = re.compile(r'.*MariaDB.*')
+    VERSION_RE = re.compile(r"(?:[a-z_ ]+)(Ver)? (?P<version>[\d.]+).*", re.I)
+    IMPLEMENTATION_RE = re.compile(r".*MariaDB.*")
 
     def __init__(
-            self, mysqld_safe, mysqld, admin_exec, logfile_path,
-            params, base_directory, user, host, port, timeout=60,
-            install_db=None
+        self,
+        mysqld_safe,
+        mysqld,
+        admin_exec,
+        logfile_path,
+        params,
+        base_directory,
+        user,
+        host,
+        port,
+        timeout=60,
+        install_db=None,
     ):
         """
         Specialised Executor to run and manage MySQL server process.
@@ -53,22 +60,21 @@ class MySQLExecutor(TCPExecutor):
         self.admin_exec = admin_exec
         self.base_directory = base_directory
         self.datadir = self.base_directory.mkdir(
-            'mysqldata_{port}'.format(port=port)
+            "mysqldata_{port}".format(port=port)
         )
         self.pidfile = self.base_directory.join(
-            'mysql-server.{port}.pid'.format(port=port)
+            "mysql-server.{port}.pid".format(port=port)
         )
         self.unixsocket = self.base_directory.join(
-            'mysql.{port}.sock'.format(port=port)
+            "mysql.{port}.sock".format(port=port)
         )
         self.logfile_path = logfile_path
         self.user = user
         self._initialised = False
-        command = '''
-        {mysql_server} --datadir={datadir} --pid-file={pidfile}
+        command = """{mysql_server} --datadir={datadir} --pid-file={pidfile}
         --port={port} --socket={socket} --log-error={logfile_path}
         --tmpdir={tmpdir} --skip-syslog {params}
-        '''.format(
+        """.format(
             mysql_server=self.mysqld_safe,
             port=port,
             datadir=self.datadir,
@@ -78,30 +84,26 @@ class MySQLExecutor(TCPExecutor):
             params=params,
             tmpdir=self.base_directory,
         )
-        super().__init__(
-            command, host, port, timeout=timeout
-        )
+        super().__init__(command, host, port, timeout=timeout)
 
     def version(self):
         """Read MySQL's version."""
         version_output = subprocess.check_output(
-            [self.mysqld, '--version']
-        ).decode('utf-8')
+            [self.mysqld, "--version"]
+        ).decode("utf-8")
         try:
-            return self.VERSION_RE.search(
-                version_output
-            ).groupdict()['version']
+            return self.VERSION_RE.search(version_output).groupdict()["version"]
         except AttributeError as exc:
             raise VersionNotDetected(version_output) from exc
 
     def implementation(self):
         """Detect MySQL Implementation."""
         version_output = subprocess.check_output(
-            [self.mysqld, '--version']
-        ).decode('utf-8')
+            [self.mysqld, "--version"]
+        ).decode("utf-8")
         if self.IMPLEMENTATION_RE.search(version_output):
-            return 'mariadb'
-        return 'mysql'
+            return "mariadb"
+        return "mysql"
 
     def initialize_mysqld(self):
         """
@@ -119,14 +121,14 @@ class MySQLExecutor(TCPExecutor):
         if self._initialised:
             return
         init_command = (
-            '{mysqld} --initialize-insecure '
-            '--datadir={datadir} --tmpdir={tmpdir} '
-            '--log-error={log}'
+            "{mysqld} --initialize-insecure "
+            "--datadir={datadir} --tmpdir={tmpdir} "
+            "--log-error={log}"
         ).format(
             mysqld=self.mysqld,
             datadir=self.datadir,
             tmpdir=self.base_directory,
-            log=self.logfile_path
+            log=self.logfile_path,
         )
         subprocess.check_output(init_command, shell=True)
         self._initialised = True
@@ -147,8 +149,8 @@ class MySQLExecutor(TCPExecutor):
         if self._initialised:
             return
         init_command = (
-            '{mysql_init} --user={user} '
-            '--datadir={datadir} --tmpdir={tmpdir}'
+            "{mysql_init} --user={user} "
+            "--datadir={datadir} --tmpdir={tmpdir}"
         ).format(
             mysql_init=self.install_db,
             user=self.user,
@@ -161,29 +163,26 @@ class MySQLExecutor(TCPExecutor):
     def start(self):
         """Trigger initialisation during start."""
         implementation = self.implementation()
-        if implementation == 'mysql' and \
-                parse_version(self.version()) > parse_version('5.7.6'):
+        if implementation == "mysql" and parse_version(
+            self.version()
+        ) > parse_version("5.7.6"):
             self.initialize_mysqld()
-        elif implementation in ['mysql', 'mariadb']:
+        elif implementation in ["mysql", "mariadb"]:
             if self.install_db:
                 self.initialise_mysql_db_install()
             else:
-                raise MySQLUnsupported('mysqld_init path is missing.')
+                raise MySQLUnsupported("mysqld_init path is missing.")
         else:
             raise MySQLUnsupported(
-                'Only MySQL and MariaDB servers are supported with MariaDB.'
+                "Only MySQL and MariaDB servers are supported with MariaDB."
             )
         super().start()
 
     def shutdown(self):
         """Send shutdown command to the server."""
         shutdown_command = (
-            '{admin} --socket={socket} --user={user} shutdown'
-        ).format(
-            admin=self.admin_exec,
-            socket=self.unixsocket,
-            user='root'
-        )
+            "{admin} --socket={socket} --user={user} shutdown"
+        ).format(admin=self.admin_exec, socket=self.unixsocket, user="root")
         subprocess.check_output(shutdown_command, shell=True)
 
     def stop(self, sig=None, exp_sig=None):
