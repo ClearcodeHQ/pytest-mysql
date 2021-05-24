@@ -4,6 +4,12 @@ CHANGELOG
 unreleased
 ----------
 
+Deprecation
++++++++++++
+
+- Deprecated `mysql_logsdir` ini configuration and `--mysql-logsdir` command option
+- Deprecated `logs_prefix` process fixture factory setting
+
 Misc
 ++++
 

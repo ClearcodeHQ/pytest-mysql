@@ -18,8 +18,11 @@
 """Process fixture factory for MySQL database."""
 
 import os
+from warnings import warn
 
 import pytest
+from _pytest.fixtures import FixtureRequest
+from _pytest.tmpdir import TempdirFactory
 
 from pytest_mysql.executor import MySQLExecutor
 from pytest_mysql.port import get_port
@@ -82,7 +85,9 @@ def mysql_proc(
     """
 
     @pytest.fixture(scope="session")
-    def mysql_proc_fixture(request, tmpdir_factory):
+    def mysql_proc_fixture(
+        request: FixtureRequest, tmpdir_factory: TempdirFactory
+    ):
         """
         Process fixture for MySQL server.
 
@@ -108,15 +113,34 @@ def mysql_proc(
         mysql_params = params or config["params"]
         mysql_install_db = install_db or config["install_db"]
 
-        tmpdir = tmpdir_factory.mktemp("pytest-mysql")
+        tmpdir = tmpdir_factory.mktemp(f"pytest-mysql-{request.fixturename}")
+
+        if logs_prefix:
+            warn(
+                f"logfile_prefix factory argument is deprecated, "
+                f"and will be dropped in future releases. All fixture related "
+                f"data resides within {tmpdir}, and logs_prefix is only used, "
+                f"if deprecated logsdir is configured",
+                DeprecationWarning,
+            )
 
         logsdir = config["logsdir"]
-        logfile_path = os.path.join(
-            logsdir,
-            "{prefix}mysql-server.{port}.log".format(
-                prefix=logs_prefix, port=mysql_port
-            ),
-        )
+        if logsdir:
+            warn(
+                f"mysql_logsdir and --mysql-logsdir config option is "
+                f"deprecated, and will be dropped in future releases. "
+                f"All fixture related data resides within {tmpdir}",
+                DeprecationWarning,
+            )
+            if logs_prefix:
+                logfile_path = os.path.join(
+                    logsdir,
+                    "{prefix}mysql-server.{port}.log".format(
+                        prefix=logs_prefix, port=mysql_port
+                    ),
+                )
+        else:
+            logfile_path = tmpdir.join(f"mysql-server.{port}.log")
 
         mysql_executor = MySQLExecutor(
             mysqld_safe=mysql_mysqld_safe,
