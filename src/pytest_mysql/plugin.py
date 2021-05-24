@@ -27,7 +27,7 @@ _help_install_db = (
     "Path to MySQL's legacy install_db script (also used in MariaDB)"
 )
 _help_mysqld_safe = "Path to MySQL's init executable"
-_help_logsdir = "Logs directory location"
+_help_logsdir = "[DEPRECATED] Logs directory location"
 _help_host = "Host at which MySQL will accept connections"
 _help_port = "Port at which MySQL will accept connections"
 _help_user = "MySQL username"
@@ -71,7 +71,6 @@ def pytest_addoption(parser):
     parser.addini(
         name="mysql_logsdir",
         help=_help_logsdir,
-        default=gettempdir(),
     )
 
     parser.addoption(
