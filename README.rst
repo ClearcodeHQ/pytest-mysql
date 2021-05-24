@@ -21,21 +21,6 @@ pytest-mysql
     :target: https://pypi.python.org/pypi/pytest-mysql/
     :alt: License
 
-Package status
---------------
-
-.. image:: https://travis-ci.org/ClearcodeHQ/pytest-mysql.svg?branch=v2.0.3
-    :target: https://travis-ci.org/ClearcodeHQ/pytest-mysql
-    :alt: Tests
-
-.. image:: https://coveralls.io/repos/ClearcodeHQ/pytest-mysql/badge.png?branch=v2.0.3
-    :target: https://coveralls.io/r/ClearcodeHQ/pytest-mysql?branch=v2.0.3
-    :alt: Coverage Status
-
-.. image:: https://requires.io/github/ClearcodeHQ/pytest-mysql/requirements.svg?tag=v2.0.3
-     :target: https://requires.io/github/ClearcodeHQ/pytest-mysql/requirements/?tag=v2.0.3
-     :alt: Requirements Status
-
 What is this?
 =============
 
