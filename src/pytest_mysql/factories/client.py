@@ -87,11 +87,9 @@ def mysql(
         )
 
         mysql_conn.query(
-            """CREATE DATABASE {name}
-            DEFAULT CHARACTER SET {charset}
-            DEFAULT COLLATE {collation}""".format(
-                name=mysql_db, charset=charset, collation=collation
-            )
+            f"CREATE DATABASE {mysql_db} "
+            f"DEFAULT CHARACTER SET {charset} "
+            f"DEFAULT COLLATE {collation}"
         )
         mysql_conn.query("USE %s" % mysql_db)
 
