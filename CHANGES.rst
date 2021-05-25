@@ -13,6 +13,7 @@ Deprecation
 Misc
 ++++
 
+- Require minimum python 3.7
 - Migrate CI to Github Actions
 
 2.0.3

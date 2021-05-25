@@ -59,30 +59,21 @@ class MySQLExecutor(TCPExecutor):
         self.install_db = install_db
         self.admin_exec = admin_exec
         self.base_directory = base_directory
-        self.datadir = self.base_directory.mkdir(
-            "mysqldata_{port}".format(port=port)
-        )
-        self.pidfile = self.base_directory.join(
-            "mysql-server.{port}.pid".format(port=port)
-        )
-        self.unixsocket = self.base_directory.join(
-            "mysql.{port}.sock".format(port=port)
-        )
+        self.datadir = self.base_directory.mkdir(f"mysqldata_{port}")
+        self.pidfile = self.base_directory.join(f"mysql-server.{port}.pid")
+        self.unixsocket = self.base_directory.join(f"mysql.{port}.sock")
         self.logfile_path = logfile_path
         self.user = user
         self._initialised = False
-        command = """{mysql_server} --datadir={datadir} --pid-file={pidfile}
-        --port={port} --socket={socket} --log-error={logfile_path}
-        --tmpdir={tmpdir} --skip-syslog {params}
-        """.format(
-            mysql_server=self.mysqld_safe,
-            port=port,
-            datadir=self.datadir,
-            pidfile=self.pidfile,
-            socket=self.unixsocket,
-            logfile_path=self.logfile_path,
-            params=params,
-            tmpdir=self.base_directory,
+        command = (
+            f"{self.mysqld_safe} "
+            f"--datadir={self.datadir} "
+            f"--pid-file={self.pidfile} "
+            f"--port={port} "
+            f"--socket={self.unixsocket} "
+            f"--log-error={self.logfile_path} "
+            f"--tmpdir={self.base_directory} "
+            f"--skip-syslog {params}"
         )
         super().__init__(command, host, port, timeout=timeout)
 
@@ -121,14 +112,9 @@ class MySQLExecutor(TCPExecutor):
         if self._initialised:
             return
         init_command = (
-            "{mysqld} --initialize-insecure "
-            "--datadir={datadir} --tmpdir={tmpdir} "
-            "--log-error={log}"
-        ).format(
-            mysqld=self.mysqld,
-            datadir=self.datadir,
-            tmpdir=self.base_directory,
-            log=self.logfile_path,
+            f"{self.mysqld} --initialize-insecure "
+            f"--datadir={self.datadir} --tmpdir={self.base_directory} "
+            f"--log-error={self.logfile_path}"
         )
         subprocess.check_output(init_command, shell=True)
         self._initialised = True
@@ -149,13 +135,8 @@ class MySQLExecutor(TCPExecutor):
         if self._initialised:
             return
         init_command = (
-            "{mysql_init} --user={user} "
-            "--datadir={datadir} --tmpdir={tmpdir}"
-        ).format(
-            mysql_init=self.install_db,
-            user=self.user,
-            datadir=self.datadir,
-            tmpdir=self.base_directory,
+            f"{self.install_db} --user={self.user} "
+            f"--datadir={self.datadir} --tmpdir={self.base_directory}"
         )
         subprocess.check_output(init_command, shell=True)
         self._initialised = True
@@ -181,8 +162,8 @@ class MySQLExecutor(TCPExecutor):
     def shutdown(self):
         """Send shutdown command to the server."""
         shutdown_command = (
-            "{admin} --socket={socket} --user={user} shutdown"
-        ).format(admin=self.admin_exec, socket=self.unixsocket, user="root")
+            f"{self.admin_exec} --socket={self.unixsocket} --user=root shutdown"
+        )
         subprocess.check_output(shutdown_command, shell=True)
 
     def stop(self, sig=None, exp_sig=None):

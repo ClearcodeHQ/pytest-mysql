@@ -135,9 +135,7 @@ def mysql_proc(
             if logs_prefix:
                 logfile_path = os.path.join(
                     logsdir,
-                    "{prefix}mysql-server.{port}.log".format(
-                        prefix=logs_prefix, port=mysql_port
-                    ),
+                    f"{logs_prefix}mysql-server.{mysql_port}.log",
                 )
         else:
             logfile_path = tmpdir.join(f"mysql-server.{port}.log")
