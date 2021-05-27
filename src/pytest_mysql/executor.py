@@ -61,7 +61,7 @@ class MySQLExecutor(TCPExecutor):
         self.base_directory = base_directory
         self.datadir = self.base_directory.mkdir(f"mysqldata_{port}")
         self.pidfile = self.base_directory.join(f"mysql-server.{port}.pid")
-        self.unixsocket = self.base_directory.join(f"mysql.{port}.sock")
+        self.unixsocket = str(self.base_directory.join(f"mysql.{port}.sock"))
         self.logfile_path = logfile_path
         self.user = user
         self._initialised = False

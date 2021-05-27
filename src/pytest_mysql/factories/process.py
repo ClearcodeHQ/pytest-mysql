@@ -24,33 +24,9 @@ import pytest
 from _pytest.fixtures import FixtureRequest
 from _pytest.tmpdir import TempdirFactory
 
+from pytest_mysql.config import get_config
 from pytest_mysql.executor import MySQLExecutor
 from pytest_mysql.port import get_port
-
-
-def get_config(request):
-    """Return a dictionary with config options."""
-    config = {}
-    options = [
-        "mysqld",
-        "mysqld_safe",
-        "admin",
-        "host",
-        "port",
-        "user",
-        "passwd",
-        "dbname",
-        "params",
-        "logsdir",
-        "install_db",
-    ]
-    for option in options:
-        option_name = "mysql_" + option
-        conf = request.config.getoption(option_name) or request.config.getini(
-            option_name
-        )
-        config[option] = conf
-    return config
 
 
 def mysql_proc(

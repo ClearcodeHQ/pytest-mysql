@@ -142,4 +142,5 @@ def pytest_addoption(parser):
 
 
 mysql_proc = factories.mysql_proc()
+mysql_noproc = factories.mysql_noproc()
 mysql = factories.mysql("mysql_proc")
