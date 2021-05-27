@@ -158,6 +158,77 @@ Example usage:
         [pytest]
         mysql_port = 8888
 
+Examples
+========
+
+Populating database for tests
+-----------------------------
+
+With SQLAlchemy
++++++++++++++++
+
+This example shows how to populate database and create an SQLAlchemy's ORM connection:
+
+Sample below is simplified session fixture from
+`pyramid_fullauth <https://github.com/fizyk/pyramid_fullauth/>`_ tests:
+
+.. code-block:: python
+
+    from sqlalchemy import create_engine
+    from sqlalchemy.orm import scoped_session, sessionmaker
+    from sqlalchemy.pool import NullPool
+    from zope.sqlalchemy import register
+
+
+    @pytest.fixture
+    def db_session(mysql):
+        """Session for SQLAlchemy."""
+        from pyramid_fullauth.models import Base  # pylint:disable=import-outside-toplevel
+
+        # assumes setting, these can be obtained from pytest-mysql config or mysql_proc
+        connection = f'mysql+mysqldb://root:@127.0.0.1:3307/tests?charset=utf8'
+
+        engine = create_engine(connection, echo=False, poolclass=NullPool)
+        pyramid_basemodel.Session = scoped_session(sessionmaker(extension=ZopeTransactionExtension()))
+        pyramid_basemodel.bind_engine(
+            engine, pyramid_basemodel.Session, should_create=True, should_drop=True)
+
+        yield pyramid_basemodel.Session
+
+        transaction.commit()
+        Base.metadata.drop_all(engine)
+
+
+    @pytest.fixture
+    def user(db_session):
+        """Test user fixture."""
+        from pyramid_fullauth.models import User
+        from tests.tools import DEFAULT_USER
+
+        new_user = User(**DEFAULT_USER)
+        db_session.add(new_user)
+        transaction.commit()
+        return new_user
+
+
+    def test_remove_last_admin(db_session, user):
+        """
+        Sample test checks internal login, but shows usage in tests with SQLAlchemy
+        """
+        user = db_session.merge(user)
+        user.is_admin = True
+        transaction.commit()
+        user = db_session.merge(user)
+
+        with pytest.raises(AttributeError):
+            user.is_admin = False
+.. note::
+
+    See the original code at `pyramid_fullauth's conftest file <https://github.com/fizyk/pyramid_fullauth/blob/2950e7f4a397b313aaf306d6d1a763ab7d8abf2b/tests/conftest.py#L35>`_.
+    Depending on your needs, that in between code can fire alembic migrations in case of sqlalchemy stack or any other code
+
+
+
 Running on Docker/as root
 =========================
 

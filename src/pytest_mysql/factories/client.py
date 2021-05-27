@@ -53,7 +53,7 @@ def mysql(
     """
 
     @pytest.fixture
-    def mysql_fixture(request):
+    def mysql_fixture(request) -> MySQLdb.Connection:
         """
         Client fixture for MySQL server.
 
@@ -79,7 +79,7 @@ def mysql(
         mysql_passwd = passwd or config["passwd"]
         mysql_db = dbname or config["dbname"]
 
-        mysql_conn = MySQLdb.connect(
+        mysql_conn: MySQLdb.Connection = MySQLdb.connect(
             host=mysql_host,
             unix_socket=process.unixsocket.strpath,
             user=mysql_user,
