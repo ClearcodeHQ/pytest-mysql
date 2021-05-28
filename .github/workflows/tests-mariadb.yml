@@ -20,10 +20,23 @@ jobs:
     env:
       OS: ubuntu-latest
       PYTHON: ${{ matrix.python-version }}
-    # Service containers to run with `container-job`
+    services:
+      mysql:
+        image: mariadb
+        env:
+          MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: yes
+          MARIADB_DATABASE: tests
+        ports:
+          - 3333:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
     - uses: actions/checkout@v2
+    - name: Verify MariaDB connection
+      run: |
+        while ! mysqladmin ping -h"127.0.0.1" -P"3333" --silent; do
+          sleep 1
+        done
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v2
       with:
@@ -38,10 +51,13 @@ jobs:
         pip install -r requirements-test.txt
     - name: Run test
       run: |
-        pytest --mysql-user=$USER -n 0 --cov-report=xml
+        pytest --mysql-user=$USER -n 0 -k "not mysqlnoproc" --cov-report=xml
     - name: Run xdist test
       run: |
-        pytest --mysql-user=$USER -n 1 --cov-report=xml:coverage-xdist.xml
+        pytest --mysql-user=$USER -n 1 -k "not mysqlnoproc" --cov-report=xml:coverage-xdist.xml
+    - name: Run noproc test
+      run: |
+        pytest -n 0 -k mysqlnoproc --cov-report=xml:coverage-noproc.xml --mysql-host="127.0.0.1" --mysql-port=3333
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1
       with:

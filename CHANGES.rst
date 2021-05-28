@@ -4,6 +4,12 @@ CHANGELOG
 unreleased
 ----------
 
+Feature
++++++++
+
+- `mysql_noproc` fixture to connect to already running mysql server
+
+
 Deprecation
 +++++++++++
 

@@ -16,11 +16,14 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with pytest-mysql.  If not, see <http://www.gnu.org/licenses/>.
 """Client fixture factory for MySQL database."""
+from typing import Union
 
 import pytest
 import MySQLdb
 
-from pytest_mysql.factories.process import get_config
+from pytest_mysql.config import get_config
+from pytest_mysql.executor import MySQLExecutor
+from pytest_mysql.executor_noop import NoopMySQLExecutor
 
 
 def mysql(
@@ -70,21 +73,27 @@ def mysql(
         :returns: connection to database
         """
         config = get_config(request)
-        process = request.getfixturevalue(process_fixture_name)
+        process: Union[
+            NoopMySQLExecutor, MySQLExecutor
+        ] = request.getfixturevalue(process_fixture_name)
         if not process.running():
             process.start()
 
-        mysql_host = process.host
         mysql_user = "root"
         mysql_passwd = passwd or config["passwd"]
         mysql_db = dbname or config["dbname"]
 
-        mysql_conn: MySQLdb.Connection = MySQLdb.connect(
-            host=mysql_host,
-            unix_socket=process.unixsocket.strpath,
-            user=mysql_user,
-            passwd=mysql_passwd,
-        )
+        connection_kwargs = {
+            "host": process.host,
+            "user": mysql_user,
+            "passwd": mysql_passwd,
+        }
+        if process.unixsocket:
+            connection_kwargs["unix_socket"] = process.unixsocket
+        else:
+            connection_kwargs["port"] = process.port
+
+        mysql_conn: MySQLdb.Connection = MySQLdb.connect(**connection_kwargs)
 
         mysql_conn.query(
             f"CREATE DATABASE {mysql_db} "

@@ -227,6 +227,42 @@ Sample below is simplified session fixture from
     See the original code at `pyramid_fullauth's conftest file <https://github.com/fizyk/pyramid_fullauth/blob/2950e7f4a397b313aaf306d6d1a763ab7d8abf2b/tests/conftest.py#L35>`_.
     Depending on your needs, that in between code can fire alembic migrations in case of sqlalchemy stack or any other code
 
+Connecting to MySQL/MariaDB (in a docker)
+-----------------------------------------
+
+To connect to a docker run postgresql and run test on it, use noproc fixtures.
+
+.. code-block:: sh
+
+    docker run --name some-db -e MYSQL_ALLOW_EMPTY_PASSWORD=yes -d mysql --expose 3306
+
+.. code-block:: sh
+
+    docker run --name some-db -e MARIADB_ALLOW_EMPTY_PASSWORD=yes -d mariadb --expose 3306
+
+This will start postgresql in a docker container, however using a postgresql installed locally is not much different.
+
+In tests, make sure that all your tests are using **mysql_noproc** fixture like that:
+
+.. code-block:: python
+
+    mysql_in_docker = factories.mysql_noproc()
+    mysql = factories.mysql("mysql_in_docker")
+
+
+    def test_mysql_docker(mysql):
+        """Run test."""
+        cur = mysql.cursor()
+        cur.query("CREATE TABLE pet (name VARCHAR(20), owner VARCHAR(20), species VARCHAR(20), sex CHAR(1), birth DATE, death DATE);")
+        mysql.commit()
+        cur.close()
+
+And run tests:
+
+.. code-block:: sh
+
+    pytest --mysql-host=127.0.0.1
+
 
 
 Running on Docker/as root
