@@ -5,17 +5,7 @@ from pkg_resources import parse_version
 
 from mirakuru import TCPExecutor
 
-
-class MySQLUnsupported(Exception):
-    """Exception raised when an unsupported MySQL has been encountered."""
-
-
-class VersionNotDetected(Exception):
-    """Exception raised when exector could not detect mysqls' version."""
-
-    def __init__(self, output):
-        """Create error message."""
-        super().__init__("Could not detect version in {}".format(output))
+from pytest_mysql.exceptions import MySQLUnsupported, VersionNotDetected
 
 
 class MySQLExecutor(TCPExecutor):

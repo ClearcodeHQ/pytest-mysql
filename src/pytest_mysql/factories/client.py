@@ -20,8 +20,11 @@ from typing import Union
 
 import pytest
 import MySQLdb
+from MySQLdb import ProgrammingError
+from _pytest.fixtures import FixtureRequest
 
 from pytest_mysql.config import get_config
+from pytest_mysql.exceptions import DatabaseExists
 from pytest_mysql.executor import MySQLExecutor
 from pytest_mysql.executor_noop import NoopMySQLExecutor
 
@@ -56,7 +59,7 @@ def mysql(
     """
 
     @pytest.fixture
-    def mysql_fixture(request) -> MySQLdb.Connection:
+    def mysql_fixture(request: FixtureRequest) -> MySQLdb.Connection:
         """
         Client fixture for MySQL server.
 
@@ -67,9 +70,8 @@ def mysql(
         #. Use proper database.
         #. Drop database after tests.
 
-        :param FixtureRequest request: fixture request object
+        :param request: fixture request object
 
-        :rtype: MySQLdb.connections.Connection
         :returns: connection to database
         """
         config = get_config(request)
@@ -95,11 +97,22 @@ def mysql(
 
         mysql_conn: MySQLdb.Connection = MySQLdb.connect(**connection_kwargs)
 
-        mysql_conn.query(
-            f"CREATE DATABASE {mysql_db} "
-            f"DEFAULT CHARACTER SET {charset} "
-            f"DEFAULT COLLATE {collation}"
-        )
+        try:
+            mysql_conn.query(
+                f"CREATE DATABASE {mysql_db} "
+                f"DEFAULT CHARACTER SET {charset} "
+                f"DEFAULT COLLATE {collation}"
+            )
+        except ProgrammingError as e:
+            if "database exists" in str(e):
+                raise DatabaseExists(
+                    f"Database {mysql_db} already exists. There's some test "
+                    f"configuration error. Either you start your own server "
+                    f"with the database name used in tests, or you use two "
+                    f"fixtures with the same database name on the same process "
+                    f"fixture."
+                ) from e
+            raise
         mysql_conn.query("USE %s" % mysql_db)
 
         yield mysql_conn
