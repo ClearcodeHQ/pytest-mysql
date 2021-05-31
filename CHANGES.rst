@@ -8,6 +8,7 @@ Feature
 +++++++
 
 - `mysql_noproc` fixture to connect to already running mysql server
+- raise more meaningful error when the test database already exists
 
 
 Deprecation
