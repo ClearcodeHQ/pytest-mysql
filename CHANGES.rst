@@ -10,6 +10,11 @@ Feature
 - `mysql_noproc` fixture to connect to already running mysql server
 - raise more meaningful error when the test database already exists
 
+Misc
+++++
+
+- rely on `get_port` functionality delivered by `port_for`
+
 
 Deprecation
 +++++++++++
