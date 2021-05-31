@@ -19,6 +19,4 @@
 """Installation module of pytest-mysql."""
 from setuptools import setup
 
-setup(
-    entry_points={"pytest11": ["pytest_mysql = pytest_mysql.plugin"]},
-)
+setup()
