@@ -23,10 +23,10 @@ from warnings import warn
 import pytest
 from _pytest.fixtures import FixtureRequest
 from _pytest.tmpdir import TempdirFactory
+from port_for import get_port
 
 from pytest_mysql.config import get_config
 from pytest_mysql.executor import MySQLExecutor
-from pytest_mysql.port import get_port
 
 
 def mysql_proc(

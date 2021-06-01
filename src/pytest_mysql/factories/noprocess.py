@@ -25,7 +25,6 @@ from _pytest.fixtures import FixtureRequest
 
 from pytest_mysql.config import get_config
 from pytest_mysql.executor_noop import NoopMySQLExecutor
-from pytest_mysql.port import get_port
 
 
 def mysql_noproc(host=None, port=None):
