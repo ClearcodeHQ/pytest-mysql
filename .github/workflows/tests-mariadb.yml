@@ -3,10 +3,6 @@ name: Run tests on MariaDB
 on:
   push:
     branches: [ master ]
-    paths:
-      - '**.py'
-      - .github/workflows/tests-mariadb.yml
-      - requirements-test.txt
   pull_request:
     branches: [ master ]
 
@@ -43,7 +39,9 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Install MariaDB
       run: |
-        sudo apt-get install mariadb-server
+        sudo apt remove mysql-server
+        sudo apt autoremove -y
+        sudo apt install mariadb-server
         mysqld --version
     - name: Install dependencies
       run: |

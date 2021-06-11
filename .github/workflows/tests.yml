@@ -3,10 +3,6 @@ name: Run tests on MySQL
 on:
   push:
     branches: [ master ]
-    paths:
-      - '**.py'
-      - .github/workflows/tests.yml
-      - requirements-test.txt
   pull_request:
     branches: [ master ]
 
