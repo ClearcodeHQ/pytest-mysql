@@ -80,56 +80,67 @@ You can pick which you prefer, but remember that these settings are handled in t
      - mysqld_exec
      - --mysql-mysqld
      - mysql_mysqld
+     - -
      - mysqld
    * - Path to safe executable
      - mysqld_safe
      - --mysql-mysqld-safe
      - mysql_mysqld_safe
+     - -
      - mysqld_safe
    * - Path to mysql_install_db for legacy installations
      - install_db
      - --mysql-install-db
      - mysql_install_db
+     - -
      - mysql_install_db
    * - Path to Admin executable
      - admin_executable
      - --mysql-admin
      - mysql_admin
+     - -
      - mysqladmin
    * - Database hostname
      - host
      - --mysql-host
      - mysql_host
+     - yes
      - localhost
    * - Database port
      - port
      - --mysql-port
      - mysql_port
+     - yes (3306)
      - random
    * - MySQL user to work with
      - user
      - --mysql-user
      - mysql_user
+     - -
      - root
    * - User's password
      - passwd
      - --mysql-passwd
      - mysql_passwd
+     - -
      -
    * - Test database name
      - dbname
      - --mysql-dbname
      - mysqldbname
+     - -
      - test
    * - Starting parameters
      - params
      - --mysql-params
      - mysql_params
+     - -
      -
    * - Log directory location [DEPRECATED]
      - logsdir
      - --mysql-logsdir
      - mysql_logsdir
+     - -
      - $TMPDIR
 
 
