@@ -67,7 +67,7 @@ You can pick which you prefer, but remember that these settings are handled in t
     * ``Command line option``
     * ``Configuration option in your pytest.ini file``
 
-. list-table:: Configuration options
+.. list-table:: Configuration options
    :header-rows: 1
 
    * - MySQL/MariaDB option
