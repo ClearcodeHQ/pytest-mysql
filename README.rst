@@ -49,8 +49,7 @@ You can also create additional mysql client and process fixtures if you'd need t
 
     from pytest_mysql import factories
 
-    mysql_my_proc = factories.mysql_proc(
-        port=None, logsdir='/tmp')
+    mysql_my_proc = factories.mysql_proc(port=None)
     mysql_my = factories.mysql('mysql_my_proc')
 
 .. note::
