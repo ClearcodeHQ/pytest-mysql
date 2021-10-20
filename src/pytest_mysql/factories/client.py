@@ -33,6 +33,7 @@ def mysql(
     process_fixture_name,
     passwd=None,
     dbname=None,
+    user=None,
     charset="utf8",
     collation="utf8_general_ci",
 ):
@@ -81,7 +82,7 @@ def mysql(
         if not process.running():
             process.start()
 
-        mysql_user = "root"
+        mysql_user = user or config["user"]
         mysql_passwd = passwd or config["passwd"]
         mysql_db = dbname or config["dbname"]
 
