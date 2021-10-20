@@ -82,7 +82,7 @@ def mysql(
         if not process.running():
             process.start()
 
-        mysql_user = user or config["user"]
+        mysql_user = user or config["user"] or "root"
         mysql_passwd = passwd or config["passwd"]
         mysql_db = dbname or config["dbname"]
 

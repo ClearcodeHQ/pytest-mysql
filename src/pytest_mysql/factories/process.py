@@ -125,7 +125,7 @@ def mysql_proc(
             logfile_path=logfile_path,
             base_directory=tmpdir,
             params=mysql_params,
-            user=user or config["user"],
+            user=user or config["user"] or "root",
             host=mysql_host,
             port=mysql_port,
             install_db=mysql_install_db,
