@@ -50,6 +50,7 @@ def mysql(
     :param str process_fixture_name: process fixture name
     :param str passwd: mysql server's password
     :param str dbname: database's name
+    :param str user: mysql user name
     :param str charset: MySQL characterset to use by default
         for *tests* database
     :param str collation: MySQL collation to use by default
