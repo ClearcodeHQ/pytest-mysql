@@ -118,13 +118,13 @@ def mysql(
           )
         try:
             mysql_conn: MySQLdb.Connection = _connect(
-                    connection_kwargs, query_str
+                connection_kwargs, query_str
             )
         except OperationalError:
             # Fallback to mysql connection with root user
             connection_kwargs["user"] = "root"
             mysql_conn: MySQLdb.Connection = _connect(
-                    connection_kwargs, query_str
+                connection_kwargs, query_str
             )
         mysql_conn.query(f"USE {mysql_db}")
         yield mysql_conn
