@@ -34,7 +34,7 @@ def mysql_proc(
     admin_executable=None,
     mysqld_safe=None,
     host=None,
-    user=None
+    user=None,
     port=-1,
     params=None,
     logs_prefix="",
