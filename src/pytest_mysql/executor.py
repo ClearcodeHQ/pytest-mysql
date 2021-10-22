@@ -165,7 +165,6 @@ class MySQLExecutor(TCPExecutor):
             )
             subprocess.check_output(shutdown_command, shell=True)
 
-
     def stop(self, sig=None, exp_sig=None):
         """Stop the server."""
         self.shutdown()
