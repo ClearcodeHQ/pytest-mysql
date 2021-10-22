@@ -34,6 +34,7 @@ def mysql_proc(
     admin_executable=None,
     mysqld_safe=None,
     host=None,
+    user=None
     port=-1,
     params=None,
     logs_prefix="",
@@ -46,6 +47,7 @@ def mysql_proc(
     :param str admin_executable: path to mysql_admin executable
     :param str mysqld_safe: path to mysqld_safe executable
     :param str host: hostname
+    :param str user: user name
     :param str|int|tuple|set|list port:
         exact port (e.g. '8000', 8000)
         randomly selected port (None) - any random available port
@@ -123,7 +125,7 @@ def mysql_proc(
             logfile_path=logfile_path,
             base_directory=tmpdir,
             params=mysql_params,
-            user=config["user"],
+            user=user or config["user"] or "root",
             host=mysql_host,
             port=mysql_port,
             install_db=mysql_install_db,

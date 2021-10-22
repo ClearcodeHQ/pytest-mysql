@@ -20,7 +20,7 @@ from typing import Union
 
 import pytest
 import MySQLdb
-from MySQLdb import ProgrammingError
+from MySQLdb import ProgrammingError, OperationalError
 from _pytest.fixtures import FixtureRequest
 
 from pytest_mysql.config import get_config
@@ -81,7 +81,7 @@ def mysql(
         if not process.running():
             process.start()
 
-        mysql_user = "root"
+        mysql_user = process.user
         mysql_passwd = passwd or config["passwd"]
         mysql_db = dbname or config["dbname"]
 
@@ -98,6 +98,17 @@ def mysql(
         mysql_conn: MySQLdb.Connection = MySQLdb.connect(**connection_kwargs)
 
         try:
+            mysql_conn.query(
+                f"CREATE DATABASE {mysql_db} "
+                f"DEFAULT CHARACTER SET {charset} "
+                f"DEFAULT COLLATE {collation}"
+            )
+        except OperationalError:
+            # Fall back to mysql connection with root user
+            connection_kwargs["user"] = "root"
+            mysql_conn: MySQLdb.Connection = MySQLdb.connect(
+                **connection_kwargs
+            )
             mysql_conn.query(
                 f"CREATE DATABASE {mysql_db} "
                 f"DEFAULT CHARACTER SET {charset} "
