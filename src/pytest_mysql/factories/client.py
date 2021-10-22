@@ -57,6 +57,7 @@ def mysql(
     :returns: function ``mysql_fixture`` with suit scope
     :rtype: func
     """
+
     def _connect(connect_kwargs: dict, query_str: str) -> MySQLdb.Connection:
         """Apply given query to a  given MySQLdb connection."""
         mysql_conn: MySQLdb.Connection = MySQLdb.connect(**connect_kwargs)
@@ -65,11 +66,11 @@ def mysql(
         except ProgrammingError as e:
             if "database exists" in str(e):
                 raise DatabaseExists(
-                  f"Database {mysql_db} already exists. There's some test "
-                  f"configuration error. Either you start your own server "
-                  f"with the database name used in tests, or you use two "
-                  f"fixtures with the same database name on the same "
-                  f"process fixture."
+                    f"Database {mysql_db} already exists. There's some test "
+                    f"configuration error. Either you start your own server "
+                    f"with the database name used in tests, or you use two "
+                    f"fixtures with the same database name on the same "
+                    f"process fixture."
                 ) from e
             raise
         return mysql_conn
@@ -112,10 +113,10 @@ def mysql(
             connection_kwargs["port"] = process.port
 
         query_str = (
-          f"CREATE DATABASE {mysql_db} "
-          f"DEFAULT CHARACTER SET {charset} "
-          f"DEFAULT COLLATE {collation}"
-          )
+            f"CREATE DATABASE {mysql_db} "
+            f"DEFAULT CHARACTER SET {charset} "
+            f"DEFAULT COLLATE {collation}"
+        )
         try:
             mysql_conn: MySQLdb.Connection = _connect(
                 connection_kwargs, query_str
