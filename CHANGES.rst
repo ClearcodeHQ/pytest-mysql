@@ -7,6 +7,8 @@ CHANGELOG
 Feature
 +++++++
 
+- add `user` option to setup and tear down mysql process as non-privileged
+  user (without root permission).
 - `mysql_noproc` fixture to connect to already running mysql server
 - raise more meaningful error when the test database already exists
 
