@@ -20,7 +20,7 @@ from typing import Union
 
 import pytest
 import MySQLdb
-from MySQLdb import ProgrammingError
+from MySQLdb import ProgrammingError, OperationalError
 from _pytest.fixtures import FixtureRequest
 
 from pytest_mysql.config import get_config
@@ -58,6 +58,23 @@ def mysql(
     :rtype: func
     """
 
+    def _connect(connect_kwargs: dict, query_str: str) -> MySQLdb.Connection:
+        """Apply given query to a  given MySQLdb connection."""
+        mysql_conn: MySQLdb.Connection = MySQLdb.connect(**connect_kwargs)
+        try:
+            mysql_conn.query(query_str)
+        except ProgrammingError as e:
+            if "database exists" in str(e):
+                raise DatabaseExists(
+                    f"Database {mysql_db} already exists. There's some test "
+                    f"configuration error. Either you start your own server "
+                    f"with the database name used in tests, or you use two "
+                    f"fixtures with the same database name on the same "
+                    f"process fixture."
+                ) from e
+            raise
+        return mysql_conn
+
     @pytest.fixture
     def mysql_fixture(request: FixtureRequest) -> MySQLdb.Connection:
         """
@@ -81,7 +98,7 @@ def mysql(
         if not process.running():
             process.start()
 
-        mysql_user = "root"
+        mysql_user = process.user
         mysql_passwd = passwd or config["passwd"]
         mysql_db = dbname or config["dbname"]
 
@@ -95,26 +112,22 @@ def mysql(
         else:
             connection_kwargs["port"] = process.port
 
-        mysql_conn: MySQLdb.Connection = MySQLdb.connect(**connection_kwargs)
-
+        query_str = (
+            f"CREATE DATABASE {mysql_db} "
+            f"DEFAULT CHARACTER SET {charset} "
+            f"DEFAULT COLLATE {collation}"
+        )
         try:
-            mysql_conn.query(
-                f"CREATE DATABASE {mysql_db} "
-                f"DEFAULT CHARACTER SET {charset} "
-                f"DEFAULT COLLATE {collation}"
+            mysql_conn: MySQLdb.Connection = _connect(
+                connection_kwargs, query_str
             )
-        except ProgrammingError as e:
-            if "database exists" in str(e):
-                raise DatabaseExists(
-                    f"Database {mysql_db} already exists. There's some test "
-                    f"configuration error. Either you start your own server "
-                    f"with the database name used in tests, or you use two "
-                    f"fixtures with the same database name on the same process "
-                    f"fixture."
-                ) from e
-            raise
-        mysql_conn.query("USE %s" % mysql_db)
-
+        except OperationalError:
+            # Fallback to mysql connection with root user
+            connection_kwargs["user"] = "root"
+            mysql_conn: MySQLdb.Connection = _connect(
+                connection_kwargs, query_str
+            )
+        mysql_conn.query(f"USE {mysql_db}")
         yield mysql_conn
 
         # clean up after test that forgot to fetch selected data

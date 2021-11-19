@@ -27,12 +27,13 @@ from pytest_mysql.config import get_config
 from pytest_mysql.executor_noop import NoopMySQLExecutor
 
 
-def mysql_noproc(host=None, port=None):
+def mysql_noproc(host=None, port=None, user=None):
     """
     Process fixture factory for MySQL server.
 
     :param str host: hostname
-    :param int port:
+    :param int port: port name
+    :param str user: user name
     :rtype: func
     :returns: function which makes a redis process
 
@@ -53,9 +54,10 @@ def mysql_noproc(host=None, port=None):
         config = get_config(request)
         mysql_port = int(port or config["port"] or 3306)
         mysql_host = host or config["host"]
+        mysql_user = user or config["user"] or "root"
 
         mysql_executor = NoopMySQLExecutor(
-            user=config["user"],
+            user=mysql_user,
             host=mysql_host,
             port=mysql_port,
         )
