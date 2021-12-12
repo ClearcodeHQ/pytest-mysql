@@ -66,7 +66,7 @@ def mysql(
         except ProgrammingError as e:
             if "database exists" in str(e):
                 raise DatabaseExists(
-                    f"Database {mysql_db} already exists. There's some test "
+                    f"Database {query_str} already exists. There's some test "
                     f"configuration error. Either you start your own server "
                     f"with the database name used in tests, or you use two "
                     f"fixtures with the same database name on the same "
@@ -140,13 +140,13 @@ def mysql(
             if not mysql_conn.open:
                 try:
                     mysql_conn: MySQLdb.Connection = _connect(
-                        connection_kwargs, query_str
+                        connection_kwargs, ""
                     )
                 except OperationalError:
                     # Fallback to mysql connection with root user
                     connection_kwargs["user"] = "root"
                     mysql_conn: MySQLdb.Connection = _connect(
-                        connection_kwargs, query_str
+                        connection_kwargs, ""
                     )
                 mysql_conn.query(f"USE {mysql_db}")
             mysql_conn.query("DROP DATABASE IF EXISTS %s" % mysql_db)
