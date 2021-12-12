@@ -131,8 +131,27 @@ def mysql(
         yield mysql_conn
 
         # clean up after test that forgot to fetch selected data
-        mysql_conn.store_result()
-        mysql_conn.query("DROP DATABASE IF EXISTS %s" % mysql_db)
-        mysql_conn.close()
+        try:
+            if mysql_conn.open:
+                mysql_conn.store_result()
+        except Exception as e:
+            print(str(e))
+        try:
+            if not mysql_conn.open:
+                try:
+                    mysql_conn: MySQLdb.Connection = _connect(
+                        connection_kwargs, query_str
+                    )
+                except OperationalError:
+                    # Fallback to mysql connection with root user
+                    connection_kwargs["user"] = "root"
+                    mysql_conn: MySQLdb.Connection = _connect(
+                        connection_kwargs, query_str
+                    )
+                mysql_conn.query(f"USE {mysql_db}")
+            mysql_conn.query("DROP DATABASE IF EXISTS %s" % mysql_db)
+            mysql_conn.close()
+        except Exception as e:
+            print(str(e))
 
     return mysql_fixture
