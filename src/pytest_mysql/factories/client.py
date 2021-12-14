@@ -137,19 +137,21 @@ def mysql(
         except Exception as e:
             print(str(e))
         try:
+            query_drop_database = "DROP DATABASE IF EXISTS %s" % mysql_db
             if not mysql_conn.open:
                 try:
                     mysql_conn: MySQLdb.Connection = _connect(
-                        connection_kwargs, "DROP DATABASE IF EXISTS %s" % mysql_db
+                        connection_kwargs,
+                        query_drop_database
                     )
                 except OperationalError:
                     # Fallback to mysql connection with root user
                     connection_kwargs["user"] = "root"
                     mysql_conn: MySQLdb.Connection = _connect(
-                        connection_kwargs, "DROP DATABASE IF EXISTS %s" % mysql_db
-                    )
+                        connection_kwargs,
+                        query_drop_database)
             else:
-                mysql_conn.query("DROP DATABASE IF EXISTS %s" % mysql_db)
+                mysql_conn.query(query_drop_database)
             mysql_conn.close()
         except Exception as e:
             print(str(e))
