@@ -58,7 +58,7 @@ def mysql(
     :rtype: func
     """
 
-    def _connect(connect_kwargs: dict, query_str: str) -> MySQLdb.Connection:
+    def _connect(connect_kwargs: dict, query_str: str, mysql_db: str) -> MySQLdb.Connection:
         """Apply given query to a  given MySQLdb connection."""
         mysql_conn: MySQLdb.Connection = MySQLdb.connect(**connect_kwargs)
         try:
@@ -66,7 +66,7 @@ def mysql(
         except ProgrammingError as e:
             if "database exists" in str(e):
                 raise DatabaseExists(
-                    f"Database {query_str} already exists. There's some test "
+                    f"Database {mysql_db} already exists. There's some test "
                     f"configuration error. Either you start your own server "
                     f"with the database name used in tests, or you use two "
                     f"fixtures with the same database name on the same "
@@ -119,41 +119,25 @@ def mysql(
         )
         try:
             mysql_conn: MySQLdb.Connection = _connect(
-                connection_kwargs, query_str
+                connection_kwargs, query_str, mysql_db
             )
         except OperationalError:
             # Fallback to mysql connection with root user
             connection_kwargs["user"] = "root"
             mysql_conn: MySQLdb.Connection = _connect(
-                connection_kwargs, query_str
+                connection_kwargs, query_str, mysql_db
             )
         mysql_conn.query(f"USE {mysql_db}")
         yield mysql_conn
 
         # clean up after test that forgot to fetch selected data
+        if not mysql_conn.open:
+            mysql_conn: MySQLdb.Connection = MySQLdb.connect(**connection_kwargs)
         try:
-            if mysql_conn.open:
-                mysql_conn.store_result()
+            mysql_conn.store_result()
         except Exception as e:
             print(str(e))
-        try:
-            query_drop_database = "DROP DATABASE IF EXISTS %s" % mysql_db
-            if not mysql_conn.open:
-                try:
-                    mysql_conn: MySQLdb.Connection = _connect(
-                        connection_kwargs,
-                        query_drop_database
-                    )
-                except OperationalError:
-                    # Fallback to mysql connection with root user
-                    connection_kwargs["user"] = "root"
-                    mysql_conn: MySQLdb.Connection = _connect(
-                        connection_kwargs,
-                        query_drop_database)
-            else:
-                mysql_conn.query(query_drop_database)
-            mysql_conn.close()
-        except Exception as e:
-            print(str(e))
-
+        query_drop_database = "DROP DATABASE IF EXISTS %s" % mysql_db
+        mysql_conn.query(query_drop_database)
+        mysql_conn.close()
     return mysql_fixture
