@@ -1,15 +1,19 @@
 """Specified MySQL Executor."""
+import platform
 import re
 import subprocess
 from pathlib import Path
 from typing import Optional, Union, Literal, Any
 
-from mirakuru.base import SimpleExecutorType
 from pkg_resources import parse_version
 
 from mirakuru import TCPExecutor
 
-from pytest_mysql.exceptions import MySQLUnsupported, VersionNotDetected
+from pytest_mysql.exceptions import (
+    MySQLUnsupported,
+    VersionNotDetected,
+    SocketPathTooLong,
+)
 
 
 class MySQLExecutor(TCPExecutor):
@@ -42,7 +46,7 @@ class MySQLExecutor(TCPExecutor):
         :param params: string containing additional starting parameters
         :param base_directory: base directory where the temporary files,
             database files, socket and pid will be placed in.
-        :param user: mysql user name
+        :param user: mysql username
         :param host: server's host
         :param port: server's port
         :param timeout: executor's timeout for start and stop actions
@@ -138,6 +142,8 @@ class MySQLExecutor(TCPExecutor):
 
     def start(self) -> "MySQLExecutor":
         """Trigger initialisation during start."""
+        self._check_socket_path()
+
         implementation = self.implementation()
         if implementation == "mysql" and parse_version(
             self.version()
@@ -174,3 +180,9 @@ class MySQLExecutor(TCPExecutor):
         """Stop the server."""
         self.shutdown()
         return super().stop(*args, **kwargs)
+
+    def _check_socket_path(self) -> None:
+        if platform.system() in ["Darwin", "FreeBSD]"] and len(self.unixsocket) > 103:
+            raise SocketPathTooLong(
+                f"Socket path '{self.unixsocket}' is too long, please pass --basetemp=/tmp/pytest_mysql to pytest"
+            )
