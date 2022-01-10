@@ -41,6 +41,7 @@ jobs:
       run: |
         sudo apt remove mysql-server
         sudo apt autoremove -y
+        sudo apt update
         sudo apt install mariadb-server
         mysqld --version
     - name: Install dependencies
