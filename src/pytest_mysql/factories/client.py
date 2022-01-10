@@ -58,7 +58,9 @@ def mysql(
     :rtype: func
     """
 
-    def _connect(connect_kwargs: dict, query_str: str, mysql_db: str) -> MySQLdb.Connection:
+    def _connect(
+            connect_kwargs: dict, query_str: str, mysql_db: str
+    ) -> MySQLdb.Connection:
         """Apply given query to a  given MySQLdb connection."""
         mysql_conn: MySQLdb.Connection = MySQLdb.connect(**connect_kwargs)
         try:
@@ -132,7 +134,9 @@ def mysql(
 
         # clean up after test that forgot to fetch selected data
         if not mysql_conn.open:
-            mysql_conn: MySQLdb.Connection = MySQLdb.connect(**connection_kwargs)
+            mysql_conn: MySQLdb.Connection = MySQLdb.connect(
+                **connection_kwargs
+            )
         try:
             mysql_conn.store_result()
         except Exception as e:
@@ -140,4 +144,5 @@ def mysql(
         query_drop_database = "DROP DATABASE IF EXISTS %s" % mysql_db
         mysql_conn.query(query_drop_database)
         mysql_conn.close()
+
     return mysql_fixture
