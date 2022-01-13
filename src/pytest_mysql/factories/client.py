@@ -58,7 +58,9 @@ def mysql(
     :rtype: func
     """
 
-    def _connect(connect_kwargs: dict, query_str: str) -> MySQLdb.Connection:
+    def _connect(
+        connect_kwargs: dict, query_str: str, mysql_db: str
+    ) -> MySQLdb.Connection:
         """Apply given query to a  given MySQLdb connection."""
         mysql_conn: MySQLdb.Connection = MySQLdb.connect(**connect_kwargs)
         try:
@@ -119,20 +121,28 @@ def mysql(
         )
         try:
             mysql_conn: MySQLdb.Connection = _connect(
-                connection_kwargs, query_str
+                connection_kwargs, query_str, mysql_db
             )
         except OperationalError:
             # Fallback to mysql connection with root user
             connection_kwargs["user"] = "root"
             mysql_conn: MySQLdb.Connection = _connect(
-                connection_kwargs, query_str
+                connection_kwargs, query_str, mysql_db
             )
         mysql_conn.query(f"USE {mysql_db}")
         yield mysql_conn
 
         # clean up after test that forgot to fetch selected data
-        mysql_conn.store_result()
-        mysql_conn.query("DROP DATABASE IF EXISTS %s" % mysql_db)
+        if not mysql_conn.open:
+            mysql_conn: MySQLdb.Connection = MySQLdb.connect(
+                **connection_kwargs
+            )
+        try:
+            mysql_conn.store_result()
+        except Exception as e:
+            print(str(e))
+        query_drop_database = "DROP DATABASE IF EXISTS %s" % mysql_db
+        mysql_conn.query(query_drop_database)
         mysql_conn.close()
 
     return mysql_fixture
