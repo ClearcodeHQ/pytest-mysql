@@ -1,6 +1,14 @@
 CHANGELOG
 =========
 
+unreleased
+----------
+
+Fixes
++++++
+
+- Database cleanup code will attempt to reconnect to mysql if test accidentally would close the connection
+
 2.2.0
 ----------
 
