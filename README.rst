@@ -39,6 +39,7 @@ Plugin contains two fixtures
 
 * **mysql** - it's a client fixture that has functional scope. After each test drops test database from MySQL ensuring repeatability.
 * **mysql_proc** - session scoped fixture, that starts MySQL instance at it's first use and stops at the end of the tests.
+* **mysql_noproc** - session scoped fixtures, that allows to connect to already existing MySQL instance, and cleans the database at the end of the tests
 
 Simply include one of these fixtures into your tests fixture list.
 
