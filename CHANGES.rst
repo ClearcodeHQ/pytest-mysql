@@ -4,6 +4,11 @@ CHANGELOG
 unreleased
 ----------
 
+Docs
+++++
+
+- List mysql_noproc in README's fixtures list
+
 Fixes
 +++++
 
