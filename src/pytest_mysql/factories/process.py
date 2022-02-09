@@ -17,12 +17,12 @@
 # along with pytest-mysql.  If not, see <http://www.gnu.org/licenses/>.
 """Process fixture factory for MySQL database."""
 
-import os
+import os, py
 from warnings import warn
 
 import pytest
 from _pytest.fixtures import FixtureRequest
-from _pytest.tmpdir import TempdirFactory
+from _pytest.tmpdir import TempPathFactory
 from port_for import get_port
 
 from pytest_mysql.config import get_config
@@ -64,7 +64,7 @@ def mysql_proc(
 
     @pytest.fixture(scope="session")
     def mysql_proc_fixture(
-        request: FixtureRequest, tmpdir_factory: TempdirFactory
+        request: FixtureRequest, tmp_path_factory: TempPathFactory
     ):
         """
         Process fixture for MySQL server.
@@ -77,7 +77,7 @@ def mysql_proc(
             `See <https://dev.mysql.com/doc/refman/5.6/en/mysqladmin.html>`_
 
         :param FixtureRequest request: fixture request object
-        :param tmpdir_factory: pytest fixture for temporary directories
+        :param tmp_path_factory: pytest fixture for temporary directories
         :rtype: pytest_dbfixtures.executors.TCPExecutor
         :returns: tcp executor
 
@@ -91,7 +91,7 @@ def mysql_proc(
         mysql_params = params or config["params"]
         mysql_install_db = install_db or config["install_db"]
 
-        tmpdir = tmpdir_factory.mktemp(f"pytest-mysql-{request.fixturename}")
+        tmpdir = py.path.local(tmp_path_factory.mktemp(f"pytest-mysql-{request.fixturename}"))
 
         if logs_prefix:
             warn(
