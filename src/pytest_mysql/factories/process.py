@@ -21,8 +21,7 @@ import os, py
 from warnings import warn
 
 import pytest
-from _pytest.fixtures import FixtureRequest
-from _pytest.tmpdir import TempPathFactory
+from pytest import FixtureRequest, TempPathFactory
 from port_for import get_port
 
 from pytest_mysql.config import get_config
