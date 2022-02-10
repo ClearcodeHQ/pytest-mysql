@@ -17,7 +17,8 @@
 # along with pytest-mysql.  If not, see <http://www.gnu.org/licenses/>.
 """Process fixture factory for MySQL database."""
 
-import os, py
+import os
+import py
 from warnings import warn
 
 import pytest
@@ -90,7 +91,9 @@ def mysql_proc(
         mysql_params = params or config["params"]
         mysql_install_db = install_db or config["install_db"]
 
-        tmpdir = py.path.local(tmp_path_factory.mktemp(f"pytest-mysql-{request.fixturename}"))
+        tmpdir = py.path.local(
+            tmp_path_factory.mktemp(f"pytest-mysql-{request.fixturename}")
+        )
 
         if logs_prefix:
             warn(
