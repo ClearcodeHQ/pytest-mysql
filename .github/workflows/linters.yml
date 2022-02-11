@@ -8,4 +8,4 @@ on:
 
 jobs:
   lint:
-    uses: fizyk/actions-reuse/.github/workflows/linters-python.yml@main
+    uses: fizyk/actions-reuse/.github/workflows/linters-python.yml@v1.3.1
