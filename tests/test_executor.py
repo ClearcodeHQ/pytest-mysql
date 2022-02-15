@@ -1,7 +1,7 @@
 """Executor tests."""
+from unittest.mock import patch
 
 import pytest
-from mock import patch
 
 from pytest_mysql.executor import MySQLExecutor
 from pytest_mysql.exceptions import MySQLUnsupported
