@@ -115,7 +115,7 @@ def mysql(
             connection_kwargs["port"] = process.port
 
         query_str = (
-            f"CREATE DATABASE {mysql_db} "
+            f"CREATE DATABASE `{mysql_db}` "
             f"DEFAULT CHARACTER SET {charset} "
             f"DEFAULT COLLATE {collation}"
         )
@@ -129,7 +129,7 @@ def mysql(
             mysql_conn: MySQLdb.Connection = _connect(
                 connection_kwargs, query_str, mysql_db
             )
-        mysql_conn.query(f"USE {mysql_db}")
+        mysql_conn.query(f"USE `{mysql_db}`")
         yield mysql_conn
 
         # clean up after test that forgot to fetch selected data
@@ -141,7 +141,7 @@ def mysql(
             mysql_conn.store_result()
         except Exception as e:
             print(str(e))
-        query_drop_database = "DROP DATABASE IF EXISTS %s" % mysql_db
+        query_drop_database = f"DROP DATABASE IF EXISTS `{mysql_db}`"
         mysql_conn.query(query_drop_database)
         mysql_conn.close()
 

@@ -1,6 +1,14 @@
 CHANGELOG
 =========
 
+unreleased
+----------
+
+Bugs
+++++
+
+- Now will accept correctly database names with hyphen
+
 2.3.0
 ----------
 
