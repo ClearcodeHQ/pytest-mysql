@@ -129,7 +129,7 @@ You can pick which you prefer, but remember that these settings are handled in t
    * - Test database name
      - dbname
      - --mysql-dbname
-     - mysqldbname
+     - mysql_dbname
      - -
      - test
    * - Starting parameters
