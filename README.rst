@@ -243,7 +243,7 @@ Sample below is simplified session fixture from
 Connecting to MySQL/MariaDB (in a docker)
 -----------------------------------------
 
-To connect to a docker run postgresql and run test on it, use noproc fixtures.
+To connect to a docker run MySQL and run test on it, use noproc fixtures.
 
 .. code-block:: sh
 
@@ -253,7 +253,7 @@ To connect to a docker run postgresql and run test on it, use noproc fixtures.
 
     docker run --name some-db -e MARIADB_ALLOW_EMPTY_PASSWORD=yes -d mariadb --expose 3306
 
-This will start postgresql in a docker container, however using a postgresql installed locally is not much different.
+This will start MySQL in a docker container, however using a MySQL installed locally is not much different.
 
 In tests, make sure that all your tests are using **mysql_noproc** fixture like that:
 
