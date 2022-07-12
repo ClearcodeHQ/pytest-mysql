@@ -35,7 +35,7 @@ def mysql_noproc(host=None, port=None, user=None):
     :param int port: port name
     :param str user: user name
     :rtype: func
-    :returns: function which makes a redis process
+    :returns: function which makes a mysql process
 
     """
 

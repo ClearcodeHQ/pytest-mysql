@@ -58,7 +58,7 @@ def mysql_proc(
     :param str logs_prefix: prefix for log filename
     :param str install_db: path to legacy mysql_install_db script
     :rtype: func
-    :returns: function which makes a redis process
+    :returns: function which makes a mysql process
 
     """
 
