@@ -1,4 +1,5 @@
 """Tests main conftest file."""
+from pytest_mysql.executor import MySQLExecutor
 from pytest_mysql.plugin import *
 from pytest_mysql import factories
 

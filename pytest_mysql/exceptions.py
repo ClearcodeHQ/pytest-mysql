@@ -12,7 +12,7 @@ class MySQLUnsupported(PytestMySQLException):
 class VersionNotDetected(PytestMySQLException):
     """Exception raised when exector could not detect mysqls' version."""
 
-    def __init__(self, output):
+    def __init__(self, output: str) -> None:
         """Create error message."""
         super().__init__("Could not detect version in {}".format(output))
 

@@ -18,6 +18,7 @@
 """Process fixture factory for MySQL database."""
 
 import os
+from typing import Optional, Callable, Any, Generator
 from warnings import warn
 
 import pytest
@@ -27,7 +28,11 @@ from pytest_mysql.config import get_config
 from pytest_mysql.executor_noop import NoopMySQLExecutor
 
 
-def mysql_noproc(host=None, port=None, user=None):
+def mysql_noproc(
+    host: Optional[str] = None,
+    port: Optional[int] = None,
+    user: Optional[str] = None,
+) -> Callable[[FixtureRequest], Generator[NoopMySQLExecutor, None, None]]:
     """
     Process fixture factory for MySQL server.
 
@@ -40,7 +45,9 @@ def mysql_noproc(host=None, port=None, user=None):
     """
 
     @pytest.fixture(scope="session")
-    def mysql_noproc_fixture(request: FixtureRequest):
+    def mysql_noproc_fixture(
+        request: FixtureRequest,
+    ) -> Generator[NoopMySQLExecutor, None, None]:
         """
         Process fixture for MySQL server.
 

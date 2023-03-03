@@ -16,11 +16,11 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with pytest-mysql.  If not, see <http://www.gnu.org/licenses/>.
 """Client fixture factory for MySQL database."""
-from typing import Union
+from typing import Union, Generator, Callable, Any, Optional, Dict
 
 import pytest
 import MySQLdb
-from MySQLdb import ProgrammingError, OperationalError
+from MySQLdb import ProgrammingError, OperationalError, Connection
 from _pytest.fixtures import FixtureRequest
 
 from pytest_mysql.config import get_config
@@ -30,12 +30,12 @@ from pytest_mysql.executor_noop import NoopMySQLExecutor
 
 
 def mysql(
-    process_fixture_name,
-    passwd=None,
-    dbname=None,
-    charset="utf8",
-    collation="utf8_general_ci",
-):
+    process_fixture_name: str,
+    passwd: Optional[str] = None,
+    dbname: Optional[str] = None,
+    charset: str = "utf8",
+    collation: str = "utf8_general_ci",
+) -> Callable[[FixtureRequest], Any]:
     """
     Client fixture factory for MySQL server.
 
@@ -62,7 +62,7 @@ def mysql(
         connect_kwargs: dict, query_str: str, mysql_db: str
     ) -> MySQLdb.Connection:
         """Apply given query to a  given MySQLdb connection."""
-        mysql_conn: MySQLdb.Connection = MySQLdb.connect(**connect_kwargs)
+        mysql_conn: MySQLdb.Connection = Connection(**connect_kwargs)
         try:
             mysql_conn.query(query_str)
         except ProgrammingError as e:
@@ -78,7 +78,9 @@ def mysql(
         return mysql_conn
 
     @pytest.fixture
-    def mysql_fixture(request: FixtureRequest) -> MySQLdb.Connection:
+    def mysql_fixture(
+        request: FixtureRequest,
+    ) -> Generator[MySQLdb.Connection, None, None]:
         """
         Client fixture for MySQL server.
 
@@ -104,7 +106,7 @@ def mysql(
         mysql_passwd = passwd or config["passwd"]
         mysql_db = dbname or config["dbname"]
 
-        connection_kwargs = {
+        connection_kwargs: Dict[str, Union[str, int]] = {
             "host": process.host,
             "user": mysql_user,
             "passwd": mysql_passwd,
@@ -126,17 +128,13 @@ def mysql(
         except OperationalError:
             # Fallback to mysql connection with root user
             connection_kwargs["user"] = "root"
-            mysql_conn: MySQLdb.Connection = _connect(
-                connection_kwargs, query_str, mysql_db
-            )
+            mysql_conn = _connect(connection_kwargs, query_str, mysql_db)
         mysql_conn.query(f"USE `{mysql_db}`")
         yield mysql_conn
 
         # clean up after test that forgot to fetch selected data
         if not mysql_conn.open:
-            mysql_conn: MySQLdb.Connection = MySQLdb.connect(
-                **connection_kwargs
-            )
+            mysql_conn = Connection(**connection_kwargs)
         try:
             mysql_conn.store_result()
         except Exception as e:
