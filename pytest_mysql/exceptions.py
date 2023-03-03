@@ -1,5 +1,8 @@
+"""Pytest MySQL's exceptions."""
+
+
 class PytestMySQLException(Exception):
-    """Base plguin's exceptions"""
+    """Base plguin's exceptions."""
 
 
 class MySQLUnsupported(PytestMySQLException):
@@ -15,4 +18,4 @@ class VersionNotDetected(PytestMySQLException):
 
 
 class DatabaseExists(PytestMySQLException):
-    """Raise this exception, when the database already exists"""
+    """Raise this exception, when the database already exists."""

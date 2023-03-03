@@ -1,3 +1,6 @@
+"""Config module."""
+
+
 def get_config(request):
     """Return a dictionary with config options."""
     config = {}

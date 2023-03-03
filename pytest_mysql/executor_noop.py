@@ -1,10 +1,20 @@
+"""Module containing Noop executor."""
+
+
 class NoopMySQLExecutor:
+    """
+    Noop Executor.
+
+    Used to mimic in necessary scope the MySQL executor inside fixtures.
+    """
+
     def __init__(
         self,
         user,
         host,
         port,
     ):
+        """Initialize NoopMySQLExecutor."""
         self.user = user
         self.host = host
         self.port = port
@@ -15,9 +25,9 @@ class NoopMySQLExecutor:
         return True
 
     def __enter__(self):
-        """Dummy enter method."""
+        """Do nothing enter method."""
         pass
 
     def __exit__(self, *args, **kwargs):
-        """Dummy exit method."""
+        """Do nothing exit method."""
         pass
