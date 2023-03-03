@@ -294,3 +294,12 @@ Package resources
 -----------------
 
 * Bug tracker: https://github.com/ClearcodeHQ/pytest-mysql/issues
+
+Release
+=======
+
+Install pipenv and --dev dependencies first, Then run:
+
+.. code-block::
+
+    pipenv run tbump [NEW_VERSION]
