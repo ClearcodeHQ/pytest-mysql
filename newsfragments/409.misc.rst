@@ -1,0 +1,1 @@
+Run mariadb tests after MySQL tests run.
