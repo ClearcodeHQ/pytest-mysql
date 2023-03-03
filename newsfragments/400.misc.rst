@@ -1,0 +1,1 @@
+Migrate automerge to a shared workflow using github app for short-lived tokens.
