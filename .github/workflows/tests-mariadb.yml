@@ -45,19 +45,19 @@ jobs:
         sudo apt install mariadb-server
         mysqld --version
     - name: Run test
-      uses: fizyk/actions-reuse/.github/actions/pipenv@v1.6.4
+      uses: fizyk/actions-reuse/.github/actions/pipenv@v1.7.0
       with:
         python-version: ${{ matrix.python-version }}
         pipenv-install-options: "--skip-lock"
         command: pytest --mysql-user=$USER -n 0 -k "not mysqlnoproc" --cov-report=xml
     - name: Run xdist test
-      uses: fizyk/actions-reuse/.github/actions/pipenv@v1.6.4
+      uses: fizyk/actions-reuse/.github/actions/pipenv@v1.7.0
       with:
         python-version: ${{ matrix.python-version }}
         pipenv-install-options: "--skip-lock"
         command: pytest --mysql-user=$USER -n 1 -k "not mysqlnoproc" --cov-report=xml:coverage-xdist.xml
     - name: Run noproc test
-      uses: fizyk/actions-reuse/.github/actions/pipenv@v1.6.4
+      uses: fizyk/actions-reuse/.github/actions/pipenv@v1.7.0
       with:
         python-version: ${{ matrix.python-version }}
         pipenv-install-options: "--skip-lock"
