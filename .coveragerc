@@ -1,2 +1,4 @@
 [run]
-source = pytest_mysql
+include =
+    pytest_mysql/*
+    tests/*
