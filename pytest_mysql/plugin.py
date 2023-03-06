@@ -18,6 +18,8 @@
 """Plugin definition."""
 from tempfile import gettempdir
 
+from pytest import Parser
+
 from pytest_mysql import factories
 
 # pylint:disable=invalid-name
@@ -36,7 +38,7 @@ _help_dbname = "Test database name"
 _help_params = "Starting parameters for the MySQL"
 
 
-def pytest_addoption(parser):
+def pytest_addoption(parser: Parser) -> None:
     """Plugin configuration."""
     parser.addini(name="mysql_mysqld", help=_help_mysqld, default="mysqld")
 

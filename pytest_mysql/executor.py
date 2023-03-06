@@ -1,6 +1,10 @@
 """Specified MySQL Executor."""
 import re
 import subprocess
+from pathlib import Path
+from typing import Optional, Union, Literal, Any
+
+from mirakuru.base import SimpleExecutorType
 from pkg_resources import parse_version
 
 from mirakuru import TCPExecutor
@@ -16,42 +20,43 @@ class MySQLExecutor(TCPExecutor):
 
     def __init__(
         self,
-        mysqld_safe,
-        mysqld,
-        admin_exec,
-        logfile_path,
-        params,
-        base_directory,
-        user,
-        host,
-        port,
-        timeout=60,
-        install_db=None,
-    ):
+        mysqld_safe: Path,
+        mysqld: Path,
+        admin_exec: str,
+        logfile_path: str,
+        params: str,
+        base_directory: Path,
+        user: str,
+        host: str,
+        port: int,
+        timeout: int = 60,
+        install_db: Optional[str] = None,
+    ) -> None:
         """
         Specialised Executor to run and manage MySQL server process.
 
-        :param str mysqld_safe: path to mysqld_safe executable
-        :param str mysqld: path to mysqld executable
-        :param str admin_exec: path to mysqladmin executable
-        :param str logfile_path: where the server shoyld wrute it's logs
-        :param str params: string containing additional starting parameters
-        :param path base_directory: base directory where the temporary files,
+        :param mysqld_safe: path to mysqld_safe executable
+        :param mysqld: path to mysqld executable
+        :param admin_exec: path to mysqladmin executable
+        :param logfile_path: where the server shoyld wrute it's logs
+        :param params: string containing additional starting parameters
+        :param base_directory: base directory where the temporary files,
             database files, socket and pid will be placed in.
-        :param str user: mysql user name
-        :param str host: server's host
-        :param int port: server's port
-        :param int timeout: executor's timeout for start and stop actions
-        :param int install_db:
+        :param user: mysql user name
+        :param host: server's host
+        :param port: server's port
+        :param timeout: executor's timeout for start and stop actions
+        :param install_db:
         """
         self.mysqld_safe = mysqld_safe
         self.mysqld = mysqld
         self.install_db = install_db
         self.admin_exec = admin_exec
         self.base_directory = base_directory
-        self.datadir = self.base_directory.mkdir(f"mysqldata_{port}")
-        self.pidfile = self.base_directory.join(f"mysql-server.{port}.pid")
-        self.unixsocket = str(self.base_directory.join(f"mysql.{port}.sock"))
+        self.datadir = self.base_directory / f"mysqldata_{port}"
+        self.datadir.mkdir()
+        self.pidfile = self.base_directory / f"mysql-server.{port}.pid"
+        self.unixsocket = str(self.base_directory / f"mysql.{port}.sock")
         self.logfile_path = logfile_path
         self.user = user
         self._initialised = False
@@ -67,17 +72,17 @@ class MySQLExecutor(TCPExecutor):
         )
         super().__init__(command, host, port, timeout=timeout)
 
-    def version(self):
+    def version(self) -> str:
         """Read MySQL's version."""
         version_output = subprocess.check_output(
             [self.mysqld, "--version"]
         ).decode("utf-8")
-        try:
-            return self.VERSION_RE.search(version_output).groupdict()["version"]
-        except AttributeError as exc:
-            raise VersionNotDetected(version_output) from exc
+        matches = self.VERSION_RE.search(version_output)
+        if not matches:
+            raise VersionNotDetected(version_output)
+        return matches.groupdict()["version"]
 
-    def implementation(self):
+    def implementation(self) -> Union[Literal["mariadb"], Literal["mysql"]]:
         """Detect MySQL Implementation."""
         version_output = subprocess.check_output(
             [self.mysqld, "--version"]
@@ -86,7 +91,7 @@ class MySQLExecutor(TCPExecutor):
             return "mariadb"
         return "mysql"
 
-    def initialize_mysqld(self):
+    def initialize_mysqld(self) -> None:
         """
         Initialise mysql directory.
 
@@ -109,7 +114,7 @@ class MySQLExecutor(TCPExecutor):
         subprocess.check_output(init_command, shell=True)
         self._initialised = True
 
-    def initialise_mysql_db_install(self):
+    def initialise_mysql_db_install(self) -> None:
         """
         Initialise mysql directory for older MySQL installations or MariaDB.
 
@@ -131,7 +136,7 @@ class MySQLExecutor(TCPExecutor):
         subprocess.check_output(init_command, shell=True)
         self._initialised = True
 
-    def start(self):
+    def start(self) -> "MySQLExecutor":
         """Trigger initialisation during start."""
         implementation = self.implementation()
         if implementation == "mysql" and parse_version(
@@ -147,9 +152,9 @@ class MySQLExecutor(TCPExecutor):
             raise MySQLUnsupported(
                 "Only MySQL and MariaDB servers are supported with MariaDB."
             )
-        super().start()
+        return super().start()
 
-    def shutdown(self):
+    def shutdown(self) -> None:
         """Send shutdown command to the server."""
         shutdown_command = (
             f"{self.admin_exec} --socket={self.unixsocket} "
@@ -165,7 +170,7 @@ class MySQLExecutor(TCPExecutor):
             )
             subprocess.check_output(shutdown_command, shell=True)
 
-    def stop(self, sig=None, exp_sig=None):
+    def stop(self, *args: Any, **kwargs: Any) -> "MySQLExecutor":
         """Stop the server."""
         self.shutdown()
-        super().stop(sig, exp_sig)
+        return super().stop(*args, **kwargs)

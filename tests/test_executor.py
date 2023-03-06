@@ -1,7 +1,9 @@
 """Executor tests."""
+from pathlib import Path
 from unittest.mock import patch
 
 import pytest
+from pytest import TempPathFactory
 
 from pytest_mysql.executor import MySQLExecutor
 from pytest_mysql.exceptions import MySQLUnsupported
@@ -37,15 +39,17 @@ from pytest_mysql.exceptions import MySQLUnsupported
         ((b"\nmysqld  Ver 5.7.23 for osx10.13 on x86_64 (Homebrew)"), "5.7.23"),
     ),
 )
-def test_version_check(verstr, version, tmpdir_factory):
+def test_version_check(
+    verstr: bytes, version: str, tmp_path_factory: TempPathFactory
+) -> None:
     """Test executor's version property."""
     executor = MySQLExecutor(
-        mysqld_safe="",
-        mysqld="",
+        mysqld_safe=Path(""),
+        mysqld=Path(""),
         admin_exec="",
         logfile_path="",
-        params={},
-        base_directory=tmpdir_factory.mktemp("pytest-mysql"),
+        params="",
+        base_directory=tmp_path_factory.mktemp("pytest-mysql"),
         user="",
         host="",
         port=8838,
@@ -89,15 +93,17 @@ def test_version_check(verstr, version, tmpdir_factory):
         ),
     ),
 )
-def test_implementation(verstr, implementation, tmpdir_factory):
+def test_implementation(
+    verstr: bytes, implementation: str, tmp_path_factory: TempPathFactory
+) -> None:
     """Check detecting implementation."""
     executor = MySQLExecutor(
-        mysqld_safe="",
-        mysqld="",
+        mysqld_safe=Path(""),
+        mysqld=Path(""),
         admin_exec="",
         logfile_path="",
-        params={},
-        base_directory=tmpdir_factory.mktemp("pytest-mysql"),
+        params="",
+        base_directory=tmp_path_factory.mktemp("pytest-mysql"),
         user="",
         host="",
         port=8838,
@@ -119,15 +125,17 @@ def test_implementation(verstr, implementation, tmpdir_factory):
         ),
     ),
 )
-def test_exception_raised(verstr, tmpdir_factory):
+def test_exception_raised(
+    verstr: bytes, tmp_path_factory: TempPathFactory
+) -> None:
     """Raise exception on not supported versions."""
     executor = MySQLExecutor(
-        mysqld_safe="",
-        mysqld="",
+        mysqld_safe=Path(""),
+        mysqld=Path(""),
         admin_exec="",
         logfile_path="",
-        params={},
-        base_directory=tmpdir_factory.mktemp("pytest-mysql"),
+        params="",
+        base_directory=tmp_path_factory.mktemp("pytest-mysql"),
         user="",
         host="",
         port=8838,

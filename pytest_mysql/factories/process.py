@@ -18,7 +18,8 @@
 """Process fixture factory for MySQL database."""
 
 import os
-import py
+from pathlib import Path
+from typing import Callable, Any, Optional, Union, Tuple, Set, List, Generator
 from warnings import warn
 
 import pytest
@@ -30,42 +31,54 @@ from pytest_mysql.executor import MySQLExecutor
 
 
 def mysql_proc(
-    mysqld_exec=None,
-    admin_executable=None,
-    mysqld_safe=None,
-    host=None,
-    user=None,
-    port=-1,
-    params=None,
-    logs_prefix="",
-    install_db=None,
-):
+    mysqld_exec: Optional[Path] = None,
+    admin_executable: Optional[str] = None,
+    mysqld_safe: Optional[Path] = None,
+    host: Optional[str] = None,
+    user: Optional[str] = None,
+    port: Union[
+        None,
+        str,
+        int,
+        Tuple[int, int],
+        Set[int],
+        List[str],
+        List[int],
+        List[Tuple[int, int]],
+        List[Set[int]],
+        List[Union[Set[int], Tuple[int, int]]],
+        List[Union[str, int, Tuple[int, int], Set[int]]],
+    ] = -1,
+    params: Optional[str] = None,
+    logs_prefix: str = "",
+    install_db: Optional[str] = None,
+) -> Callable[
+    [FixtureRequest, TempPathFactory], Generator[MySQLExecutor, None, None]
+]:
     """
     Process fixture factory for MySQL server.
 
-    :param str mysqld_exec: path to mysql executable
-    :param str admin_executable: path to mysql_admin executable
-    :param str mysqld_safe: path to mysqld_safe executable
-    :param str host: hostname
-    :param str user: user name
-    :param str|int|tuple|set|list port:
+    :param mysqld_exec: path to mysql executable
+    :param admin_executable: path to mysql_admin executable
+    :param mysqld_safe: path to mysqld_safe executable
+    :param host: hostname
+    :param user: user name
+    :param port:
         exact port (e.g. '8000', 8000)
         randomly selected port (None) - any random available port
         [(2000,3000)] or (2000,3000) - random available port from a given range
         [{4002,4003}] or {4002,4003} - random of 4002 or 4003 ports
         [(2000,3000), {4002,4003}] -random of given range and set
-    :param str params: additional command-line mysqld parameters
-    :param str logs_prefix: prefix for log filename
-    :param str install_db: path to legacy mysql_install_db script
-    :rtype: func
+    :param params: additional command-line mysqld parameters
+    :param logs_prefix: prefix for log filename
+    :param install_db: path to legacy mysql_install_db script
     :returns: function which makes a mysql process
-
     """
 
     @pytest.fixture(scope="session")
     def mysql_proc_fixture(
         request: FixtureRequest, tmp_path_factory: TempPathFactory
-    ):
+    ) -> Generator[MySQLExecutor, None, None]:
         """
         Process fixture for MySQL server.
 
@@ -87,13 +100,12 @@ def mysql_proc(
         mysql_admin_exec = admin_executable or config["admin"]
         mysql_mysqld_safe = mysqld_safe or config["mysqld_safe"]
         mysql_port = get_port(port) or get_port(config["port"])
+        assert mysql_port
         mysql_host = host or config["host"]
         mysql_params = params or config["params"]
         mysql_install_db = install_db or config["install_db"]
 
-        tmpdir = py.path.local(
-            tmp_path_factory.mktemp(f"pytest-mysql-{request.fixturename}")
-        )
+        tmpdir = tmp_path_factory.mktemp(f"pytest-mysql-{request.fixturename}")
 
         if logs_prefix:
             warn(
@@ -104,6 +116,7 @@ def mysql_proc(
                 DeprecationWarning,
             )
 
+        logfile_path = tmpdir / f"mysql-server.{port}.log"
         logsdir = config["logsdir"]
         if logsdir:
             warn(
@@ -113,18 +126,16 @@ def mysql_proc(
                 DeprecationWarning,
             )
             if logs_prefix:
-                logfile_path = os.path.join(
-                    logsdir,
-                    f"{logs_prefix}mysql-server.{mysql_port}.log",
+                logfile_path = (
+                    Path(logsdir)
+                    / f"{logs_prefix}mysql-server.{mysql_port}.log"
                 )
-        else:
-            logfile_path = tmpdir.join(f"mysql-server.{port}.log")
 
         mysql_executor = MySQLExecutor(
             mysqld_safe=mysql_mysqld_safe,
             mysqld=mysql_mysqld,
             admin_exec=mysql_admin_exec,
-            logfile_path=logfile_path,
+            logfile_path=str(logfile_path),
             base_directory=tmpdir,
             params=mysql_params,
             user=user or config["user"] or "root",
