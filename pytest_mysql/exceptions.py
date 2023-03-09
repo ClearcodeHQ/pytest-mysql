@@ -17,5 +17,13 @@ class VersionNotDetected(PytestMySQLException):
         super().__init__("Could not detect version in {}".format(output))
 
 
+class SocketPathTooLong(PytestMySQLException):
+    """
+    Exception raised the socket path is over 103 chars.
+
+    Raised on BSD/MacOS as Mysql will fail to start.
+    """
+
+
 class DatabaseExists(PytestMySQLException):
     """Raise this exception, when the database already exists."""
