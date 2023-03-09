@@ -18,7 +18,11 @@ class VersionNotDetected(PytestMySQLException):
 
 
 class SocketPathTooLong(PytestMySQLException):
-    """Exception raised the socket path is over 103 chars (mysql will fail to start)."""
+    """
+    Exception raised the socket path is over 103 chars.
+
+    Raised on BSD/MacOS as Mysql will fail to start.
+    """
 
 
 class DatabaseExists(PytestMySQLException):

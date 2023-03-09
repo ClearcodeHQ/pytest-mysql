@@ -182,7 +182,11 @@ class MySQLExecutor(TCPExecutor):
         return super().stop(*args, **kwargs)
 
     def _check_socket_path(self) -> None:
-        if platform.system() in ["Darwin", "FreeBSD]"] and len(self.unixsocket) > 103:
+        if (
+            platform.system() in ["Darwin", "FreeBSD]"]
+            and len(self.unixsocket) > 103
+        ):
             raise SocketPathTooLong(
-                f"Socket path '{self.unixsocket}' is too long, please pass --basetemp=/tmp/pytest_mysql to pytest"
+                f"Socket path '{self.unixsocket}' is too long, "
+                f"please pass ie. `--basetemp=/tmp/pytest_mysql` to pytest"
             )
