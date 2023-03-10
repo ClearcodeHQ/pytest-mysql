@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 jobs:
-  tests:
+  tests-mysql-linux:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: true
@@ -29,16 +29,14 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: Verify MySQL connection
-      run: |
-        while ! mysqladmin ping -h"127.0.0.1" -P"3333" --silent; do
-          sleep 1
-        done
+    - uses: ankane/setup-mysql@v1
+      with:
+        mysql-version: 8.0
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
-    - name: Install MySQL
+    - name: Check MySQL Version
       run: mysqld --version
     - name: Run test
       uses: fizyk/actions-reuse/.github/actions/pipenv@v1.7.0
@@ -66,9 +64,9 @@ jobs:
         fail_ci_if_error: false
         token: ${{ secrets.CODECOV_TOKEN }}
 
-  tests-mariadb:
+  tests-mariadb-linux:
     runs-on: ubuntu-latest
-    needs: [tests]
+    needs: [tests-mysql-linux]
     strategy:
       fail-fast: true
       matrix:
@@ -88,22 +86,15 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: Verify MariaDB connection
-      run: |
-        while ! mysqladmin ping -h"127.0.0.1" -P"3333" --silent; do
-          sleep 1
-        done
+    - uses: ankane/setup-mariadb@v1
+      with:
+        mariadb-version: "10.10"
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
-    - name: Install MariaDB
-      run: |
-        sudo apt remove mysql-server
-        sudo apt autoremove -y
-        sudo apt update
-        sudo apt install mariadb-server
-        mysqld --version
+    - name: Check MySQL Version
+      run: mysqld --version
     - name: Run test
       uses: fizyk/actions-reuse/.github/actions/pipenv@v1.7.0
       with:
@@ -129,3 +120,59 @@ jobs:
         env_vars: OS, PYTHON
         fail_ci_if_error: false
         token: ${{ secrets.CODECOV_TOKEN }}
+
+  tests-mysql-macosx:
+    runs-on: macos-latest
+    needs: [tests-mysql-linux]
+    strategy:
+      fail-fast: true
+      matrix:
+        python-version: [3.9, "3.10", "3.11"]
+    env:
+      OS: macos-latest
+      PYTHON: ${{ matrix.python-version }}
+    steps:
+    - uses: actions/checkout@v3
+    - uses: ankane/setup-mysql@v1
+      with:
+        mysql-version: 8.0
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Check MySQL Version
+      run: mysqld --version
+    - name: Run test
+      uses: fizyk/actions-reuse/.github/actions/pipenv@v1.7.0
+      with:
+        python-version: ${{ matrix.python-version }}
+        pipenv-install-options: "--skip-lock"
+        command: pytest -n 0 -k "not mysqlnoproc" --cov-report=xml --mysql-user=root --basetemp=/tmp/pytest_mysql
+
+  tests-mariadb-macosx:
+    runs-on: macos-latest
+    needs: [tests-mysql-macosx, tests-mariadb-linux]
+    strategy:
+      fail-fast: true
+      matrix:
+        python-version: [3.9, "3.10", "3.11"]
+    env:
+      OS: macos-latest
+      PYTHON: ${{ matrix.python-version }}
+    steps:
+    - uses: actions/checkout@v3
+    - uses: ankane/setup-mariadb@v1
+      with:
+        mariadb-version: "10.10"
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Check MySQL Version
+      run: mysqld --version
+    - name: Run test
+      uses: fizyk/actions-reuse/.github/actions/pipenv@v1.7.0
+      with:
+        python-version: ${{ matrix.python-version }}
+        pipenv-install-options: "--skip-lock"
+        command: pytest --mysql-user=$USER -n 0 -k "not mysqlnoproc" --cov-report=xml --basetemp=/tmp/pytest_mysql
