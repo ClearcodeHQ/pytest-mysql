@@ -1,1 +1,0 @@
-Move most of the package definition to pyproject.toml

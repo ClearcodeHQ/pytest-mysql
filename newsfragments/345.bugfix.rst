@@ -1,6 +1,0 @@
-Raise exception with helpful message if unixsocket is too long on FreeBSD or MacOS system
-
-OSX gives out super long temp directories.  This isn't a problem until
-we run into an odd 103-character limit on the names of unix sockets
-`see this stackoverflow thread <https://unix.stackexchange.com/questions/367008/why-is-socket-path-length-limited-to-a-hundred-chars/367012#367012>`_.
-Here we warn and give the user a way out of it.

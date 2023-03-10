@@ -1,3 +1,0 @@
-Updated codecov configuration:
-* Added token
-* Turned off pipeline failing if codecov upload fails

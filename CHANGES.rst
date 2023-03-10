@@ -3,6 +3,51 @@ CHANGELOG
 
 .. towncrier release notes start
 
+2.4.0 (2023-03-10)
+==================
+
+Breaking changes
+----------------
+
+- Dropped support for Python 3.7 (`#401 <https://https://github.com/ClearcodeHQ/pytest-mysql/issues/401>`_)
+
+
+Bugfixes
+--------
+
+- Raise exception with helpful message if unixsocket is too long on FreeBSD or MacOS system
+
+  OSX gives out super long temp directories.  This isn't a problem until
+  we run into an odd 103-character limit on the names of unix sockets
+  `see this stackoverflow thread <https://unix.stackexchange.com/questions/367008/why-is-socket-path-length-limited-to-a-hundred-chars/367012#367012>`_.
+  Here we warn and give the user a way out of it. (`#345 <https://https://github.com/ClearcodeHQ/pytest-mysql/issues/345>`_)
+
+
+Features
+--------
+
+- Added support to Python 3.11 (`#392 <https://https://github.com/ClearcodeHQ/pytest-mysql/issues/392>`_)
+- Add type hints and mypy checks (`#401 <https://https://github.com/ClearcodeHQ/pytest-mysql/issues/401>`_)
+
+
+Miscellaneus
+------------
+
+- Run tests on CI on macosx (`#245 <https://https://github.com/ClearcodeHQ/pytest-mysql/issues/245>`_)
+- Update example configuration in README (`#365 <https://https://github.com/ClearcodeHQ/pytest-mysql/issues/365>`_)
+- Readme fixes (`#372 <https://https://github.com/ClearcodeHQ/pytest-mysql/issues/372>`_)
+- Docstring fixes (`#378 <https://https://github.com/ClearcodeHQ/pytest-mysql/issues/378>`_)
+- Added towncrier to manage newsfragments (`#397 <https://https://github.com/ClearcodeHQ/pytest-mysql/issues/397>`_)
+- Migrate dependency management to pipenv (`#398 <https://https://github.com/ClearcodeHQ/pytest-mysql/issues/398>`_)
+- Move most of the package definition to pyproject.toml (`#399 <https://https://github.com/ClearcodeHQ/pytest-mysql/issues/399>`_)
+- Migrate automerge to a shared workflow using github app for short-lived tokens. (`#400 <https://https://github.com/ClearcodeHQ/pytest-mysql/issues/400>`_)
+- Use tbump to manage versioning (`#402 <https://https://github.com/ClearcodeHQ/pytest-mysql/issues/402>`_)
+- Updated codecov configuration:
+  * Added token
+  * Turned off pipeline failing if codecov upload fails (`#405 <https://https://github.com/ClearcodeHQ/pytest-mysql/issues/405>`_)
+- Run mariadb tests after MySQL tests run. (`#409 <https://https://github.com/ClearcodeHQ/pytest-mysql/issues/409>`_)
+
+
 2.3.1
 =====
 
