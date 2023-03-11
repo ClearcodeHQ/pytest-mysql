@@ -39,19 +39,19 @@ jobs:
     - name: Check MySQL Version
       run: mysqld --version
     - name: Run test
-      uses: fizyk/actions-reuse/.github/actions/pipenv@v1.7.0
+      uses: fizyk/actions-reuse/.github/actions/pipenv@v1.7.1
       with:
         python-version: ${{ matrix.python-version }}
         pipenv-install-options: "--skip-lock"
         command: pytest -n 0 -k "not mysqlnoproc" --cov-report=xml --mysql-user=root
     - name: Run xdist test
-      uses: fizyk/actions-reuse/.github/actions/pipenv@v1.7.0
+      uses: fizyk/actions-reuse/.github/actions/pipenv@v1.7.1
       with:
         python-version: ${{ matrix.python-version }}
         pipenv-install-options: "--skip-lock"
         command: pytest -n 0 -k "not mysqlnoproc" --cov-report=xml:coverage-xdist.xml --mysql-user=root
     - name: Run noproc test
-      uses: fizyk/actions-reuse/.github/actions/pipenv@v1.7.0
+      uses: fizyk/actions-reuse/.github/actions/pipenv@v1.7.1
       with:
         python-version: ${{ matrix.python-version }}
         pipenv-install-options: "--skip-lock"
@@ -96,19 +96,19 @@ jobs:
     - name: Check MySQL Version
       run: mysqld --version
     - name: Run test
-      uses: fizyk/actions-reuse/.github/actions/pipenv@v1.7.0
+      uses: fizyk/actions-reuse/.github/actions/pipenv@v1.7.1
       with:
         python-version: ${{ matrix.python-version }}
         pipenv-install-options: "--skip-lock"
         command: pytest --mysql-user=$USER -n 0 -k "not mysqlnoproc" --cov-report=xml
     - name: Run xdist test
-      uses: fizyk/actions-reuse/.github/actions/pipenv@v1.7.0
+      uses: fizyk/actions-reuse/.github/actions/pipenv@v1.7.1
       with:
         python-version: ${{ matrix.python-version }}
         pipenv-install-options: "--skip-lock"
         command: pytest --mysql-user=$USER -n 1 -k "not mysqlnoproc" --cov-report=xml:coverage-xdist.xml
     - name: Run noproc test
-      uses: fizyk/actions-reuse/.github/actions/pipenv@v1.7.0
+      uses: fizyk/actions-reuse/.github/actions/pipenv@v1.7.1
       with:
         python-version: ${{ matrix.python-version }}
         pipenv-install-options: "--skip-lock"
@@ -143,7 +143,7 @@ jobs:
     - name: Check MySQL Version
       run: mysqld --version
     - name: Run test
-      uses: fizyk/actions-reuse/.github/actions/pipenv@v1.7.0
+      uses: fizyk/actions-reuse/.github/actions/pipenv@v1.7.1
       with:
         python-version: ${{ matrix.python-version }}
         pipenv-install-options: "--skip-lock"
@@ -171,7 +171,7 @@ jobs:
     - name: Check MySQL Version
       run: mysqld --version
     - name: Run test
-      uses: fizyk/actions-reuse/.github/actions/pipenv@v1.7.0
+      uses: fizyk/actions-reuse/.github/actions/pipenv@v1.7.1
       with:
         python-version: ${{ matrix.python-version }}
         pipenv-install-options: "--skip-lock"
