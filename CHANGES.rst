@@ -3,6 +3,15 @@ CHANGELOG
 
 .. towncrier release notes start
 
+2.4.1 (2023-03-13)
+==================
+
+Bugfixes
+--------
+
+- Fix packaging mistake which did not included the subpackages. (`#417 <https://https://github.com/ClearcodeHQ/pytest-mysql/issues/417>`_)
+
+
 2.4.0 (2023-03-10)
 ==================
 
