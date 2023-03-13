@@ -48,7 +48,11 @@ build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
 zip-safe = true
-packages = ["pytest_mysql"]
+
+[tool.setuptools.packages.find]
+include = ["pyramid_fullauth*"]
+exclude = ["tests*"]
+namespaces = false
 
 [tool.pytest.ini_options]
 xfail_strict=true
