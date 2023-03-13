@@ -50,7 +50,7 @@ build-backend = "setuptools.build_meta"
 zip-safe = true
 
 [tool.setuptools.packages.find]
-include = ["pyramid_fullauth*"]
+include = ["pytest_mysql*"]
 exclude = ["tests*"]
 namespaces = false
 
