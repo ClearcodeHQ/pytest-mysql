@@ -1,2 +1,2 @@
 include *.rst *.py
-recursive-include src/pytest_mysql *.py
+recursive-include pytest_mysql *.py
