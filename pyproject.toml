@@ -4,7 +4,7 @@ version = "2.4.1"
 description = "MySQL process and client fixtures for pytest"
 readme = "README.rst"
 keywords = ["tests", "pytest", "fixture", "mysql"]
-license = {file = "LICENSE"}
+license = {file = "COPYING.lesser"}
 authors = [
     {name = "Grzegorz Śliwiński", email = "fizyk+pypi@fizyk.dev"}
 ]
