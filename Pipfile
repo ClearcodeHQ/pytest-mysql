@@ -13,7 +13,7 @@ mysqlclient = "==2.1.1"
 towncrier = "==22.12"
 pycodestyle = "==2.10.0"
 pydocstyle = {version = "==6.3.0", extras = ["toml"]}
-black = "==22.10.0"
+black = "==23.1.0"
 pytest-cov = "==4.0.0"
 pytest-xdist = "==3.2.0"
 mock = "==5.0.1"
