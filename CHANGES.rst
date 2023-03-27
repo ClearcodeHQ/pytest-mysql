@@ -3,6 +3,15 @@ CHANGELOG
 
 .. towncrier release notes start
 
+2.4.2 (2023-03-27)
+==================
+
+Bugfixes
+--------
+
+- Fix license configuration in pyproject.toml (`#426 <https://https://github.com/ClearcodeHQ/pytest-mysql/issues/426>`_)
+
+
 2.4.1 (2023-03-13)
 ==================
 
