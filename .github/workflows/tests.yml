@@ -57,7 +57,7 @@ jobs:
         pipenv-install-options: "--skip-lock"
         command: pytest -n 0 -k mysqlnoproc --cov-report=xml:coverage-noproc.xml --mysql-host="127.0.0.1" --mysql-port=3333
     - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v3.1.1
+      uses: codecov/codecov-action@v3.1.2
       with:
         flags: linux,mysql
         env_vars: OS, PYTHON
@@ -114,7 +114,7 @@ jobs:
         pipenv-install-options: "--skip-lock"
         command: pytest -n 0 -k mysqlnoproc --cov-report=xml:coverage-noproc.xml --mysql-host="127.0.0.1" --mysql-port=3333
     - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v3.1.1
+      uses: codecov/codecov-action@v3.1.2
       with:
         flags: linux,mariadb
         env_vars: OS, PYTHON
