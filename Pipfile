@@ -15,7 +15,7 @@ pycodestyle = "==2.10.0"
 pydocstyle = {version = "==6.3.0", extras = ["toml"]}
 black = "==23.3.0"
 pytest-cov = "==4.0.0"
-pytest-xdist = "==3.2.0"
+pytest-xdist = "==3.2.1"
 mock = "==5.0.2"
 coverage = "==7.2.2"
 tbump = "==6.9.0"
