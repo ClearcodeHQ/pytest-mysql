@@ -35,6 +35,7 @@ def mysql(
     dbname: Optional[str] = None,
     charset: str = "utf8",
     collation: str = "utf8_general_ci",
+    scope="function",
 ) -> Callable[[FixtureRequest], Any]:
     """
     Client fixture factory for MySQL server.
@@ -77,7 +78,7 @@ def mysql(
             raise
         return mysql_conn
 
-    @pytest.fixture
+    @pytest.fixture(scope=scope)
     def mysql_fixture(
         request: FixtureRequest,
     ) -> Generator[MySQLdb.Connection, None, None]:
