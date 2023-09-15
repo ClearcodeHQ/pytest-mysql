@@ -1,0 +1,1 @@
+Update MariaDB service health check in github-actions
