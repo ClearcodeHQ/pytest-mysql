@@ -32,10 +32,6 @@ jobs:
     - uses: ankane/setup-mysql@v1
       with:
         mysql-version: 8.0
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v4
-      with:
-        python-version: ${{ matrix.python-version }}
     - name: Check MySQL Version
       run: mysqld --version
     - name: Run test
@@ -89,10 +85,6 @@ jobs:
     - uses: ankane/setup-mariadb@v1
       with:
         mariadb-version: "10.10"
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v4
-      with:
-        python-version: ${{ matrix.python-version }}
     - name: Check MySQL Version
       run: mysqld --version
     - name: Run test
@@ -136,10 +128,6 @@ jobs:
     - uses: ankane/setup-mysql@v1
       with:
         mysql-version: 8.0
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v4
-      with:
-        python-version: ${{ matrix.python-version }}
     - name: Check MySQL Version
       run: mysqld --version
     - name: Run test
@@ -164,10 +152,6 @@ jobs:
     - uses: ankane/setup-mariadb@v1
       with:
         mariadb-version: "10.10"
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v4
-      with:
-        python-version: ${{ matrix.python-version }}
     - name: Check MySQL Version
       run: mysqld --version
     - name: Run test
