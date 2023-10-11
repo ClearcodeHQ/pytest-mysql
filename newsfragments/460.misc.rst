@@ -1,0 +1,1 @@
+Stop fast-failing tests on CI. They are nicely split into groups anyway.
