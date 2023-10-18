@@ -16,7 +16,7 @@ def test_mysql(mysql: Connection) -> None:
     """Check first, basic client fixture factory."""
     cursor = mysql.cursor()
     cursor.execute(QUERY)
-    mysql.commit()
+    mysql.commit()  # type: ignore
     cursor.close()
 
 
@@ -29,12 +29,12 @@ def test_mysql_newfixture(mysql: Connection, mysql2: Connection) -> None:
     """More complext test with several mysql_processes."""
     cursor = mysql.cursor()
     cursor.execute(QUERY)
-    mysql.commit()
+    mysql.commit()  # type: ignore
     cursor.close()
 
     cursor = mysql2.cursor()
     cursor.execute(QUERY)
-    mysql2.commit()
+    mysql2.commit()  # type: ignore
     cursor.close()
 
 
