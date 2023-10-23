@@ -10,7 +10,6 @@ jobs:
   tests-mysql-linux:
     runs-on: ubuntu-latest
     strategy:
-      fail-fast: true
       matrix:
         python-version: [3.8, 3.9, "3.10", "3.11", pypy-3.8]
     env:
@@ -64,7 +63,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: [tests-mysql-linux]
     strategy:
-      fail-fast: true
       matrix:
         python-version: [3.8, 3.9, "3.10", "3.11", pypy-3.8]
     env:
@@ -117,7 +115,6 @@ jobs:
     runs-on: macos-latest
     needs: [tests-mysql-linux]
     strategy:
-      fail-fast: true
       matrix:
         python-version: [3.9, "3.10", "3.11"]
     env:
@@ -141,7 +138,6 @@ jobs:
     runs-on: macos-latest
     needs: [tests-mysql-macosx, tests-mariadb-linux]
     strategy:
-      fail-fast: true
       matrix:
         python-version: [3.9, "3.10", "3.11"]
     env:

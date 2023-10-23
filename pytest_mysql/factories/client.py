@@ -136,11 +136,11 @@ def mysql(
         if not mysql_conn.open:
             mysql_conn = Connection(**connection_kwargs)
         try:
-            mysql_conn.store_result()
+            mysql_conn.store_result()  # type: ignore
         except Exception as e:
             print(str(e))
         query_drop_database = f"DROP DATABASE IF EXISTS `{mysql_db}`"
         mysql_conn.query(query_drop_database)
-        mysql_conn.close()
+        mysql_conn.close()  # type: ignore
 
     return mysql_fixture
