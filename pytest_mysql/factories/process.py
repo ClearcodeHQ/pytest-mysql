@@ -17,14 +17,13 @@
 # along with pytest-mysql.  If not, see <http://www.gnu.org/licenses/>.
 """Process fixture factory for MySQL database."""
 
-import os
 from pathlib import Path
-from typing import Callable, Any, Optional, Union, Tuple, Set, List, Generator
+from typing import Callable, Generator, List, Optional, Set, Tuple, Union
 from warnings import warn
 
 import pytest
-from pytest import FixtureRequest, TempPathFactory
 from port_for import get_port
+from pytest import FixtureRequest, TempPathFactory
 
 from pytest_mysql.config import get_config
 from pytest_mysql.executor import MySQLExecutor
@@ -55,8 +54,7 @@ def mysql_proc(
 ) -> Callable[
     [FixtureRequest, TempPathFactory], Generator[MySQLExecutor, None, None]
 ]:
-    """
-    Process fixture factory for MySQL server.
+    """Process fixture factory for MySQL server.
 
     :param mysqld_exec: path to mysql executable
     :param admin_executable: path to mysql_admin executable
@@ -79,8 +77,7 @@ def mysql_proc(
     def mysql_proc_fixture(
         request: FixtureRequest, tmp_path_factory: TempPathFactory
     ) -> Generator[MySQLExecutor, None, None]:
-        """
-        Process fixture for MySQL server.
+        """Process fixture for MySQL server.
 
         #. Get config.
         #. Initialize MySQL data directory

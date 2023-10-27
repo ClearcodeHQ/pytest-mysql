@@ -1,3 +1,4 @@
+"""MySQL tests that do not start mysql server."""
 from MySQLdb import Connection
 
 from pytest_mysql import factories
@@ -18,9 +19,9 @@ def test_mysql_noproc(mysqlnoproc_client: Connection) -> None:
 def test_mysql_noproc_closing_connection_not_throwing_exception(
     mysqlnoproc_client: Connection,
 ) -> None:
-    """
-    Check if closing the connection doesn't throw an exception
-    when cleaning the fixture.
+    """Check if closing the connection doesn't throw an exception.
+
+    When cleaning the fixture.
     """
     cursor = mysqlnoproc_client.cursor()
     cursor.execute(QUERY)

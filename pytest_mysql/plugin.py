@@ -16,7 +16,6 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with pytest-mysql.  If not, see <http://www.gnu.org/licenses/>.
 """Plugin definition."""
-from tempfile import gettempdir
 
 from pytest import Parser
 
@@ -146,3 +145,5 @@ def pytest_addoption(parser: Parser) -> None:
 mysql_proc = factories.mysql_proc()
 mysql_noproc = factories.mysql_noproc()
 mysql = factories.mysql("mysql_proc")
+
+__all__ = ("pytest_addoption", "mysql_proc", "mysql_noproc", "mysql")

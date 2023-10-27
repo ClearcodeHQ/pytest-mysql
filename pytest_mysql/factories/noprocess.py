@@ -17,9 +17,7 @@
 # along with pytest-mysql.  If not, see <http://www.gnu.org/licenses/>.
 """Process fixture factory for MySQL database."""
 
-import os
-from typing import Optional, Callable, Any, Generator
-from warnings import warn
+from typing import Callable, Generator, Optional
 
 import pytest
 from _pytest.fixtures import FixtureRequest
@@ -33,8 +31,7 @@ def mysql_noproc(
     port: Optional[int] = None,
     user: Optional[str] = None,
 ) -> Callable[[FixtureRequest], Generator[NoopMySQLExecutor, None, None]]:
-    """
-    Process fixture factory for MySQL server.
+    """Process fixture factory for MySQL server.
 
     :param str host: hostname
     :param int port: port name
@@ -48,8 +45,7 @@ def mysql_noproc(
     def mysql_noproc_fixture(
         request: FixtureRequest,
     ) -> Generator[NoopMySQLExecutor, None, None]:
-        """
-        Process fixture for MySQL server.
+        """Process fixture for MySQL server.
 
         #. Get config.
 
