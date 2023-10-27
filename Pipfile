@@ -11,8 +11,6 @@ mysqlclient = "==2.2.0"
 
 [dev-packages]
 towncrier = "==23.10.0"
-pycodestyle = "==2.11.1"
-pydocstyle = {version = "==6.3.0", extras = ["toml"]}
 black = "==23.10.1"
 pytest-cov = "==4.1.0"
 pytest-xdist = "==3.3.1"
@@ -22,3 +20,4 @@ tbump = "==6.11.0"
 mypy = "==1.6.1"
 types-setuptools = "==68.2.0.0"
 types-mysqlclient = "==2.2.0.1"
+ruff = "==0.1.3"

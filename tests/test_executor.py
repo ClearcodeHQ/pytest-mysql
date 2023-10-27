@@ -5,8 +5,8 @@ from unittest.mock import patch
 import pytest
 from pytest import TempPathFactory
 
-from pytest_mysql.executor import MySQLExecutor
 from pytest_mysql.exceptions import MySQLUnsupported
+from pytest_mysql.executor import MySQLExecutor
 
 
 @pytest.mark.parametrize(

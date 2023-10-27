@@ -16,12 +16,12 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with pytest-mysql.  If not, see <http://www.gnu.org/licenses/>.
 """Client fixture factory for MySQL database."""
-from typing import Union, Generator, Callable, Any, Optional, Dict
+from typing import Any, Callable, Dict, Generator, Optional, Union
 
-import pytest
 import MySQLdb
-from MySQLdb import ProgrammingError, OperationalError, Connection
+import pytest
 from _pytest.fixtures import FixtureRequest
+from MySQLdb import Connection, OperationalError, ProgrammingError
 
 from pytest_mysql.config import get_config
 from pytest_mysql.exceptions import DatabaseExists
@@ -36,8 +36,7 @@ def mysql(
     charset: str = "utf8",
     collation: str = "utf8_general_ci",
 ) -> Callable[[FixtureRequest], Any]:
-    """
-    Client fixture factory for MySQL server.
+    """Client fixture factory for MySQL server.
 
     Factory. Create connection to mysql. If you want you can give a scope,
     default is 'session'.
@@ -81,8 +80,7 @@ def mysql(
     def mysql_fixture(
         request: FixtureRequest,
     ) -> Generator[MySQLdb.Connection, None, None]:
-        """
-        Client fixture for MySQL server.
+        """Client fixture for MySQL server.
 
         #. Get config.
         #. Try to import MySQLdb package.

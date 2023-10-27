@@ -3,8 +3,7 @@ from typing import Any, Literal
 
 
 class NoopMySQLExecutor:
-    """
-    Noop Executor.
+    """Noop Executor.
 
     Used to mimic in necessary scope the MySQL executor inside fixtures.
     """

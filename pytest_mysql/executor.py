@@ -3,16 +3,15 @@ import platform
 import re
 import subprocess
 from pathlib import Path
-from typing import Optional, Union, Literal, Any
-
-from pkg_resources import parse_version
+from typing import Any, Literal, Optional, Union
 
 from mirakuru import TCPExecutor
+from pkg_resources import parse_version
 
 from pytest_mysql.exceptions import (
     MySQLUnsupported,
-    VersionNotDetected,
     SocketPathTooLong,
+    VersionNotDetected,
 )
 
 
@@ -36,8 +35,7 @@ class MySQLExecutor(TCPExecutor):
         timeout: int = 60,
         install_db: Optional[str] = None,
     ) -> None:
-        """
-        Specialised Executor to run and manage MySQL server process.
+        """Specialised Executor to run and manage MySQL server process.
 
         :param mysqld_safe: path to mysqld_safe executable
         :param mysqld: path to mysqld executable
@@ -97,8 +95,7 @@ class MySQLExecutor(TCPExecutor):
         return "mysql"
 
     def initialize_mysqld(self) -> None:
-        """
-        Initialise mysql directory.
+        """Initialise mysql directory.
 
         #. Remove mysql directory if exist.
         #. `Initialize MySQL data directory
@@ -120,8 +117,7 @@ class MySQLExecutor(TCPExecutor):
         self._initialised = True
 
     def initialise_mysql_db_install(self) -> None:
-        """
-        Initialise mysql directory for older MySQL installations or MariaDB.
+        """Initialise mysql directory for older MySQL installations or MariaDB.
 
         #. Remove mysql directory if exist.
         #. `Initialize MySQL data directory
