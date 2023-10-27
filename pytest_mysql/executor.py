@@ -69,6 +69,7 @@ class MySQLExecutor(TCPExecutor):
             f"--datadir={self.datadir} "
             f"--pid-file={self.pidfile} "
             f"--port={port} "
+            f"--user={self.user} "
             f"--socket={self.unixsocket} "
             f"--log-error={self.logfile_path} "
             f"--tmpdir={self.base_directory} "
