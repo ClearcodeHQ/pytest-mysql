@@ -7,7 +7,7 @@ name = "pypi"
 pytest = "==7.4.3"
 port-for = "==0.7.2"
 mirakuru = "==2.5.2"
-mysqlclient = "==2.1.1"
+mysqlclient = "==2.2.0"
 
 [dev-packages]
 towncrier = "==23.10.0"
