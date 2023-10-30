@@ -1,0 +1,1 @@
+Use packaging.version.parse directly instead of the one provided by setuptools

@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import Any, Literal, Optional, Union
 
 from mirakuru import TCPExecutor
-from pkg_resources import parse_version
+from packaging.version import parse
 
 from pytest_mysql.exceptions import (
     MySQLUnsupported,
@@ -77,9 +77,7 @@ class MySQLExecutor(TCPExecutor):
 
     def version(self) -> str:
         """Read MySQL's version."""
-        version_output = subprocess.check_output(
-            [self.mysqld, "--version"]
-        ).decode("utf-8")
+        version_output = subprocess.check_output([self.mysqld, "--version"]).decode("utf-8")
         matches = self.VERSION_RE.search(version_output)
         if not matches:
             raise VersionNotDetected(version_output)
@@ -87,9 +85,7 @@ class MySQLExecutor(TCPExecutor):
 
     def implementation(self) -> Union[Literal["mariadb"], Literal["mysql"]]:
         """Detect MySQL Implementation."""
-        version_output = subprocess.check_output(
-            [self.mysqld, "--version"]
-        ).decode("utf-8")
+        version_output = subprocess.check_output([self.mysqld, "--version"]).decode("utf-8")
         if self.IMPLEMENTATION_RE.search(version_output):
             return "mariadb"
         return "mysql"
@@ -142,9 +138,7 @@ class MySQLExecutor(TCPExecutor):
         self._check_socket_path()
 
         implementation = self.implementation()
-        if implementation == "mysql" and parse_version(
-            self.version()
-        ) > parse_version("5.7.6"):
+        if implementation == "mysql" and parse(self.version()) > parse("5.7.6"):
             self.initialize_mysqld()
         elif implementation in ["mysql", "mariadb"]:
             if self.install_db:
@@ -152,24 +146,20 @@ class MySQLExecutor(TCPExecutor):
             else:
                 raise MySQLUnsupported("mysqld_init path is missing.")
         else:
-            raise MySQLUnsupported(
-                "Only MySQL and MariaDB servers are supported with MariaDB."
-            )
+            raise MySQLUnsupported("Only MySQL and MariaDB servers are supported with MariaDB.")
         return super().start()
 
     def shutdown(self) -> None:
         """Send shutdown command to the server."""
         shutdown_command = (
-            f"{self.admin_exec} --socket={self.unixsocket} "
-            f"--user={self.user} shutdown"
+            f"{self.admin_exec} --socket={self.unixsocket} " f"--user={self.user} shutdown"
         )
         try:
             subprocess.check_output(shutdown_command, shell=True)
         except subprocess.CalledProcessError:
             # Fallback to using root user for shutdown
             shutdown_command = (
-                f"{self.admin_exec} --socket={self.unixsocket} "
-                f"--user=root shutdown"
+                f"{self.admin_exec} --socket={self.unixsocket} " f"--user=root shutdown"
             )
             subprocess.check_output(shutdown_command, shell=True)
 
@@ -179,10 +169,7 @@ class MySQLExecutor(TCPExecutor):
         return super().stop(*args, **kwargs)
 
     def _check_socket_path(self) -> None:
-        if (
-            platform.system() in ["Darwin", "FreeBSD]"]
-            and len(self.unixsocket) > 103
-        ):
+        if platform.system() in ["Darwin", "FreeBSD]"] and len(self.unixsocket) > 103:
             raise SocketPathTooLong(
                 f"Socket path '{self.unixsocket}' is too long, "
                 f"please pass ie. `--basetemp=/tmp/pytest_mysql` to pytest"
