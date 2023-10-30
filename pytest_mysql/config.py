@@ -26,9 +26,7 @@ def get_config(request: FixtureRequest) -> MySQLConfigType:
 
     def get_conf_option(option: str) -> Any:
         option_name = "mysql_" + option
-        return request.config.getoption(option_name) or request.config.getini(
-            option_name
-        )
+        return request.config.getoption(option_name) or request.config.getini(option_name)
 
     config: MySQLConfigType = {
         "mysqld": Path(get_conf_option("mysqld")),

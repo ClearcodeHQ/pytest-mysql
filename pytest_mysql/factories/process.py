@@ -51,9 +51,7 @@ def mysql_proc(
     params: Optional[str] = None,
     logs_prefix: str = "",
     install_db: Optional[str] = None,
-) -> Callable[
-    [FixtureRequest, TempPathFactory], Generator[MySQLExecutor, None, None]
-]:
+) -> Callable[[FixtureRequest, TempPathFactory], Generator[MySQLExecutor, None, None]]:
     """Process fixture factory for MySQL server.
 
     :param mysqld_exec: path to mysql executable
@@ -123,10 +121,7 @@ def mysql_proc(
                 DeprecationWarning,
             )
             if logs_prefix:
-                logfile_path = (
-                    Path(logsdir)
-                    / f"{logs_prefix}mysql-server.{mysql_port}.log"
-                )
+                logfile_path = Path(logsdir) / f"{logs_prefix}mysql-server.{mysql_port}.log"
 
         mysql_executor = MySQLExecutor(
             mysqld_safe=mysql_mysqld_safe,

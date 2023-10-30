@@ -57,9 +57,7 @@ def mysql(
     :rtype: func
     """
 
-    def _connect(
-        connect_kwargs: dict, query_str: str, mysql_db: str
-    ) -> MySQLdb.Connection:
+    def _connect(connect_kwargs: dict, query_str: str, mysql_db: str) -> MySQLdb.Connection:
         """Apply given query to a  given MySQLdb connection."""
         mysql_conn: MySQLdb.Connection = Connection(**connect_kwargs)
         try:
@@ -94,9 +92,9 @@ def mysql(
         :returns: connection to database
         """
         config = get_config(request)
-        process: Union[
-            NoopMySQLExecutor, MySQLExecutor
-        ] = request.getfixturevalue(process_fixture_name)
+        process: Union[NoopMySQLExecutor, MySQLExecutor] = request.getfixturevalue(
+            process_fixture_name
+        )
         if not process.running():
             process.start()
 
@@ -120,9 +118,7 @@ def mysql(
             f"DEFAULT COLLATE {collation}"
         )
         try:
-            mysql_conn: MySQLdb.Connection = _connect(
-                connection_kwargs, query_str, mysql_db
-            )
+            mysql_conn: MySQLdb.Connection = _connect(connection_kwargs, query_str, mysql_db)
         except OperationalError:
             # Fallback to mysql connection with root user
             connection_kwargs["user"] = "root"
