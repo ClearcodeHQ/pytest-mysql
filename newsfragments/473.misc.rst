@@ -1,1 +1,0 @@
-Manually update mysqlclient to 2.2.0 and actions-reuse to 2.4.2

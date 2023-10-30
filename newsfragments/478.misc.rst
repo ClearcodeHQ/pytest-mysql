@@ -1,1 +1,0 @@
-Replace pydocstyle and pycodestyle with ruff linter.

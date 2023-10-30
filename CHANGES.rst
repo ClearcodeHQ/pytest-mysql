@@ -3,6 +3,22 @@ CHANGELOG
 
 .. towncrier release notes start
 
+2.5.0 (2023-10-30)
+==================
+
+Features
+--------
+
+- Add missing user param (`#474 <https://github.com/ClearcodeHQ/pytest-mysql/issues/474>`_)
+- Add support for Python 3.12 (`#480 <https://github.com/ClearcodeHQ/pytest-mysql/issues/480>`_)
+
+
+Miscellaneus
+------------
+
+- `#450 <https://github.com/ClearcodeHQ/pytest-mysql/issues/450>`_, `#454 <https://github.com/ClearcodeHQ/pytest-mysql/issues/454>`_, `#460 <https://github.com/ClearcodeHQ/pytest-mysql/issues/460>`_, `#473 <https://github.com/ClearcodeHQ/pytest-mysql/issues/473>`_, `#478 <https://github.com/ClearcodeHQ/pytest-mysql/issues/478>`_, `#479 <https://github.com/ClearcodeHQ/pytest-mysql/issues/479>`_, `#480 <https://github.com/ClearcodeHQ/pytest-mysql/issues/480>`_
+
+
 2.4.2 (2023-03-27)
 ==================
 

@@ -1,1 +1,0 @@
-Remove Pipfile.lock from reposittory, rely on the artifacted/cached one in CI/Github Actions
