@@ -1,0 +1,72 @@
+name: Run pytest tests
+
+on:
+  workflow_call:
+    inputs:
+      python-versions:
+        description: 'Supported python versions'
+        default: '["3.8", "3.9", "3.10", "3.11", "3.12", "pypy-3.8"]'
+        required: false
+        type: string
+      mariadb:
+        description: 'MariaDB version'
+        required: true
+        type: string
+    secrets:
+      codecov_token:
+        description: 'Codecov token'
+        required: false
+
+jobs:
+  mariadb:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ${{ fromJSON(inputs.python-versions) }}
+    env:
+      OS: ubuntu-latest
+      PYTHON: ${{ matrix.python-version }}
+    services:
+      mysql:
+        image: mariadb:${{ inputs.mariadb }}
+        env:
+          MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: yes
+          MARIADB_DATABASE: tests
+        ports:
+          - 3333:3306
+        options: --health-cmd="healthcheck.sh --su-mysql --connect --innodb_initialized" --health-interval=10s --health-timeout=5s --health-retries=3
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ankane/setup-mariadb@v1
+        with:
+          mariadb-version: ${{ inputs.mariadb }}
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Check MariaDB Version
+        run: mysqld --version
+      - name: Run test
+        uses: fizyk/actions-reuse/.github/actions/pipenv@v2.4.2
+        with:
+          python-version: ${{ matrix.python-version }}
+          command: pytest --mysql-user=$USER -n 0 -k "not mysqlnoproc" --cov-report=xml
+      - name: Run xdist test
+        uses: fizyk/actions-reuse/.github/actions/pipenv@v2.4.2
+        with:
+          python-version: ${{ matrix.python-version }}
+          command: pytest --mysql-user=$USER -n 1 -k "not mysqlnoproc" --cov-report=xml:coverage-xdist.xml
+      - name: Run noproc test
+        uses: fizyk/actions-reuse/.github/actions/pipenv@v2.4.2
+        with:
+          python-version: ${{ matrix.python-version }}
+          command: pytest -n 0 -k mysqlnoproc --cov-report=xml:coverage-noproc.xml --mysql-host="127.0.0.1" --mysql-port=3333
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3.1.4
+        with:
+          flags: linux,mariadb
+          env_vars: OS, PYTHON
+          fail_ci_if_error: false
+          token: ${{ secrets.codecov_token }}

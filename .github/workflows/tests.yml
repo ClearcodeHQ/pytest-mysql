@@ -61,59 +61,25 @@ jobs:
         fail_ci_if_error: false
         token: ${{ secrets.CODECOV_TOKEN }}
 
-  tests-mariadb-linux:
-    runs-on: ubuntu-latest
-    needs: [tests-mysql-linux]
-    strategy:
-      fail-fast: false
-      matrix:
-        python-version: [3.8, 3.9, "3.10", "3.11", "3.12", pypy-3.8]
-    env:
-      OS: ubuntu-latest
-      PYTHON: ${{ matrix.python-version }}
-    services:
-      mysql:
-        image: mariadb
-        env:
-          MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: yes
-          MARIADB_DATABASE: tests
-        ports:
-          - 3333:3306
-        options: --health-cmd="healthcheck.sh --su-mysql --connect --innodb_initialized" --health-interval=10s --health-timeout=5s --health-retries=3
+  tests-mariadb-linux-11_1:
+    needs: [ tests-mysql-linux ]
+    uses: ./.github/workflows/tests-mariadb-linux.yml
+    with:
+      mariadb: 11.1
 
-    steps:
-    - uses: actions/checkout@v4
-    - uses: ankane/setup-mariadb@v1
-      with:
-        mariadb-version: "10.10"
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v4
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Check MySQL Version
-      run: mysqld --version
-    - name: Run test
-      uses: fizyk/actions-reuse/.github/actions/pipenv@v2.4.2
-      with:
-        python-version: ${{ matrix.python-version }}
-        command: pytest --mysql-user=$USER -n 0 -k "not mysqlnoproc" --cov-report=xml
-    - name: Run xdist test
-      uses: fizyk/actions-reuse/.github/actions/pipenv@v2.4.2
-      with:
-        python-version: ${{ matrix.python-version }}
-        command: pytest --mysql-user=$USER -n 1 -k "not mysqlnoproc" --cov-report=xml:coverage-xdist.xml
-    - name: Run noproc test
-      uses: fizyk/actions-reuse/.github/actions/pipenv@v2.4.2
-      with:
-        python-version: ${{ matrix.python-version }}
-        command: pytest -n 0 -k mysqlnoproc --cov-report=xml:coverage-noproc.xml --mysql-host="127.0.0.1" --mysql-port=3333
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v3.1.4
-      with:
-        flags: linux,mariadb
-        env_vars: OS, PYTHON
-        fail_ci_if_error: false
-        token: ${{ secrets.CODECOV_TOKEN }}
+  tests-mariadb-linux-11:
+    needs: [ tests-mariadb-linux-11_1 ]
+    uses: ./.github/workflows/tests-mariadb-linux.yml
+    with:
+      mariadb: "11.0"
+      python-versions: '["3.10", "3.11", "3.12"]'
+
+  tests-mariadb-linux-10_11:
+    needs: [ tests-mariadb-linux-11 ]
+    uses: ./.github/workflows/tests-mariadb-linux.yml
+    with:
+      mariadb: 10.11
+      python-versions: '["3.11", "3.12"]'
 
   tests-mysql-macosx:
     runs-on: macos-latest
@@ -142,7 +108,7 @@ jobs:
 
   tests-mariadb-macosx:
     runs-on: macos-latest
-    needs: [tests-mysql-macosx, tests-mariadb-linux]
+    needs: [tests-mysql-macosx, tests-mariadb-linux-11_1]
     strategy:
       fail-fast: false
       matrix:
@@ -155,7 +121,7 @@ jobs:
     - uses: actions/checkout@v4
     - uses: ankane/setup-mariadb@v1
       with:
-        mariadb-version: "10.10"
+        mariadb-version: "11.1"
     - name: Install pkg-config
       run: brew install pkg-config
     - name: Check MySQL Version
