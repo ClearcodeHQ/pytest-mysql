@@ -33,6 +33,7 @@ _help_user = "MySQL username"
 _help_passwd = "MySQL password"
 _help_dbname = "Test database name"
 _help_params = "Starting parameters for the MySQL"
+_help_preserve_schema = "TRUNCATE but do not the database after tests"
 
 
 def pytest_addoption(parser: Parser) -> None:
@@ -47,6 +48,12 @@ def pytest_addoption(parser: Parser) -> None:
         name="mysql_install_db",
         help=_help_install_db,
         default="mysql_install_db",
+    )
+
+    parser.addini(
+        name="mysql_preserve_schema",
+        help=_help_preserve_schema,
+        default=False,
     )
 
     parser.addini(name="mysql_host", help=_help_host, default="localhost")
@@ -100,6 +107,13 @@ def pytest_addoption(parser: Parser) -> None:
         metavar="path",
         dest="mysql_install_db",
         help=_help_install_db,
+    )
+
+    parser.addoption(
+        "--mysql-preserve-schema",
+        action="store",
+        dest="mysql_preserve_schema",
+        help=_help_preserve_schema,
     )
 
     parser.addoption(

@@ -34,6 +34,7 @@ class MySQLExecutor(TCPExecutor):
         port: int,
         timeout: int = 60,
         install_db: Optional[str] = None,
+        preserve_schema: bool = False,
     ) -> None:
         """Specialised Executor to run and manage MySQL server process.
 

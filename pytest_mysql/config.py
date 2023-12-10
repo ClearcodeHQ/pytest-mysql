@@ -19,6 +19,7 @@ class MySQLConfigType(TypedDict):
     params: str
     logsdir: str
     install_db: str
+    preserve_schema: bool
 
 
 def get_config(request: FixtureRequest) -> MySQLConfigType:
@@ -40,5 +41,6 @@ def get_config(request: FixtureRequest) -> MySQLConfigType:
         "params": get_conf_option("params"),
         "logsdir": get_conf_option("logsdir"),
         "install_db": get_conf_option("install_db"),
+        "preserve_schema": get_conf_option("preserve_schema"),
     }
     return config

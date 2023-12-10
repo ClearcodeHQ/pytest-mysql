@@ -101,6 +101,7 @@ def mysql(
         mysql_user = process.user
         mysql_passwd = passwd or config["passwd"]
         mysql_db = dbname or config["dbname"]
+        preserve_schema = config["preserve_schema"]
 
         connection_kwargs: Dict[str, Union[str, int]] = {
             "host": process.host,
@@ -112,8 +113,10 @@ def mysql(
         else:
             connection_kwargs["port"] = process.port
 
+        if_not_exists = "IF NOT EXISTS" if preserve_schema else ""
+
         query_str = (
-            f"CREATE DATABASE `{mysql_db}` "
+            f"CREATE DATABASE {if_not_exists} `{mysql_db}` "
             f"DEFAULT CHARACTER SET {charset} "
             f"DEFAULT COLLATE {collation}"
         )
@@ -133,8 +136,18 @@ def mysql(
             mysql_conn.store_result()  # type: ignore
         except Exception as e:
             print(str(e))
-        query_drop_database = f"DROP DATABASE IF EXISTS `{mysql_db}`"
-        mysql_conn.query(query_drop_database)
+        if preserve_schema:
+            mysql_conn.query(f"SET FOREIGN_KEY_CHECKS=0")
+            mysql_conn.query(f"show tables from `{mysql_db}`")
+            res = mysql_conn.store_result()
+            while row := res.fetch_row():
+                mysql_conn.query(f"TRUNCATE table `{mysql_db}`.`{row[0][0]}`")
+
+            mysql_conn.query(f"SET FOREIGN_KEY_CHECKS=0")
+        else:
+            query_drop_database = f"DROP DATABASE IF EXISTS `{mysql_db}`"
+            mysql_conn.query(query_drop_database)
+
         mysql_conn.close()  # type: ignore
 
     return mysql_fixture
