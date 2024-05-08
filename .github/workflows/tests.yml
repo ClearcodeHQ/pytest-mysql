@@ -123,7 +123,7 @@ jobs:
       with:
         mariadb-version: "11.1"
     - name: Install pkg-config
-      run: brew install pkg-config
+      run: brew install pkg-config openssl
     - name: Check MySQL Version
       run: mysqld --version
     - name: Run test
