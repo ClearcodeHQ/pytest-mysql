@@ -91,7 +91,7 @@ jobs:
     env:
       OS: macos-latest
       PYTHON: ${{ matrix.python-version }}
-      PKG_CONFIG_PATH: /usr/local/opt/mysql@8.0/lib/pkgconfig
+      PKG_CONFIG_PATH: /opt/homebrew/opt/mysql@8.0/lib/pkgconfig
     steps:
     - uses: actions/checkout@v4
     - uses: ankane/setup-mysql@v1
@@ -116,7 +116,7 @@ jobs:
     env:
       OS: macos-latest
       PYTHON: ${{ matrix.python-version }}
-      PKG_CONFIG_PATH: /usr/local/opt/mariadb@10.10/lib/pkgconfig
+      PKG_CONFIG_PATH: /opt/homebrew/opt/mariadb@11.1/lib/pkgconfig
     steps:
     - uses: actions/checkout@v4
     - uses: ankane/setup-mariadb@v1
