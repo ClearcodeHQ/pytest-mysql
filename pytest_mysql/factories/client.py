@@ -18,10 +18,9 @@
 """Client fixture factory for MySQL database."""
 from typing import Any, Callable, Dict, Generator, Optional, Union
 
-import MySQLdb
 import pytest
 from _pytest.fixtures import FixtureRequest
-from MySQLdb import Connection, OperationalError, ProgrammingError
+from pymysql import Connection, OperationalError, ProgrammingError
 
 from pytest_mysql.config import get_config
 from pytest_mysql.exceptions import DatabaseExists
@@ -57,9 +56,9 @@ def mysql(
     :rtype: func
     """
 
-    def _connect(connect_kwargs: dict, query_str: str, mysql_db: str) -> MySQLdb.Connection:
+    def _connect(connect_kwargs: Dict[str, Any], query_str: str, mysql_db: str) -> Connection:
         """Apply given query to a  given MySQLdb connection."""
-        mysql_conn: MySQLdb.Connection = Connection(**connect_kwargs)
+        mysql_conn = Connection(**connect_kwargs)
         try:
             mysql_conn.query(query_str)
         except ProgrammingError as e:
@@ -77,7 +76,7 @@ def mysql(
     @pytest.fixture
     def mysql_fixture(
         request: FixtureRequest,
-    ) -> Generator[MySQLdb.Connection, None, None]:
+    ) -> Generator[Connection, None, None]:
         """Client fixture for MySQL server.
 
         #. Get config.
@@ -102,7 +101,7 @@ def mysql(
         mysql_passwd = passwd or config["passwd"]
         mysql_db = dbname or config["dbname"]
 
-        connection_kwargs: Dict[str, Union[str, int]] = {
+        connection_kwargs: Dict[str, Any] = {
             "host": process.host,
             "user": mysql_user,
             "passwd": mysql_passwd,
@@ -118,7 +117,7 @@ def mysql(
             f"DEFAULT COLLATE {collation}"
         )
         try:
-            mysql_conn: MySQLdb.Connection = _connect(connection_kwargs, query_str, mysql_db)
+            mysql_conn: Connection = _connect(connection_kwargs, query_str, mysql_db)
         except OperationalError:
             # Fallback to mysql connection with root user
             connection_kwargs["user"] = "root"
@@ -130,11 +129,12 @@ def mysql(
         if not mysql_conn.open:
             mysql_conn = Connection(**connection_kwargs)
         try:
-            mysql_conn.store_result()  # type: ignore
+            with mysql_conn.cursor() as cursor:
+                cursor.fetchall()
         except Exception as e:
             print(str(e))
         query_drop_database = f"DROP DATABASE IF EXISTS `{mysql_db}`"
         mysql_conn.query(query_drop_database)
-        mysql_conn.close()  # type: ignore
+        mysql_conn.close()
 
     return mysql_fixture
