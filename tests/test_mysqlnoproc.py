@@ -1,5 +1,5 @@
 """MySQL tests that do not start mysql server."""
-from MySQLdb import Connection
+from pymysql import Connection
 
 from pytest_mysql import factories
 from tests.test_mysql import QUERY
@@ -12,7 +12,7 @@ def test_mysql_noproc(mysqlnoproc_client: Connection) -> None:
     """Check if noproc fixture connects to the running mysql instance."""
     cursor = mysqlnoproc_client.cursor()
     cursor.execute(QUERY)
-    mysqlnoproc_client.commit()  # type: ignore
+    mysqlnoproc_client.commit()
     cursor.close()
 
 
@@ -25,6 +25,6 @@ def test_mysql_noproc_closing_connection_not_throwing_exception(
     """
     cursor = mysqlnoproc_client.cursor()
     cursor.execute(QUERY)
-    mysqlnoproc_client.commit()  # type: ignore
+    mysqlnoproc_client.commit()
     cursor.close()
-    mysqlnoproc_client.close()  # type: ignore
+    mysqlnoproc_client.close()
