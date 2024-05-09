@@ -39,17 +39,17 @@ jobs:
     - name: Check MySQL Version
       run: mysqld --version
     - name: Run test
-      uses: fizyk/actions-reuse/.github/actions/pipenv@v2.4.2
+      uses: fizyk/actions-reuse/.github/actions/pipenv@v2.4.7
       with:
         python-version: ${{ matrix.python-version }}
         command: pytest -n 0 -k "not mysqlnoproc" --cov-report=xml --mysql-user=root
     - name: Run xdist test
-      uses: fizyk/actions-reuse/.github/actions/pipenv@v2.4.2
+      uses: fizyk/actions-reuse/.github/actions/pipenv@v2.4.7
       with:
         python-version: ${{ matrix.python-version }}
         command: pytest -n 0 -k "not mysqlnoproc" --cov-report=xml:coverage-xdist.xml --mysql-user=root
     - name: Run noproc test
-      uses: fizyk/actions-reuse/.github/actions/pipenv@v2.4.2
+      uses: fizyk/actions-reuse/.github/actions/pipenv@v2.4.7
       with:
         python-version: ${{ matrix.python-version }}
         command: pytest -n 0 -k mysqlnoproc --cov-report=xml:coverage-noproc.xml --mysql-host="127.0.0.1" --mysql-port=3333
@@ -100,7 +100,7 @@ jobs:
     - name: Check MySQL Version
       run: mysqld --version
     - name: Run test
-      uses: fizyk/actions-reuse/.github/actions/pipenv@v2.4.2
+      uses: fizyk/actions-reuse/.github/actions/pipenv@v2.4.7
       with:
         python-version: ${{ matrix.python-version }}
         command: pytest -n 0 -k "not mysqlnoproc" --cov-report=xml --mysql-user=root --basetemp=/tmp/pytest_mysql
@@ -127,7 +127,7 @@ jobs:
     - name: Check MySQL Version
       run: mysqld --version
     - name: Run test
-      uses: fizyk/actions-reuse/.github/actions/pipenv@v2.4.2
+      uses: fizyk/actions-reuse/.github/actions/pipenv@v2.4.7
       with:
         python-version: ${{ matrix.python-version }}
         command: pytest --mysql-user=$USER -n 0 -k "not mysqlnoproc" --cov-report=xml --basetemp=/tmp/pytest_mysql
