@@ -1,4 +1,5 @@
 """Config module."""
+
 from pathlib import Path
 from typing import Any, TypedDict
 

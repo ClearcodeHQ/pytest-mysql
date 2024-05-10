@@ -1,4 +1,5 @@
 """Actual tests for pytest-mysql."""
+
 from pymysql import Connection
 
 from pytest_mysql.executor import MySQLExecutor

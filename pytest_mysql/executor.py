@@ -1,4 +1,5 @@
 """Specified MySQL Executor."""
+
 import platform
 import re
 import subprocess

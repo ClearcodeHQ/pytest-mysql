@@ -1,4 +1,5 @@
 """Module containing Noop executor."""
+
 from typing import Any, Literal
 
 
