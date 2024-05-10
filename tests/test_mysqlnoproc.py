@@ -1,4 +1,5 @@
 """MySQL tests that do not start mysql server."""
+
 from pymysql import Connection
 
 from pytest_mysql import factories

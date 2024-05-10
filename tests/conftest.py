@@ -1,4 +1,5 @@
 """Tests main conftest file."""
+
 from pytest_mysql import factories
 from pytest_mysql.plugin import *  # noqa: F403
 
