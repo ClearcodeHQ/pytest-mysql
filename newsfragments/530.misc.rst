@@ -1,0 +1,1 @@
+Fixed pyproject.toml requirements after migrating to pymysql

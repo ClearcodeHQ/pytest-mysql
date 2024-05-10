@@ -31,7 +31,7 @@ dependencies = [
     "pytest >= 6.2",
     "port-for >= 0.6.0",
     "mirakuru",
-    "mysqlclient",
+    "pymysql",
     "packaging >= 23"
 ]
 requires-python = ">= 3.8"
