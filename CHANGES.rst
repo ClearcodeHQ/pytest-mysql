@@ -3,6 +3,25 @@ CHANGELOG
 
 .. towncrier release notes start
 
+3.0.0 (2024-05-23)
+==================
+
+Breaking changes
+----------------
+
+- Replace mysqlclient with pymysql library.
+
+  Installation of mysqlclient became more and more problematic on macosx which in turn proved to be hard to maintain on github-actions.
+
+  PyMySQL is mostly API compatible so pytest-mysql usage is just changing import location with one exception for poorly documented client fixture closeup. (`#491 <https://github.com/ClearcodeHQ/pytest-mysql/issues/491>`_)
+
+
+Miscellaneus
+------------
+
+- `#481 <https://github.com/ClearcodeHQ/pytest-mysql/issues/481>`_, `#527 <https://github.com/ClearcodeHQ/pytest-mysql/issues/527>`_, `#530 <https://github.com/ClearcodeHQ/pytest-mysql/issues/530>`_
+
+
 2.5.0 (2023-10-30)
 ==================
 

@@ -1,5 +1,0 @@
-Replace mysqlclient with pymysql library.
-
-Installation of mysqlclient became more and more problematic on macosx which in turn proved to be hard to maintain on github-actions.
-
-PyMySQL is mostly API compatible so pytest-mysql usage is just changing import location with one exception for poorly documented client fixture closeup.

@@ -1,1 +1,0 @@
-Test against MariaDB 10.11, 11 and 11.1
