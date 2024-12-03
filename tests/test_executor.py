@@ -126,7 +126,8 @@ def test_exception_raised(verstr: bytes, tmp_path_factory: TempPathFactory) -> N
         port=8838,
     )
 
-    with patch("subprocess.check_output", lambda *args, **kwargs: verstr), pytest.raises(
-        MySQLUnsupported
+    with (
+        patch("subprocess.check_output", lambda *args, **kwargs: verstr),
+        pytest.raises(MySQLUnsupported),
     ):
         executor.start()
