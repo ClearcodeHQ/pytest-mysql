@@ -8,58 +8,17 @@ on:
 
 jobs:
   tests-mysql-linux:
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        python-version: ["3.9", "3.10", "3.11", "3.12", "3.13", "pypy-3.10"]
-    env:
-      OS: ubuntu-latest
-      PYTHON: ${{ matrix.python-version }}
-    # Service containers to run with `container-job`
-    services:
-      mysql:
-        image: mysql
-        env:
-          MYSQL_ALLOW_EMPTY_PASSWORD: yes
-          MYSQL_DATABASE: tests
-        ports:
-          - 3333:3306
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+    uses: ./.github/workflows/tests-mysql-linux.yml
+    with:
+      mysql: "8.4"
+      python-versions: '["3.9", "3.10", "3.11", "3.12", "3.13", "pypy-3.10"]'
 
-    steps:
-    - uses: actions/checkout@v4
-    - uses: ankane/setup-mysql@v1
-      with:
-        mysql-version: 8.0
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v5
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Check MySQL Version
-      run: mysqld --version
-    - name: Run test
-      uses: fizyk/actions-reuse/.github/actions/pipenv@v2.4.8
-      with:
-        python-version: ${{ matrix.python-version }}
-        command: pytest -n 0 -k "not mysqlnoproc" --cov-report=xml --mysql-user=root
-    - name: Run xdist test
-      uses: fizyk/actions-reuse/.github/actions/pipenv@v2.4.8
-      with:
-        python-version: ${{ matrix.python-version }}
-        command: pytest -n 0 -k "not mysqlnoproc" --cov-report=xml:coverage-xdist.xml --mysql-user=root
-    - name: Run noproc test
-      uses: fizyk/actions-reuse/.github/actions/pipenv@v2.4.8
-      with:
-        python-version: ${{ matrix.python-version }}
-        command: pytest -n 0 -k mysqlnoproc --cov-report=xml:coverage-noproc.xml --mysql-host="127.0.0.1" --mysql-port=3333
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v5.1.1
-      with:
-        flags: linux,mysql
-        env_vars: OS, PYTHON
-        fail_ci_if_error: false
-        token: ${{ secrets.CODECOV_TOKEN }}
+  tests-mysql-linux_8:
+    needs: [ tests-mysql-linux ]
+    uses: ./.github/workflows/tests-mysql-linux.yml
+    with:
+      mysql: "8.0"
+      python-versions: '["3.11", "3.12", "3.13"]'
 
   tests-mariadb-linux-11:
     needs: [ tests-mysql-linux ]
@@ -89,7 +48,7 @@ jobs:
     - uses: actions/checkout@v4
     - uses: ankane/setup-mysql@v1
       with:
-        mysql-version: 8.0
+        mysql-version: 8.4
     - name: Check MySQL Version
       run: mysqld --version
     - name: Run test
