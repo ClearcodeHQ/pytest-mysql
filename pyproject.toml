@@ -17,11 +17,11 @@ classifiers = [
     "Operating System :: OS Independent",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3 :: Only",
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Topic :: Software Development :: Testing",
@@ -34,7 +34,7 @@ dependencies = [
     "pymysql",
     "packaging >= 23"
 ]
-requires-python = ">= 3.8"
+requires-python = ">= 3.9"
 
 [project.urls]
 "Source" = "https://github.com/ClearcodeHQ/pytest-mysql"
@@ -64,7 +64,7 @@ mysql_dbname = "pytestmysql"
 
 [tool.black]
 line-length = 100
-target-version = ['py38']
+target-version = ['py39']
 include = '.*\.pyi?$'
 
 [tool.ruff]
