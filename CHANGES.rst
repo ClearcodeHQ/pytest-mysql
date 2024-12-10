@@ -3,6 +3,30 @@ CHANGELOG
 
 .. towncrier release notes start
 
+3.1.0 (2024-12-10)
+==================
+
+Breaking changes
+----------------
+
+- Drop support for Python 3.8
+
+
+Features
+--------
+
+- Declare support for Python 3.13
+
+
+Miscellaneus
+------------
+
+- `#550 <https://github.com/ClearcodeHQ/pytest-mysql/issues/550>`_
+- Fixed last piece of macosx environment setup after moving to pymysql
+- Readme fix
+- Update MySQL versions in CI
+
+
 3.0.0 (2024-05-23)
 ==================
 

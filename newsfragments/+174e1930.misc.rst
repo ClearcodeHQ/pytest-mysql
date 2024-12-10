@@ -1,1 +1,0 @@
-Fixed last piece of macosx environment setup after moving to pymysql
